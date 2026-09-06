@@ -1,0 +1,31 @@
+// ╔══════════════════════════════════════════════════════════════╗
+// ║  ⚡ Zeus CSS — Base Colors                                     ║
+// ║                                                               ║
+// ║  Design tokens and configuration for base colors.             ║
+// ╚══════════════════════════════════════════════════════════════╝
+
+@use "sass:map";
+@use "../../../../zeus.config" as config;
+
+// ╔══════════════════════════════════════════════════════════╗
+// ║  🎨 BASE COLORS (Static)                                
+// ║                                                         
+// ║  These are the system reference colors. Core UI uses    
+// ║  semantic tokens instead of these.                      
+// ╚══════════════════════════════════════════════════════════╝
+
+// ── Defaults ─────────────────────────────────────────────────
+$_base-defaults: (
+  "pure-white": oklch(100% 0 0),
+  "pure-black": oklch(0%   0 0),
+  "pure-gray":  oklch(50%  0 0),
+
+  "system": (
+    "success": oklch(65% 0.20 145),
+    "warning": oklch(72% 0.18 85),
+    "error":   oklch(55% 0.25 25),
+  ),
+);
+
+// ── Developer Override ──
+$base-colors: map.deep-merge($_base-defaults, config.$zeus-base-colors);

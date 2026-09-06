@@ -1,0 +1,84 @@
+// ╔══════════════════════════════════════════════════════════════╗
+// ║  ⚡ Zeus CSS — Avatar                                          ║
+// ║                                                               ║
+// ║  Core structural and visual styles for the avatar component.  ║
+// ╚══════════════════════════════════════════════════════════════╝
+
+@use "../../core/engine" as *;
+
+// ╔══════════════════════════════════════════════════════════════╗
+// ║  🙂 Avatar Component                                          ║
+// ║                                                              ║
+// ║  Fixed-size circular image or initials. Deliberately NOT     ║
+// ║  fluid (clamp-based) like the rest of the token system —      ║
+// ║  avatars anchor to a person/entity's identity and should stay ║
+// ║  visually stable across breakpoints, same reasoning as every  ║
+// ║  other design system's avatar scale.                          ║
+// ║                                                              ║
+// ║  Usage:                                                      ║
+// ║  <img class="z-avatar z-avatar--md" src="…" alt="Jane Doe" /> ║
+// ║  <div class="z-avatar z-avatar--md">JD</div>                 ║
+// ╚══════════════════════════════════════════════════════════════╝
+
+@layer components {
+  $_avatar-sizes: (
+    "xs": 1.5rem,
+    "sm": 2rem,
+    "md": 2.5rem,
+    "lg": 3.5rem,
+    "xl": 5rem,
+  );
+
+  .z-avatar {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    @include border-radius("rounded");
+    overflow: hidden;
+    background: var(--color-surface-subtle);
+    color: var(--color-text-muted);
+    @include text("label-bold");
+    object-fit: cover;
+    user-select: none;
+
+    @each $name, $size in $_avatar-sizes {
+      &--#{$name} {
+        width: $size;
+        height: $size;
+      }
+    }
+
+    // ── Status dot — e.g. online/offline indicator ──────────────
+    // Wrap the image/initials + dot in a positioned .z-avatar-group
+    // item, or use directly on a position:relative parent.
+    &__status {
+      position: absolute;
+      inset-block-end: 0;
+      inset-inline-end: 0;
+      width: 25%;
+      aspect-ratio: 1;
+      border-radius: 50%;
+      border: var(--border-line-sm) solid var(--color-surface);
+      background: var(--color-border-strong);
+
+      &--online { background: var(--base-system-success); }
+      &--busy   { background: var(--base-system-error); }
+      &--away   { background: var(--base-system-warning); }
+    }
+  }
+
+  // ── Group — overlapping stack of avatars ──────────────────────
+  .z-avatar-group {
+    display: flex;
+
+    .z-avatar {
+      border: var(--border-line-sm) solid var(--color-surface);
+      margin-inline-start: -0.6em;
+
+      &:first-child {
+        margin-inline-start: 0;
+      }
+    }
+  }
+}

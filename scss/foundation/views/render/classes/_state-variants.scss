@@ -1,0 +1,47 @@
+// ╔══════════════════════════════════════════════════════════════╗
+// ║  ⚡ Zeus CSS — State Variants                                  ║
+// ║                                                               ║
+// ║  Generates hover:/focus: variants for color utilities.        ║
+// ╚══════════════════════════════════════════════════════════════╝
+
+@use "../../../../zeus.config" as config;
+
+// ╔══════════════════════════════════════════════════════════════╗
+// ║  🎯 hover:/focus: state variants — colors & borders only     ║
+// ║                                                              ║
+// ║  Deliberately NOT generalized to every utility family (sizing,║
+// ║  spacing, shadows already have their own dedicated hover      ║
+// ║  variants). Also deliberately excludes the bg-{name}-{step}   ║
+// ║  opacity variants in _colors.scss — 17 colors × 13 steps × 2   ║
+// ║  states would add ~440 rarely-used selectors for one color    ║
+// ║  family alone. Base bg-*/color-*/border-color-* only:         ║
+// ║  17 colors × 3 properties × 2 states ≈ 100 selectors.         ║
+// ╚══════════════════════════════════════════════════════════════╝
+
+@mixin load-state-variants($prefix: "") {
+@if config.$zeus-enable-color-utilities {
+
+@each $name, $value in config.$zeus-colors {
+  .hover\:#{$prefix}bg-#{$name}:hover {
+    background-color: var(--color-#{$name});
+  }
+  .hover\:#{$prefix}color-#{$name}:hover {
+    color: var(--color-#{$name});
+  }
+  .hover\:#{$prefix}border-color-#{$name}:hover {
+    border-color: var(--color-#{$name});
+  }
+
+  .focus\:#{$prefix}bg-#{$name}:focus-visible {
+    background-color: var(--color-#{$name});
+  }
+  .focus\:#{$prefix}color-#{$name}:focus-visible {
+    color: var(--color-#{$name});
+  }
+  .focus\:#{$prefix}border-color-#{$name}:focus-visible {
+    border-color: var(--color-#{$name});
+  }
+}
+
+} // end @if zeus-enable-color-utilities
+}

@@ -1,0 +1,129 @@
+// ╔══════════════════════════════════════════════════════════════╗
+// ║  ⚡ Zeus CSS — Typography                                      ║
+// ║                                                               ║
+// ║  Core styles and definitions for typography.                  ║
+// ╚══════════════════════════════════════════════════════════════╝
+
+@use "sass:map";
+@use "../../core/engine" as *;
+@use "../../core/design" as *;
+
+@layer base {
+  /**
+   * Zeus CSS Typography
+   * Core typographic styles and text element normalization
+   */
+
+  // Anchor Elements and Hyperlinks
+  :where(a) {
+    outline: none;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 0.2em;
+
+    // &:hover {
+    //   color: initial;
+    // }
+
+    &:focus-visible {
+      outline: $focus-ring;
+      outline-offset: 2px;
+    }
+
+    // &:active {
+    //   opacity: 0.8;
+    // }
+  }
+
+  // Initialisms and Shortened Terms
+  :where(abbr[title]) {
+    text-decoration: underline dotted;
+    cursor: help;
+  }
+
+  // Bulleted & Ordered Collections
+  // Plain <ul>/<ol> keep native browser bullets, numbering and indentation —
+  // this preserves list semantics for assistive tech (VoiceOver/Safari drop the
+  // list role when list-style is stripped without an explicit ARIA role).
+  // Decorative/navigational lists opt out via [role="list"] — see reset.scss.
+
+  // Standard Prose Blocks
+  :where(p) {
+    margin-top: var(--space-xl);
+    margin-bottom: var(--space-xl);
+  }
+
+  p:first-child {
+    margin-top: 0;
+  }
+
+  p:last-child {
+    margin-bottom: 0;
+  }
+
+  // Text emphasis
+  :where(strong, b) {
+    font-weight: 600;
+  }
+
+  :where(em, i) {
+    font-style: italic;
+  }
+
+  // Code elements
+  :where(code) {
+    padding: 0.125em 0.375em;
+    border-radius: 0.25em;
+    background: var(--color-surface-subtle);
+    font-size: 0.9em;
+  }
+
+  :where(pre) {
+    overflow-x: auto;
+
+    code {
+      padding: 0;
+      background: none;
+    }
+  }
+
+  // Quotes
+  :where(blockquote) {
+    padding-inline-start: var(--space-lg);
+    border-inline-start: 3px solid var(--color-border);
+    font-style: italic;
+  }
+
+  // Mark/Highlight
+  :where(mark) {
+    padding: 0.125em 0.25em;
+    background: var(--color-warning-subtle);
+    color: inherit;
+  }
+
+  // Subscript and Superscript baseline offsets
+  :where(sub, sup) {
+    font-size: 0.75em;
+    line-height: 0;
+    position: relative;
+    vertical-align: baseline;
+  }
+
+  :where(sub) {
+    bottom: -0.25em;
+  }
+
+  :where(sup) {
+    top: -0.5em;
+  }
+
+  // Small text
+  :where(small) {
+    font-size: 0.875em;
+  }
+
+  // Text selection
+  ::selection {
+    background: var(--color-primary-light);
+    color: var(--color-text-inverse);
+  }
+}

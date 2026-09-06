@@ -1,0 +1,30 @@
+// ╔══════════════════════════════════════════════════════════════╗
+// ║  ⚡ Zeus CSS — Z-Index                                         ║
+// ║                                                               ║
+// ║  Design tokens and configuration for the stacking scale.      ║
+// ╚══════════════════════════════════════════════════════════════╝
+
+@use "sass:map";
+@use "../../../../zeus.config" as config;
+
+// ╔══════════════════════════════════════════════════════════╗
+// ║  🧱 Z-INDEX SCALE                                       ║
+// ║                                                         ║
+// ║  Format: "name": N (unitless integer)                    ║
+// ║  Output CSS variable: --z-{name}                         ║
+// ╚══════════════════════════════════════════════════════════╝
+
+// ── Defaults ─────────────────────────────────────────────────
+$_z-index-defaults: (
+  "base":           0,
+  "dropdown":       100,
+  "sticky":         200,
+  "overlay":        900,
+  "modal-backdrop": 999,
+  "modal":          1000,
+  "toast":          1100,
+  "tooltip":        1200,
+);
+
+// ── Developer Override ──
+$z-index: map.merge($_z-index-defaults, config.$zeus-z-index);

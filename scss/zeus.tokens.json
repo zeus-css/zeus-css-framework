@@ -1,0 +1,667 @@
+{
+  "$description": "Zeus CSS design tokens — auto-generated from the compiled stylesheet. Do not hand-edit; regenerate with `npm run gen:tokens`.",
+  "custom": {
+    "header-height": {
+      "$value": "60px",
+      "$type": "other",
+      "$description": "--header-height"
+    }
+  },
+  "base": {
+    "pure-white": {
+      "$value": "oklch(100% 0 0deg)",
+      "$type": "color",
+      "$description": "--base-pure-white"
+    },
+    "pure-black": {
+      "$value": "oklch(0% 0 0deg)",
+      "$type": "color",
+      "$description": "--base-pure-black"
+    },
+    "pure-gray": {
+      "$value": "oklch(50% 0 0deg)",
+      "$type": "color",
+      "$description": "--base-pure-gray"
+    },
+    "system-success": {
+      "$value": "oklch(65% 0.2 145deg)",
+      "$type": "color",
+      "$description": "--base-system-success"
+    },
+    "system-warning": {
+      "$value": "oklch(72% 0.18 85deg)",
+      "$type": "color",
+      "$description": "--base-system-warning"
+    },
+    "system-error": {
+      "$value": "oklch(55% 0.25 25deg)",
+      "$type": "color",
+      "$description": "--base-system-error"
+    }
+  },
+  "iconSize": {
+    "xs": {
+      "$value": "clamp(14px, round(13px + 0.3cqi, 0.1px), 18px)",
+      "$type": "dimension",
+      "$description": "--size-icon-xs"
+    },
+    "sm": {
+      "$value": "clamp(20px, round(19px + 0.3cqi, 0.1px), 24px)",
+      "$type": "dimension",
+      "$description": "--size-icon-sm"
+    },
+    "md": {
+      "$value": "clamp(22px, round(19.6px + 0.7cqi, 0.1px), 32px)",
+      "$type": "dimension",
+      "$description": "--size-icon-md"
+    },
+    "lg": {
+      "$value": "clamp(38px, round(35.6px + 0.7cqi, 0.1px), 48px)",
+      "$type": "dimension",
+      "$description": "--size-icon-lg"
+    },
+    "xl": {
+      "$value": "clamp(48px, round(44.2px + 1.1cqi, 0.1px), 64px)",
+      "$type": "dimension",
+      "$description": "--size-icon-xl"
+    }
+  },
+  "space": {
+    "0": {
+      "$value": "0px",
+      "$type": "dimension",
+      "$description": "--space-0"
+    },
+    "4xs": {
+      "$value": "clamp(1px, round(0.7px + 0.1cqi, 0.1px), 2px)",
+      "$type": "dimension",
+      "$description": "--space-4xs"
+    },
+    "3xs": {
+      "$value": "clamp(2px, round(1.7px + 0.1cqi, 0.1px), 4px)",
+      "$type": "dimension",
+      "$description": "--space-3xs"
+    },
+    "2xs": {
+      "$value": "clamp(4px, round(3.7px + 0.1cqi, 0.1px), 6px)",
+      "$type": "dimension",
+      "$description": "--space-2xs"
+    },
+    "xs": {
+      "$value": "clamp(6px, round(5.7px + 0.1cqi, 0.1px), 8px)",
+      "$type": "dimension",
+      "$description": "--space-xs"
+    },
+    "sm": {
+      "$value": "clamp(8px, round(7px + 0.3cqi, 0.1px), 12px)",
+      "$type": "dimension",
+      "$description": "--space-sm"
+    },
+    "md": {
+      "$value": "clamp(12px, round(11px + 0.3cqi, 0.1px), 16px)",
+      "$type": "dimension",
+      "$description": "--space-md"
+    },
+    "lg": {
+      "$value": "clamp(16px, round(13.9px + 0.6cqi, 0.1px), 24px)",
+      "$type": "dimension",
+      "$description": "--space-lg"
+    },
+    "xl": {
+      "$value": "clamp(24px, round(21.9px + 0.6cqi, 0.1px), 32px)",
+      "$type": "dimension",
+      "$description": "--space-xl"
+    },
+    "2xl": {
+      "$value": "clamp(32px, round(28.2px + 1.1cqi, 0.1px), 48px)",
+      "$type": "dimension",
+      "$description": "--space-2xl"
+    },
+    "3xl": {
+      "$value": "clamp(48px, round(44.2px + 1.1cqi, 0.1px), 64px)",
+      "$type": "dimension",
+      "$description": "--space-3xl"
+    },
+    "4xl": {
+      "$value": "clamp(64px, round(56.5px + 2.2cqi, 0.1px), 96px)",
+      "$type": "dimension",
+      "$description": "--space-4xl"
+    }
+  },
+  "borderRadius": {
+    "none": {
+      "$value": "0px",
+      "$type": "dimension",
+      "$description": "--border-radius-none"
+    },
+    "xs": {
+      "$value": "clamp(2px, round(1.7px + 0.1cqi, 0.1px), 4px)",
+      "$type": "dimension",
+      "$description": "--border-radius-xs"
+    },
+    "sm": {
+      "$value": "clamp(8px, round(7px + 0.3cqi, 0.1px), 12px)",
+      "$type": "dimension",
+      "$description": "--border-radius-sm"
+    },
+    "md": {
+      "$value": "clamp(16px, round(13.9px + 0.6cqi, 0.1px), 24px)",
+      "$type": "dimension",
+      "$description": "--border-radius-md"
+    },
+    "lg": {
+      "$value": "clamp(20px, round(17.3px + 0.8cqi, 0.1px), 32px)",
+      "$type": "dimension",
+      "$description": "--border-radius-lg"
+    },
+    "xl": {
+      "$value": "clamp(38px, round(31.8px + 1.8cqi, 0.1px), 64px)",
+      "$type": "dimension",
+      "$description": "--border-radius-xl"
+    },
+    "rounded": {
+      "$value": "360px",
+      "$type": "dimension",
+      "$description": "--border-radius-rounded"
+    }
+  },
+  "borderWidth": {
+    "none": {
+      "$value": "0px",
+      "$type": "dimension",
+      "$description": "--border-line-none"
+    },
+    "xs": {
+      "$value": "clamp(1px, round(0.7px + 0.1cqi, 0.1px), 2px)",
+      "$type": "dimension",
+      "$description": "--border-line-xs"
+    },
+    "sm": {
+      "$value": "clamp(1.5px, round(1.2px + 0.1cqi, 0.1px), 3px)",
+      "$type": "dimension",
+      "$description": "--border-line-sm"
+    },
+    "md": {
+      "$value": "clamp(2px, round(1.7px + 0.1cqi, 0.1px), 4px)",
+      "$type": "dimension",
+      "$description": "--border-line-md"
+    },
+    "lg": {
+      "$value": "clamp(4px, round(3px + 0.3cqi, 0.1px), 8px)",
+      "$type": "dimension",
+      "$description": "--border-line-lg"
+    }
+  },
+  "columnGap": {
+    "xs": {
+      "$value": "clamp(12px, round(11px + 0.3cqi, 0.1px), 16px)",
+      "$type": "dimension",
+      "$description": "--col-gap-xs"
+    },
+    "sm": {
+      "$value": "clamp(16px, round(15px + 0.3cqi, 0.1px), 20px)",
+      "$type": "dimension",
+      "$description": "--col-gap-sm"
+    },
+    "md": {
+      "$value": "clamp(20px, round(17.9px + 0.6cqi, 0.1px), 28px)",
+      "$type": "dimension",
+      "$description": "--col-gap-md"
+    },
+    "lg": {
+      "$value": "clamp(28px, round(25.3px + 0.8cqi, 0.1px), 40px)",
+      "$type": "dimension",
+      "$description": "--col-gap-lg"
+    },
+    "xl": {
+      "$value": "clamp(36px, round(33.3px + 0.8cqi, 0.1px), 48px)",
+      "$type": "dimension",
+      "$description": "--col-gap-xl"
+    },
+    "xxl": {
+      "$value": "clamp(40px, round(34.2px + 1.7cqi, 0.1px), 64px)",
+      "$type": "dimension",
+      "$description": "--col-gap-xxl"
+    }
+  },
+  "spacing": {
+    "padding-outer": {
+      "$value": "clamp(16px, round(-10.4px + 7.7cqi, 0.1px), 128px)",
+      "$type": "dimension",
+      "$description": "--padding-outer"
+    }
+  },
+  "shadow": {
+    "none": {
+      "$value": "none",
+      "$type": "shadow",
+      "$description": "--shadow-none"
+    },
+    "xs": {
+      "$value": "0px 1px 2px 0px rgba(132, 132, 132, 0.43)",
+      "$type": "shadow",
+      "$description": "--shadow-xs"
+    },
+    "sm": {
+      "$value": "0px 1px 3px 0px rgba(132, 132, 132, 0.43), 0px 1px 2px -1px rgba(132, 132, 132, 0.43)",
+      "$type": "shadow",
+      "$description": "--shadow-sm"
+    },
+    "md": {
+      "$value": "0px 4px 6px -1px rgba(132, 132, 132, 0.43), 0px 2px 4px -2px rgba(132, 132, 132, 0.43)",
+      "$type": "shadow",
+      "$description": "--shadow-md"
+    },
+    "lg": {
+      "$value": "0px 10px 15px -3px rgba(132, 132, 132, 0.43), 0px 4px 6px -4px rgba(132, 132, 132, 0.43)",
+      "$type": "shadow",
+      "$description": "--shadow-lg"
+    },
+    "xl": {
+      "$value": "0px 20px 25px -5px rgba(132, 132, 132, 0.43), 0px 8px 10px -6px rgba(132, 132, 132, 0.43)",
+      "$type": "shadow",
+      "$description": "--shadow-xl"
+    },
+    "2xl": {
+      "$value": "0px 25px 50px -12px rgba(0, 0, 0, 0.25)",
+      "$type": "shadow",
+      "$description": "--shadow-2xl"
+    },
+    "primary": {
+      "$value": "0px 4px 12px 0px oklch(from var(--color-primary) l c h/0.3)",
+      "$type": "shadow",
+      "$description": "--shadow-primary"
+    },
+    "secondary": {
+      "$value": "0px 4px 12px 0px oklch(from var(--color-secondary) l c h/0.3)",
+      "$type": "shadow",
+      "$description": "--shadow-secondary"
+    },
+    "success": {
+      "$value": "0px 4px 12px 0px rgba(34, 197, 94, 0.3)",
+      "$type": "shadow",
+      "$description": "--shadow-success"
+    },
+    "warning": {
+      "$value": "0px 4px 12px 0px rgba(251, 146, 60, 0.3)",
+      "$type": "shadow",
+      "$description": "--shadow-warning"
+    },
+    "danger": {
+      "$value": "0px 4px 12px 0px rgba(239, 68, 68, 0.3)",
+      "$type": "shadow",
+      "$description": "--shadow-danger"
+    },
+    "info": {
+      "$value": "0px 4px 12px 0px rgba(14, 165, 233, 0.3)",
+      "$type": "shadow",
+      "$description": "--shadow-info"
+    },
+    "inner": {
+      "$value": "inset 0px 2px 4px 0px rgba(0, 0, 0, 0.06)",
+      "$type": "shadow",
+      "$description": "--shadow-inner"
+    },
+    "inner-lg": {
+      "$value": "inset 0px 4px 8px 0px rgba(132, 132, 132, 0.43)",
+      "$type": "shadow",
+      "$description": "--shadow-inner-lg"
+    },
+    "glow": {
+      "$value": "0px 0px 20px 0px oklch(from var(--color-primary) l c h/0.5)",
+      "$type": "shadow",
+      "$description": "--shadow-glow"
+    },
+    "glow-lg": {
+      "$value": "0px 0px 40px 0px oklch(from var(--color-primary) l c h/0.6)",
+      "$type": "shadow",
+      "$description": "--shadow-glow-lg"
+    },
+    "outline": {
+      "$value": "0px 0px 0px 3px oklch(from var(--color-primary) l c h/0.5)",
+      "$type": "shadow",
+      "$description": "--shadow-outline"
+    },
+    "card": {
+      "$value": "0px 2px 8px 0px rgba(0, 0, 0, 0.08), 0px 1px 2px 0px rgba(0, 0, 0, 0.06)",
+      "$type": "shadow",
+      "$description": "--shadow-card"
+    },
+    "card-hover": {
+      "$value": "0px 8px 24px 0px rgba(0, 0, 0, 0.12), 0px 2px 6px 0px rgba(0, 0, 0, 0.08)",
+      "$type": "shadow",
+      "$description": "--shadow-card-hover"
+    },
+    "dropdown": {
+      "$value": "0px 10px 40px 0px rgba(0, 0, 0, 0.15), 0px 2px 8px 0px rgba(132, 132, 132, 0.43)",
+      "$type": "shadow",
+      "$description": "--shadow-dropdown"
+    },
+    "modal": {
+      "$value": "0px 20px 60px 0px rgba(0, 0, 0, 0.3), 0px 4px 16px 0px rgba(0, 0, 0, 0.2)",
+      "$type": "shadow",
+      "$description": "--shadow-modal"
+    }
+  },
+  "typography": {
+    "display-xl": {
+      "$value": "800 clamp(3.5rem, round(2.908rem + 2.761cqi, 0.01rem), 6rem)/1.1 Inter, -apple-system, BlinkMacSystemFont, Segoe UI, system-ui, sans-serif",
+      "$type": "typography",
+      "$description": "--text-display-xl"
+    },
+    "display-lg": {
+      "$value": "800 clamp(3rem, round(2.527rem + 2.208cqi, 0.01rem), 5rem)/1.1 Inter, -apple-system, BlinkMacSystemFont, Segoe UI, system-ui, sans-serif",
+      "$type": "typography",
+      "$description": "--text-display-lg"
+    },
+    "display-md": {
+      "$value": "700 clamp(2.5rem, round(2.145rem + 1.656cqi, 0.01rem), 4rem)/1.15 Inter, -apple-system, BlinkMacSystemFont, Segoe UI, system-ui, sans-serif",
+      "$type": "typography",
+      "$description": "--text-display-md"
+    },
+    "h1": {
+      "$value": "700 clamp(2.25rem, round(2.013rem + 1.104cqi, 0.01rem), 3.25rem)/1.2 Inter, -apple-system, BlinkMacSystemFont, Segoe UI, system-ui, sans-serif",
+      "$type": "typography",
+      "$description": "--text-h1"
+    },
+    "h1-light": {
+      "$value": "300 clamp(2.25rem, round(2.013rem + 1.104cqi, 0.01rem), 3.25rem)/1.2 Inter, -apple-system, BlinkMacSystemFont, Segoe UI, system-ui, sans-serif",
+      "$type": "typography",
+      "$description": "--text-h1-light"
+    },
+    "h2": {
+      "$value": "600 clamp(1.88rem, round(1.674rem + 0.961cqi, 0.01rem), 2.75rem)/1.2 Inter, -apple-system, BlinkMacSystemFont, Segoe UI, system-ui, sans-serif",
+      "$type": "typography",
+      "$description": "--text-h2"
+    },
+    "h2-light": {
+      "$value": "300 clamp(1.88rem, round(1.674rem + 0.961cqi, 0.01rem), 2.75rem)/1.2 Inter, -apple-system, BlinkMacSystemFont, Segoe UI, system-ui, sans-serif",
+      "$type": "typography",
+      "$description": "--text-h2-light"
+    },
+    "h3": {
+      "$value": "600 clamp(1.63rem, round(1.424rem + 0.961cqi, 0.01rem), 2.5rem)/1.25 Inter, -apple-system, BlinkMacSystemFont, Segoe UI, system-ui, sans-serif",
+      "$type": "typography",
+      "$description": "--text-h3"
+    },
+    "h3-light": {
+      "$value": "300 clamp(1.63rem, round(1.424rem + 0.961cqi, 0.01rem), 2.5rem)/1.25 Inter, -apple-system, BlinkMacSystemFont, Segoe UI, system-ui, sans-serif",
+      "$type": "typography",
+      "$description": "--text-h3-light"
+    },
+    "h4": {
+      "$value": "600 clamp(1.5rem, round(1.382rem + 0.552cqi, 0.01rem), 2rem)/1.3 Inter, -apple-system, BlinkMacSystemFont, Segoe UI, system-ui, sans-serif",
+      "$type": "typography",
+      "$description": "--text-h4"
+    },
+    "h4-light": {
+      "$value": "300 clamp(1.5rem, round(1.382rem + 0.552cqi, 0.01rem), 2rem)/1.3 Inter, -apple-system, BlinkMacSystemFont, Segoe UI, system-ui, sans-serif",
+      "$type": "typography",
+      "$description": "--text-h4-light"
+    },
+    "h5": {
+      "$value": "500 clamp(1.25rem, round(1.191rem + 0.276cqi, 0.01rem), 1.5rem)/1.4 Inter, -apple-system, BlinkMacSystemFont, Segoe UI, system-ui, sans-serif",
+      "$type": "typography",
+      "$description": "--text-h5"
+    },
+    "h5-light": {
+      "$value": "300 clamp(1.25rem, round(1.191rem + 0.276cqi, 0.01rem), 1.5rem)/1.4 Inter, -apple-system, BlinkMacSystemFont, Segoe UI, system-ui, sans-serif",
+      "$type": "typography",
+      "$description": "--text-h5-light"
+    },
+    "h6": {
+      "$value": "500 clamp(1.13rem, round(1.101rem + 0.133cqi, 0.01rem), 1.25rem)/1.4 Inter, -apple-system, BlinkMacSystemFont, Segoe UI, system-ui, sans-serif",
+      "$type": "typography",
+      "$description": "--text-h6"
+    },
+    "h6-light": {
+      "$value": "300 clamp(1.13rem, round(1.101rem + 0.133cqi, 0.01rem), 1.25rem)/1.4 Inter, -apple-system, BlinkMacSystemFont, Segoe UI, system-ui, sans-serif",
+      "$type": "typography",
+      "$description": "--text-h6-light"
+    },
+    "body-xl": {
+      "$value": "400 clamp(1.25rem, round(1.191rem + 0.276cqi, 0.01rem), 1.5rem)/1.6 Inter, -apple-system, BlinkMacSystemFont, Segoe UI, system-ui, sans-serif",
+      "$type": "typography",
+      "$description": "--text-body-xl"
+    },
+    "body-lg": {
+      "$value": "400 clamp(1.13rem, round(1.101rem + 0.133cqi, 0.01rem), 1.25rem)/1.6 Inter, -apple-system, BlinkMacSystemFont, Segoe UI, system-ui, sans-serif",
+      "$type": "typography",
+      "$description": "--text-body-lg"
+    },
+    "body": {
+      "$value": "400 clamp(1rem, round(0.969rem + 0.144cqi, 0.01rem), 1.13rem)/1.6 Inter, -apple-system, BlinkMacSystemFont, Segoe UI, system-ui, sans-serif",
+      "$type": "typography",
+      "$description": "--text-body"
+    },
+    "body-bold": {
+      "$value": "700 clamp(1rem, round(0.969rem + 0.144cqi, 0.01rem), 1.13rem)/1.6 Inter, -apple-system, BlinkMacSystemFont, Segoe UI, system-ui, sans-serif",
+      "$type": "typography",
+      "$description": "--text-body-bold"
+    },
+    "body-semibold": {
+      "$value": "600 clamp(1rem, round(0.969rem + 0.144cqi, 0.01rem), 1.13rem)/1.6 Inter, -apple-system, BlinkMacSystemFont, Segoe UI, system-ui, sans-serif",
+      "$type": "typography",
+      "$description": "--text-body-semibold"
+    },
+    "body-medium": {
+      "$value": "500 clamp(1rem, round(0.969rem + 0.144cqi, 0.01rem), 1.13rem)/1.6 Inter, -apple-system, BlinkMacSystemFont, Segoe UI, system-ui, sans-serif",
+      "$type": "typography",
+      "$description": "--text-body-medium"
+    },
+    "body-sm": {
+      "$value": "400 clamp(0.88rem, round(0.851rem + 0.133cqi, 0.01rem), 1rem)/1.5 Inter, -apple-system, BlinkMacSystemFont, Segoe UI, system-ui, sans-serif",
+      "$type": "typography",
+      "$description": "--text-body-sm"
+    },
+    "body-sm-bold": {
+      "$value": "700 clamp(0.88rem, round(0.851rem + 0.133cqi, 0.01rem), 1rem)/1.5 Inter, -apple-system, BlinkMacSystemFont, Segoe UI, system-ui, sans-serif",
+      "$type": "typography",
+      "$description": "--text-body-sm-bold"
+    },
+    "body-sm-semibold": {
+      "$value": "600 clamp(0.88rem, round(0.851rem + 0.133cqi, 0.01rem), 1rem)/1.5 Inter, -apple-system, BlinkMacSystemFont, Segoe UI, system-ui, sans-serif",
+      "$type": "typography",
+      "$description": "--text-body-sm-semibold"
+    },
+    "body-xs": {
+      "$value": "400 clamp(0.75rem, round(0.719rem + 0.144cqi, 0.01rem), 0.88rem)/1.5 Inter, -apple-system, BlinkMacSystemFont, Segoe UI, system-ui, sans-serif",
+      "$type": "typography",
+      "$description": "--text-body-xs"
+    },
+    "label": {
+      "$value": "500 clamp(0.75rem, round(0.719rem + 0.144cqi, 0.01rem), 0.88rem)/1.4 Inter, -apple-system, BlinkMacSystemFont, Segoe UI, system-ui, sans-serif",
+      "$type": "typography",
+      "$description": "--text-label"
+    },
+    "label-bold": {
+      "$value": "700 clamp(0.75rem, round(0.719rem + 0.144cqi, 0.01rem), 0.88rem)/1.4 Inter, -apple-system, BlinkMacSystemFont, Segoe UI, system-ui, sans-serif",
+      "$type": "typography",
+      "$description": "--text-label-bold"
+    },
+    "caption": {
+      "$value": "400 clamp(0.69rem, round(0.676rem + 0.066cqi, 0.01rem), 0.75rem)/1.4 Inter, -apple-system, BlinkMacSystemFont, Segoe UI, system-ui, sans-serif",
+      "$type": "typography",
+      "$description": "--text-caption"
+    },
+    "caption-bold": {
+      "$value": "600 clamp(0.69rem, round(0.676rem + 0.066cqi, 0.01rem), 0.75rem)/1.4 Inter, -apple-system, BlinkMacSystemFont, Segoe UI, system-ui, sans-serif",
+      "$type": "typography",
+      "$description": "--text-caption-bold"
+    },
+    "overline": {
+      "$value": "600 clamp(0.88rem, round(0.851rem + 0.133cqi, 0.01rem), 1rem)/1.3 Inter, -apple-system, BlinkMacSystemFont, Segoe UI, system-ui, sans-serif",
+      "$type": "typography",
+      "$description": "--text-overline"
+    },
+    "link": {
+      "$value": "500 clamp(0.94rem, round(0.926rem + 0.066cqi, 0.01rem), 1rem)/1.5 Inter, -apple-system, BlinkMacSystemFont, Segoe UI, system-ui, sans-serif",
+      "$type": "typography",
+      "$description": "--text-link"
+    },
+    "link-bold": {
+      "$value": "700 clamp(0.94rem, round(0.926rem + 0.066cqi, 0.01rem), 1rem)/1.5 Inter, -apple-system, BlinkMacSystemFont, Segoe UI, system-ui, sans-serif",
+      "$type": "typography",
+      "$description": "--text-link-bold"
+    },
+    "button": {
+      "$value": "600 clamp(0.88rem, round(0.851rem + 0.133cqi, 0.01rem), 1rem)/1.2 Inter, -apple-system, BlinkMacSystemFont, Segoe UI, system-ui, sans-serif",
+      "$type": "typography",
+      "$description": "--text-button"
+    },
+    "button-lg": {
+      "$value": "600 clamp(1rem, round(0.969rem + 0.144cqi, 0.01rem), 1.13rem)/1.2 Inter, -apple-system, BlinkMacSystemFont, Segoe UI, system-ui, sans-serif",
+      "$type": "typography",
+      "$description": "--text-button-lg"
+    },
+    "button-sm": {
+      "$value": "600 clamp(0.75rem, round(0.719rem + 0.144cqi, 0.01rem), 0.88rem)/1.2 Inter, -apple-system, BlinkMacSystemFont, Segoe UI, system-ui, sans-serif",
+      "$type": "typography",
+      "$description": "--text-button-sm"
+    },
+    "code": {
+      "$value": "400 clamp(0.88rem, round(0.851rem + 0.133cqi, 0.01rem), 1rem)/1.6 JetBrains Mono, Fira Code, Cascadia Code, Courier New, monospace",
+      "$type": "typography",
+      "$description": "--text-code"
+    },
+    "code-sm": {
+      "$value": "400 clamp(0.75rem, round(0.719rem + 0.144cqi, 0.01rem), 0.88rem)/1.6 JetBrains Mono, Fira Code, Cascadia Code, Courier New, monospace",
+      "$type": "typography",
+      "$description": "--text-code-sm"
+    }
+  },
+  "zIndex": {
+    "base": {
+      "$value": 0,
+      "$type": "number",
+      "$description": "--z-base"
+    },
+    "dropdown": {
+      "$value": 100,
+      "$type": "number",
+      "$description": "--z-dropdown"
+    },
+    "sticky": {
+      "$value": 200,
+      "$type": "number",
+      "$description": "--z-sticky"
+    },
+    "overlay": {
+      "$value": 900,
+      "$type": "number",
+      "$description": "--z-overlay"
+    },
+    "modal-backdrop": {
+      "$value": 999,
+      "$type": "number",
+      "$description": "--z-modal-backdrop"
+    },
+    "modal": {
+      "$value": 1000,
+      "$type": "number",
+      "$description": "--z-modal"
+    },
+    "toast": {
+      "$value": 1100,
+      "$type": "number",
+      "$description": "--z-toast"
+    },
+    "tooltip": {
+      "$value": 1200,
+      "$type": "number",
+      "$description": "--z-tooltip"
+    }
+  },
+  "color": {
+    "primary": {
+      "$value": "oklch(50% 0.232 259.6deg)",
+      "$type": "color",
+      "$description": "--color-primary"
+    },
+    "primary-light": {
+      "$value": "oklch(from var(--color-primary) calc(l + 0.15) c h)",
+      "$type": "color",
+      "$description": "--color-primary-light"
+    },
+    "primary-dark": {
+      "$value": "oklch(from var(--color-primary) calc(l - 0.15) c h)",
+      "$type": "color",
+      "$description": "--color-primary-dark"
+    },
+    "secondary": {
+      "$value": "oklch(74.7% 0.174 60.6deg)",
+      "$type": "color",
+      "$description": "--color-secondary"
+    },
+    "secondary-light": {
+      "$value": "oklch(from var(--color-secondary) calc(l + 0.15) c h)",
+      "$type": "color",
+      "$description": "--color-secondary-light"
+    },
+    "secondary-dark": {
+      "$value": "oklch(from var(--color-secondary) calc(l - 0.15) c h)",
+      "$type": "color",
+      "$description": "--color-secondary-dark"
+    },
+    "accent": {
+      "$value": "oklch(52% 0.153 164.1deg)",
+      "$type": "color",
+      "$description": "--color-accent"
+    },
+    "accent-light": {
+      "$value": "oklch(from var(--color-accent) calc(l + 0.15) c h)",
+      "$type": "color",
+      "$description": "--color-accent-light"
+    },
+    "accent-dark": {
+      "$value": "oklch(from var(--color-accent) calc(l - 0.15) c h)",
+      "$type": "color",
+      "$description": "--color-accent-dark"
+    },
+    "background": {
+      "$value": "oklch(97.6% 0 0deg)",
+      "$type": "color",
+      "$description": "--color-background"
+    },
+    "surface": {
+      "$value": "oklch(from var(--color-background) calc(l - 0.02) c h)",
+      "$type": "color",
+      "$description": "--color-surface"
+    },
+    "text": {
+      "$value": "oklch(21.8% 0 0deg)",
+      "$type": "color",
+      "$description": "--color-text"
+    },
+    "text-inverse": {
+      "$value": "oklch(97.6% 0 0deg)",
+      "$type": "color",
+      "$description": "--color-text-inverse"
+    },
+    "text-muted": {
+      "$value": "color-mix(in oklch, var(--color-text), var(--color-background) 50%)",
+      "$type": "color",
+      "$description": "--color-text-muted"
+    },
+    "border": {
+      "$value": "color-mix(in oklch, var(--color-text), var(--color-background) 80%)",
+      "$type": "color",
+      "$description": "--color-border"
+    },
+    "border-strong": {
+      "$value": "color-mix(in oklch, var(--color-text), var(--color-background) 60%)",
+      "$type": "color",
+      "$description": "--color-border-strong"
+    },
+    "surface-subtle": {
+      "$value": "color-mix(in oklch, var(--color-surface), var(--color-text) 5%)",
+      "$type": "color",
+      "$description": "--color-surface-subtle"
+    },
+    "warning-subtle": {
+      "$value": "color-mix(in oklch, var(--base-system-warning), var(--color-background) 75%)",
+      "$type": "color",
+      "$description": "--color-warning-subtle"
+    }
+  }
+}

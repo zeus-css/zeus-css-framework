@@ -1,0 +1,198 @@
+// ╔══════════════════════════════════════════════════════════════╗
+// ║  ⚡ Zeus CSS — Shadows                                         ║
+// ║                                                               ║
+// ║  Generates utility classes for shadows based on the framework's design tokens. ║
+// ╚══════════════════════════════════════════════════════════════╝
+
+@use "../../../../zeus.config" as config;
+@use "../../../core/design/effects/shadows" as *;
+
+@mixin load-shadows($prefix: "") {
+@if config.$zeus-enable-shadow-classes {
+
+// -----------------------------------------------------------------------------
+// BASE SHADOW CLASSES
+// -----------------------------------------------------------------------------
+
+// No shadow
+.#{$prefix}shadow-none {
+  box-shadow: none !important;
+}
+
+// Elevation levels
+.#{$prefix}shadow-xs {
+  box-shadow: var(--shadow-xs);
+}
+
+.#{$prefix}shadow-sm {
+  box-shadow: var(--shadow-sm);
+}
+
+.#{$prefix}shadow-md {
+  box-shadow: var(--shadow-md);
+}
+
+.#{$prefix}shadow-lg {
+  box-shadow: var(--shadow-lg);
+}
+
+.#{$prefix}shadow-xl {
+  box-shadow: var(--shadow-xl);
+}
+
+.#{$prefix}shadow-2xl {
+  box-shadow: var(--shadow-2xl);
+}
+
+// -----------------------------------------------------------------------------
+// SEMANTIC SHADOW CLASSES
+// -----------------------------------------------------------------------------
+
+.#{$prefix}shadow-primary {
+  box-shadow: var(--shadow-primary);
+}
+
+.#{$prefix}shadow-secondary {
+  box-shadow: var(--shadow-secondary);
+}
+
+.#{$prefix}shadow-success {
+  box-shadow: var(--shadow-success);
+}
+
+.#{$prefix}shadow-warning {
+  box-shadow: var(--shadow-warning);
+}
+
+.#{$prefix}shadow-danger {
+  box-shadow: var(--shadow-danger);
+}
+
+.#{$prefix}shadow-info {
+  box-shadow: var(--shadow-info);
+}
+
+// -----------------------------------------------------------------------------
+// INNER SHADOW CLASSES
+// -----------------------------------------------------------------------------
+
+.#{$prefix}shadow-inner {
+  box-shadow: var(--shadow-inner);
+}
+
+.#{$prefix}shadow-inner-lg {
+  box-shadow: var(--shadow-inner-lg);
+}
+
+// -----------------------------------------------------------------------------
+// SPECIAL EFFECT CLASSES
+// -----------------------------------------------------------------------------
+
+.#{$prefix}shadow-glow {
+  box-shadow: var(--shadow-glow);
+}
+
+.#{$prefix}shadow-glow-lg {
+  box-shadow: var(--shadow-glow-lg);
+}
+
+.#{$prefix}shadow-outline {
+  box-shadow: var(--shadow-outline);
+}
+
+// -----------------------------------------------------------------------------
+// COMPONENT SHADOW CLASSES
+// -----------------------------------------------------------------------------
+
+.#{$prefix}shadow-card {
+  box-shadow: var(--shadow-card);
+  transition: box-shadow 0.3s ease;
+
+  &:hover {
+    box-shadow: var(--shadow-card-hover);
+  }
+}
+
+.#{$prefix}shadow-card-hover {
+  box-shadow: var(--shadow-card-hover);
+}
+
+.#{$prefix}shadow-dropdown {
+  box-shadow: var(--shadow-dropdown);
+}
+
+.#{$prefix}shadow-modal {
+  box-shadow: var(--shadow-modal);
+}
+
+// -----------------------------------------------------------------------------
+// HOVER VARIANTS
+// -----------------------------------------------------------------------------
+
+.hover\:#{$prefix}shadow-xs:hover {
+  box-shadow: var(--shadow-xs);
+}
+
+.hover\:#{$prefix}shadow-sm:hover {
+  box-shadow: var(--shadow-sm);
+}
+
+.hover\:#{$prefix}shadow-md:hover {
+  box-shadow: var(--shadow-md);
+}
+
+.hover\:#{$prefix}shadow-lg:hover {
+  box-shadow: var(--shadow-lg);
+}
+
+.hover\:#{$prefix}shadow-xl:hover {
+  box-shadow: var(--shadow-xl);
+}
+
+.hover\:#{$prefix}shadow-2xl:hover {
+  box-shadow: var(--shadow-2xl);
+}
+
+.hover\:#{$prefix}shadow-none:hover {
+  box-shadow: none !important;
+}
+
+// -----------------------------------------------------------------------------
+// FOCUS VARIANTS
+// -----------------------------------------------------------------------------
+
+// Transparent, not none: invisible in normal rendering (box-shadow is the
+// real affordance) but forced-colors mode paints outlines with a system
+// color regardless of author color, so focus survives box-shadow being
+// stripped entirely under forced-colors.
+.focus\:#{$prefix}shadow-outline:focus-visible {
+  box-shadow: var(--shadow-outline);
+  outline: 2px solid transparent;
+  outline-offset: 2px;
+}
+
+.focus\:#{$prefix}shadow-primary:focus-visible {
+  box-shadow: var(--shadow-primary);
+  outline: 2px solid transparent;
+  outline-offset: 2px;
+}
+
+// -----------------------------------------------------------------------------
+// TRANSITION HELPERS
+// -----------------------------------------------------------------------------
+
+.#{$prefix}shadow-transition {
+  transition: box-shadow 0.3s ease;
+}
+
+.#{$prefix}shadow-transition-fast {
+  transition: box-shadow 0.15s ease;
+}
+
+.#{$prefix}shadow-transition-slow {
+  transition: box-shadow 0.5s ease;
+}
+
+} // end @if zeus-enable-shadow-classes
+
+}

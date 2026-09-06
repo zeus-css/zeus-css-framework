@@ -1,0 +1,30 @@
+// ╔══════════════════════════════════════════════════════════════╗
+// ║  ⚡ Zeus CSS — Sections                                        ║
+// ║                                                               ║
+// ║  Generates utility classes for sections based on the framework's design tokens. ║
+// ╚══════════════════════════════════════════════════════════════╝
+
+@use "sass:map";
+@use "../../../core/engine" as *;
+@use "../../../core/design/dimensions/spaces" as spacing-tokens;
+
+@mixin load-sections($prefix: "") {
+$spacing-sizes: map.keys(spacing-tokens.$space);
+
+  // .section-0 (from the "0" key below) already covers the zero-padding
+  // case — no separate .section-none needed. (Removed: the two
+  // were an exact duplicate, .section-none hardcoded literal 0 instead of
+  // going through --space-0 like every other size in this family.)
+  @each $size in $spacing-sizes {
+    .#{$prefix}section-#{$size} {
+      padding-block: var(--space-#{$size});
+    }
+  }
+
+  .#{$prefix}section-full {
+    min-height: 100svh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+}

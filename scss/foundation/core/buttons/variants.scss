@@ -1,0 +1,72 @@
+// ╔══════════════════════════════════════════════════════════════╗
+// ║  ⚡ Zeus CSS — Variants                                        ║
+// ║                                                               ║
+// ║  Core styles and definitions for variants.                    ║
+// ╚══════════════════════════════════════════════════════════════╝
+
+@use "sass:map";
+@use "../../../zeus.config" as config;
+
+$_button-variants-defaults: (
+  "primary": (
+    "default": (
+      "background": var(--color-primary),
+      "color": var(--color-text-inverse),
+      "border": none,
+    ),
+    "hover": (
+      "background": var(--color-primary-dark),
+      "color": var(--color-text-inverse),
+      "border": none,
+    ),
+    "active": (
+      "background": var(--color-primary-dark),
+      "color": var(--color-text-inverse),
+      "border": none,
+    ),
+  ),
+  "secondary": (
+    "default": (
+      "background": transparent,
+      "color": var(--color-primary),
+      "border": var(--border-line-sm) solid var(--color-primary),
+    ),
+    "hover": (
+      "color": var(--color-primary-dark),
+      "border-color": var(--color-primary-dark),
+    ),
+    "active": (
+      "color": var(--color-primary-dark),
+      "border-color": var(--color-primary-dark),
+    ),
+  ),
+  "tertiary": (
+    "default": (
+      "background": transparent,
+      "color": var(--color-primary),
+      "border": none,
+    ),
+    "hover": (
+      "color": var(--color-primary-dark),
+    ),
+    "active": (
+      "color": var(--color-primary-dark),
+    ),
+  ),
+  "icon-only": (
+    "default": (
+      "background": transparent,
+      "color": var(--color-primary),
+      "border": none,
+    ),
+    "hover": (
+      "color": var(--color-primary-dark),
+    ),
+    "active": (
+      "color": var(--color-primary-dark),
+    ),
+  ),
+);
+
+// ── Developer Override ──
+$button-variants: map.deep-merge($_button-variants-defaults, config.$zeus-button-variants);

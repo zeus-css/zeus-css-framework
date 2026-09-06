@@ -1,0 +1,31 @@
+// ╔══════════════════════════════════════════════════════════════╗
+// ║  ⚡ Zeus CSS — Borders                                         ║
+// ║                                                               ║
+// ║  Generates utility classes for borders based on the framework's design tokens. ║
+// ╚══════════════════════════════════════════════════════════════╝
+
+@use "sass:map";
+@use "../../../../zeus.config" as config;
+
+
+@use "../../../core/engine" as *;
+@use "../../../core/design/borders/border-radius" as border-radius-tokens;
+@use "../../../core/design/borders/border-line" as border-line-tokens;
+
+@mixin load-borders($prefix: "") {
+$border-classes: map.keys(border-radius-tokens.$border-radius);
+$border-line-classes: map.keys(border-line-tokens.$border-line);
+
+@each $size in $border-classes {
+  .#{$prefix}border-radius-#{$size} {
+    @include border-radius($size);
+  }
+}
+
+@each $size in $border-line-classes {
+  .#{$prefix}border-line-#{$size} {
+    @include border-line($size);
+  }
+}
+
+}

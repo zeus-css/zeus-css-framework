@@ -1,0 +1,247 @@
+// ╔══════════════════════════════════════════════════════════════╗
+// ║  ⚡ Zeus CSS — Zeus.customize                                  ║
+// ║                                                               ║
+// ║  Core styles and definitions for zeus.customize.              ║
+// ╚══════════════════════════════════════════════════════════════╝
+
+// ╔══════════════════════════════════════════════════════════════╗
+// ║  🎨 Zeus CSS — Design Token Customization                    ║
+// ║                                                              ║
+// ║  This is the single place to override ALL visual/design      ║
+// ║  tokens for your project. Feature flags and layout engine    ║
+// ║  settings live in zeus.config.scss.                          ║
+// ║                                                              ║
+// ║  Usage: edit the values below, then import zeus.scss as      ║
+// ║  usual. All !default variables are safe to override.         ║
+// ╚══════════════════════════════════════════════════════════════╝
+
+// ────────────────────────────────────────────────────────────────
+// 1. COLORS — OKLCH Palette
+// ────────────────────────────────────────────────────────────────
+// Only the 5 base keys are required — every other key below (light/dark
+// variants, muted, inverse, surface, border, border-strong) is derived
+// automatically at compile/paint time from these 5. Uncomment any key to
+// pin an exact value instead of the auto-derived one; the deriver skips
+// any key you've already defined.
+//
+// You can specify colors using ANY valid CSS format: OKLCH, HEX (#2563eb),
+// RGB, HSL, or named colors. Zeus converts them dynamically via relative CSS syntax.
+$zeus-colors: (
+  "primary":         oklch(50.0% 0.232 259.6), // WCAG AA compliant (> 4.5:1 contrast on white text)
+  "secondary":       oklch(74.7% 0.174 60.6),
+  "accent":          oklch(52.0% 0.153 164.1), // WCAG AA compliant (4.55:1 contrast on white text) — re-audit 27.07.2026, was 71.8%
+  "text":            oklch(21.8% 0.000 0.0),
+  "background":      oklch(97.6% 0.000 0.0),
+
+  // HEX Example Alternative:
+  // "primary": #1d4ed8, "secondary": #f59e0b, "accent": #10b981, "text": #111827, "background": #f9fafb,
+
+  // "primary-light":   oklch(73.7% 0.158 235.9),
+  // "primary-dark":    oklch(41.6% 0.287 264.4),
+  // "secondary-light": oklch(83.5% 0.142 74.3),
+  // "secondary-dark":  oklch(54.5% 0.117 72.2),
+  // "accent-light":    oklch(85%   0.100 164.1),
+  // "accent-dark":     oklch(55%   0.153 164.1),
+  // "text-muted":      oklch(46.8% 0.000 0.0),
+  // "text-inverse":    oklch(97.6% 0.000 0.0),
+  // "surface":         oklch(97.6% 0.000 0.0),
+  // "border":          oklch(79.8% 0.000 0.0),
+  // "border-strong":   oklch(46.8% 0.000 0.0),
+) !default;
+
+// ────────────────────────────────────────────────────────────────
+// 2. TYPOGRAPHY
+// ────────────────────────────────────────────────────────────────
+// Available Keys:
+// • Headings: display-xl, display-lg, display-md, h1, h1-light, h2, h2-light, 
+//             h3, h3-light, h4, h4-light, h5, h5-light, h6, h6-light
+// • Body:     body-xl, body-lg, body, body-bold, body-semibold, body-medium,
+//             body-sm, body-sm-bold, body-sm-semibold, body-xs
+// • UI/Other: label, label-bold, caption, caption-bold, overline, 
+//             link, link-bold, button, button-lg, button-sm, code, code-sm
+
+$zeus-font-family: () !default;
+// Example Override:
+// $zeus-font-family: (
+//   "primary": ("Inter", sans-serif),
+// ) !default;
+
+$zeus-typography: () !default;
+// Example Override:
+// $zeus-typography: (
+//   "h1": ( family: "primary", size: (floor: 40, ceil: 64), lh: 1.1, ls: -0.02, weight: 800, role: "heading" )
+// ) !default;
+
+// ────────────────────────────────────────────────────────────────
+// 3. SPACING SCALE — Fluid (floor→ceil px)
+// ────────────────────────────────────────────────────────────────
+// Available Keys: 4xs, 3xs, 2xs, xs, sm, md, lg, xl, 2xl, 3xl, 4xl
+
+$zeus-space: () !default;
+// Example Override:
+// $zeus-space: (
+//   "lg": (floor: 16, ceil: 24),
+// ) !default;
+
+// ────────────────────────────────────────────────────────────────
+// 4. BORDER RADIUS — Fluid (floor→ceil px)
+// ────────────────────────────────────────────────────────────────
+// Available Keys: xs, sm, md, lg, xl, rounded
+
+$zeus-border-radius: () !default;
+// Example Override:
+// $zeus-border-radius: (
+//   "md": (floor: 16, ceil: 24),
+// ) !default;
+
+// ────────────────────────────────────────────────────────────────
+// 5. BORDER WIDTH — Fluid (floor→ceil px)
+// ────────────────────────────────────────────────────────────────
+// Available Keys: xs, sm, md, lg
+
+$zeus-border-line: () !default;
+// Example Override:
+// $zeus-border-line: (
+//   "sm": (floor: 1.5, ceil: 3),
+// ) !default;
+
+// ────────────────────────────────────────────────────────────────
+// 6. ICON SIZES — Fluid (floor→ceil px)
+// ────────────────────────────────────────────────────────────────
+// Available Keys: xs, sm, md, lg, xl
+
+$zeus-icon-size: () !default;
+// Example Override:
+// $zeus-icon-size: (
+//   "md": (floor: 22, ceil: 32),
+// ) !default;
+
+// ────────────────────────────────────────────────────────────────
+// 7. SHADOWS
+// ────────────────────────────────────────────────────────────────
+// Available Keys:
+// • Elevation: none, xs, sm, md, lg, xl, 2xl
+// • Semantic:  primary, secondary, success, warning, danger, info
+// • Inner:     inner, inner-lg
+// • Special:   glow, glow-lg, outline
+// • Component: card, card-hover, dropdown, modal
+
+$zeus-shadows: () !default;
+// Example Override:
+// $zeus-shadows: (
+//   "sm": (0px 1px 3px 0px rgba(0,0,0,0.1)),
+// ) !default;
+
+// ────────────────────────────────────────────────────────────────
+// 8. BUTTON SIZES — Fluid (floor→ceil px)
+// ────────────────────────────────────────────────────────────────
+// Available Keys: 2xs, xs, sm, md, lg, xl, 2xl
+
+$zeus-button-sizes: () !default;
+// Example Override:
+// $zeus-button-sizes: (
+//   "md": (font: (floor: 14, ceil: 16), py: (floor: 10, ceil: 12), px: (floor: 20, ceil: 24)),
+// ) !default;
+
+// ────────────────────────────────────────────────────────────────
+// 9. BASE / SYSTEM COLORS
+// ────────────────────────────────────────────────────────────────
+$zeus-base-colors: () !default;
+// Example Override:
+// $zeus-base-colors: (
+//   "system": (
+//     "success": oklch(65% 0.20 145),
+//   ),
+// ) !default;
+
+// ────────────────────────────────────────────────────────────────
+// 10. Z-INDEX SCALE
+// ────────────────────────────────────────────────────────────────
+// A single stacking-order scale so components never need a magic number.
+// Used internally by .z-modal/.z-modal-backdrop; exposed as both
+// --z-{name} CSS variables and .layer-{name} utility classes.
+// Available Keys: base, dropdown, sticky, overlay, modal-backdrop, modal, toast, tooltip
+
+$zeus-z-index: () !default;
+// Example Override:
+// $zeus-z-index: (
+//   "modal": 2000,
+// ) !default;
+
+// ────────────────────────────────────────────────────────────────
+// 11. CUSTOM RESPONSIVE VARIABLES
+// ────────────────────────────────────────────────────────────────
+// Define your own custom CSS variables that change value based on breakpoints.
+// The variables will be automatically generated inside the :root with media queries.
+// 
+// HOW IT WORKS:
+// - The engine automatically treats the **lowest** defined breakpoint as the base value (no media query).
+// - Higher breakpoints generate `min-width` media queries, creating a clean mobile-first cascade.
+//
+// EXAMPLE BEHAVIOR for "header-height" below:
+// - It starts with `60px` by default (from 0px and up).
+// - From `md` (768px) it changes to `64px`.
+// - From `ml` (1024px) it changes to `72px` and stays `72px` for all larger screens.
+//
+// In your code, you can just use `var(--header-height)` without writing any @media blocks!
+
+$zeus-custom-vars: (
+  "header-height": (
+    sm: 60px,
+    md: 64px,
+    ml: 72px,
+  ),
+  // You can add more responsive variables here!
+  // "sidebar-width": (
+  //   xs: 240px,
+  //   lg: 320px
+  // )
+) !default;
+
+// ────────────────────────────────────────────────────────────────
+// 12. BUTTON VARIANTS
+// ────────────────────────────────────────────────────────────────
+$zeus-button-variants: (
+  "primary": ("default": ("background": var(--color-primary),
+      "color": var(--color-text-inverse),
+      "border": none,
+    ),
+    "hover": ("background": var(--color-primary-dark),
+      "color": var(--color-text-inverse),
+      "border": none,
+    ),
+    "active": ("background": var(--color-primary-dark),
+      "color": var(--color-text-inverse),
+      "border": none,
+    ),
+  ),
+  "secondary": ("default": ("background": transparent,
+      "color": var(--color-primary),
+      "border": var(--border-line-sm) solid var(--color-primary),
+    ),
+    "hover": ("color": var(--color-primary-dark),
+      "border-color": var(--color-primary-dark),
+    ),
+    "active": ("color": var(--color-primary-dark),
+      "border-color": var(--color-primary-dark),
+    ),
+  ),
+  "tertiary": ("default": ("background": transparent,
+      "color": var(--color-primary),
+      "border": none,
+    ),
+    "hover": ("color": var(--color-primary-dark),
+    ),
+    "active": ("color": var(--color-primary-dark),
+    ),
+  ),
+  "icon-only": ("default": ("background": transparent,
+      "color": var(--color-primary),
+      "border": none,
+    ),
+    "hover": ("color": var(--color-primary-dark),
+    ),
+    "active": ("color": var(--color-primary-dark),
+    ),
+  ),
+  ) !default;

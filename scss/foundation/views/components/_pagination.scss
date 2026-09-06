@@ -1,0 +1,82 @@
+// ╔══════════════════════════════════════════════════════════════╗
+// ║  ⚡ Zeus CSS — Pagination                                      ║
+// ║                                                               ║
+// ║  Core structural and visual styles for pagination.            ║
+// ╚══════════════════════════════════════════════════════════════╝
+
+@use "../../core/engine" as *;
+@use "../../core/design" as *;
+
+// ╔══════════════════════════════════════════════════════════════╗
+// ║  🔢 Pagination Component                                     ║
+// ║                                                              ║
+// ║  Usage:                                                      ║
+// ║  <nav class="z-pagination" aria-label="Pagination">           ║
+// ║    <ul>                                                      ║
+// ║      <li><a class="z-pagination__link" href="#p1">1</a></li> ║
+// ║      <li><a class="z-pagination__link z-pagination__link--active"║
+// ║              href="#p2" aria-current="page">2</a></li>       ║
+// ║      <li><span class="z-pagination__ellipsis">…</span></li>  ║
+// ║    </ul>                                                     ║
+// ║  </nav>                                                      ║
+// ╚══════════════════════════════════════════════════════════════╝
+
+@layer components {
+  .z-pagination {
+    ul {
+      display: flex;
+      align-items: center;
+      gap: var(--space-3xs);
+      list-style: none;
+      margin: 0;
+      padding: 0;
+    }
+
+    &__link {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 2.25rem;
+      height: 2.25rem;
+      @include padding("2xs", "x");
+      @include border-radius("sm");
+      @include text("body-sm");
+      color: var(--color-text);
+      text-decoration: none;
+      border: var(--border-line-xs) solid transparent;
+      cursor: pointer;
+
+      &:hover:not(&--active, &--disabled) {
+        background: var(--color-surface-subtle);
+        border-color: var(--color-border);
+      }
+
+      &:focus-visible {
+        outline: $focus-ring;
+        outline-offset: 2px;
+      }
+
+      &--active {
+        background: var(--color-primary);
+        color: var(--color-text-inverse);
+        cursor: default;
+      }
+
+      &--disabled {
+        color: var(--color-text-muted);
+        opacity: 0.5;
+        cursor: not-allowed;
+        pointer-events: none;
+      }
+    }
+
+    &__ellipsis {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 2.25rem;
+      height: 2.25rem;
+      color: var(--color-text-muted);
+    }
+  }
+}

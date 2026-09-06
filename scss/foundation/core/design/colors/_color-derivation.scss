@@ -1,0 +1,80 @@
+// ╔══════════════════════════════════════════════════════════════╗
+// ║  ⚡ Zeus CSS — Color Derivation                                ║
+// ║                                                               ║
+// ║  Pure functions for design tokens color derivation.            ║
+// ╚══════════════════════════════════════════════════════════════╝
+
+// ╔══════════════════════════════════════════════════════════════╗
+// ║  🎨 Shared Color Derivation Math                              ║
+// ║                                                              ║
+// ║  Single source of truth for how *-light/*-dark/muted/border   ║
+// ║  tokens relate to their base color. Used by BOTH:             ║
+// ║    · semantic-colors.scss  → the default palette              ║
+// ║    · engine/theme-builder.scss → zeus-theme() named themes    ║
+// ║  so a named theme's border/muted "weight" always matches the  ║
+// ║  default palette's, instead of two independently hand-tuned   ║
+// ║  percentages drifting apart.                                  ║
+// ║                                                                ║
+// ║  $base/$fg/$bg accept anything usable inside oklch()/          ║
+// ║  color-mix() — a literal color or a var(--color-*) reference.  ║
+// ╚══════════════════════════════════════════════════════════════╝
+
+// Picks a readable foreground (near-white or near-dark) for text/icons sitting
+// ON TOP of $base, by switching on the base color's own OKLCH lightness.
+//
+// How the switch works, entirely in CSS so it stays reactive: inside
+// oklch(from …) the `l` channel is available to calc(), so
+// `clamp(0, (0.6 - l) * 1000, 1)` collapses to exactly 0 (base is light →
+// use dark text) or 1 (base is dark → use light text). That 0/1 then
+// interpolates between the framework's own text (0.218) and background
+// (0.976) lightness values, at chroma 0 so the result is neutral.
+//
+// Why CSS and not Sass compile-time math: a consumer can reassign
+// --color-primary at runtime (JS, [data-theme]) and every derived token has
+// to follow. Computing this in Sass would freeze it at build time and break
+// that contract — the same reason *-light/*-dark above are CSS-derived.
+//
+// LIMITATION — this is a best-effort improvement, not a WCAG guarantee.
+// OKLCH lightness is not WCAG relative luminance, so a single threshold
+// cannot clear 4.5:1 for every possible input: a highly saturated green or
+// yellow around l≈0.6 has high luminance in both directions and bottoms out
+// near 3.5:1 whichever foreground is chosen. It picks the *better* of the two
+// options for any color, and all six of the framework's own default colors
+// clear AA comfortably (4.55–7.40:1, asserted by scripts/test-compile.mjs
+// check 8). If you override a brand color, re-run that check.
+@function derive-on-color($base) {
+  @return oklch(from #{$base} calc(0.218 + 0.758 * clamp(0, (0.6 - l) * 1000, 1)) 0 h);
+}
+
+@function derive-light($base) {
+  @return oklch(from #{$base} calc(l + 0.15) c h);
+}
+
+@function derive-dark($base) {
+  @return oklch(from #{$base} calc(l - 0.15) c h);
+}
+
+// Derives the default card/surface background elevation from the page background.
+@function derive-surface($background) {
+  @return oklch(from #{$background} calc(l - 0.02) c h);
+}
+
+@function derive-muted($foreground, $background) {
+  @return color-mix(in oklch, #{$foreground}, #{$background} 50%);
+}
+
+@function derive-border($foreground, $background) {
+  @return color-mix(in oklch, #{$foreground}, #{$background} 80%);
+}
+
+@function derive-border-strong($foreground, $background) {
+  @return color-mix(in oklch, #{$foreground}, #{$background} 60%);
+}
+
+@function derive-surface-subtle($surface, $foreground) {
+  @return color-mix(in oklch, #{$surface}, #{$foreground} 5%);
+}
+
+@function derive-warning-subtle($warning, $background) {
+  @return color-mix(in oklch, #{$warning}, #{$background} 75%);
+}

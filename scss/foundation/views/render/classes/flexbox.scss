@@ -1,0 +1,56 @@
+// ╔══════════════════════════════════════════════════════════════╗
+// ║  ⚡ Zeus CSS — Flexbox                                         ║
+// ║                                                               ║
+// ║  Generates utility classes for flexbox based on the framework's design tokens. ║
+// ╚══════════════════════════════════════════════════════════════╝
+
+@use "sass:map";
+@use "../../../../zeus.config" as config;
+
+@mixin load-flexbox($prefix: "") {
+  .#{$prefix}flex {
+    display: flex;
+  }
+  .#{$prefix}flex-row {
+    display: flex;
+    flex-direction: row;
+  }
+  .#{$prefix}flex-wrap {
+    display: flex;
+    flex-wrap: wrap;
+  }
+  .#{$prefix}flex-column {
+    display: flex;
+    flex-direction: column;
+  }
+  .#{$prefix}flex-center {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .#{$prefix}flex-space-between {
+    display: flex;
+    justify-content: space-between;
+  }
+
+  // Display helpers
+  .#{$prefix}d-none {
+    display: none !important;
+  }
+  .#{$prefix}d-block {
+    display: block;
+  }
+  .#{$prefix}d-inline-block {
+    display: inline-block;
+  }
+
+  // Alignment helpers
+  .#{$prefix}align-center  { align-items: center; }
+  .#{$prefix}align-start   { align-items: flex-start; }
+  .#{$prefix}align-end     { align-items: flex-end; }
+  .#{$prefix}justify-center { justify-content: center; }
+  .#{$prefix}justify-start  { justify-content: flex-start; }
+  .#{$prefix}justify-end    { justify-content: flex-end; }
+  .#{$prefix}justify-between { justify-content: space-between; }
+  .#{$prefix}justify-around  { justify-content: space-around; }
+}

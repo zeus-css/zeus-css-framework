@@ -1,0 +1,168 @@
+// ╔══════════════════════════════════════════════════════════════╗
+// ║  ⚡ Zeus CSS — Root Generator                                  ║
+// ║                                                               ║
+// ║  Core styles and definitions for root generator.              ║
+// ╚══════════════════════════════════════════════════════════════╝
+
+@use "sass:map";
+@use "sass:meta";
+@use "sass:list";
+@use "../../../zeus.config" as config;
+@use "../../core/design" as *;
+@use "../../core/engine" as *;
+@use "../../core/design/typography/typography" as typo;
+
+// ╔══════════════════════════════════════════════════════════════╗
+// ║  ⚡ Zeus Root Generator                                      ║
+// ║                                                              ║
+// ║  Single mixin generates ALL CSS custom properties.           ║
+// ╚══════════════════════════════════════════════════════════════╝
+
+// ╔══════════════════════════════════════════════════════════════╗
+// ║  ⚡ Zeus Token Pipeline Engine                                ║
+// ║                                                              ║
+// ║  A functional pipeline that resolves, transforms, and         ║
+// ║  emits CSS custom properties from a master dictionary.       ║
+// ╚══════════════════════════════════════════════════════════════╝
+
+// --- Stage 1: Resolver (Categorize the token) ---
+@function zeus-resolve-type($value) {
+  @if meta.type-of($value) !="map" {
+    @return "atomic";
+  }
+
+  $has-floor: map.has-key($value, "floor");
+  $has-ceil: map.has-key($value, "ceil");
+  @if $has-floor and $has-ceil {
+    @return "fluid-dimension";
+  }
+  // 'floor'/'ceil' are reserved fluid-dimension keys — a map with only one of
+  // them is a malformed override (e.g. a missing 'ceil'), not a legitimately
+  // named nested map. Error loudly instead of silently misfiling it as a
+  // nested map, which used to emit a bogus "{name}-floor" var and drop the
+  // real one entirely.
+  @if $has-floor or $has-ceil {
+    @error "[Zeus] Malformed fluid-dimension token: found only one of 'floor'/'ceil'. Both are required. Got keys: #{map.keys($value)}.";
+  }
+
+  $has-weight: map.has-key($value, "weight");
+  $has-lh: map.has-key($value, "lh");
+  @if $has-weight and $has-lh {
+    @return "typography-set";
+  }
+  @if $has-weight or $has-lh {
+    @error "[Zeus] Malformed typography-set token: found only one of 'weight'/'lh'. Both are required. Got keys: #{map.keys($value)}.";
+  }
+
+  @return "nested-map";
+}
+
+// --- Stage 2: Transformer (Calculate the final value) ---
+@function zeus-transform-value($type, $value, $key: null) {
+  @if $type =="fluid-dimension" {
+    @return useclamp-sizing(map.get($value, "floor"), map.get($value, "ceil"));
+  }
+
+  @if $type =="typography-set" {
+    $family-key: map.get($value, "family");
+    @if not map.has-key(typo.$font-family, $family-key) {
+      @error "[Zeus] Typography token '#{$key}' references unknown font family '#{$family-key}'. Available: #{map.keys(typo.$font-family)}.";
+    }
+    $font-family-val: map.get(typo.$font-family, $family-key);
+    @return #{map.get($value, "weight")} #{useclamp-typography($key)} / #{map.get($value, "lh")} #{$font-family-val};
+  }
+
+  @return $value;
+}
+
+// --- Stage 3: Emitter (Generate the CSS Variable) ---
+@mixin zeus-emit-variable($name, $value) {
+  @if $value !=null {
+    #{$name}: #{$value};
+  }
+}
+
+// --- Stage 4: Orchestrator (Recursive traversal) ---
+@mixin zeus-pipeline-orchestrator($dictionary, $prefix: "--") {
+  @each $key, $value in $dictionary {
+    $type: zeus-resolve-type($value);
+
+    // Dynamic naming logic (removes 'default' suffixes for cleaner aliases)
+    $current-name: null;
+    @if $key == "default" {
+      $current-name: $prefix;
+    } @else {
+      @if $prefix == "--" {
+        $current-name: "#{$prefix}#{$key}";
+      } @else {
+        $current-name: "#{$prefix}-#{$key}";
+      }
+    }
+
+    @if $type =="nested-map" {
+      @include zeus-pipeline-orchestrator($value, $current-name);
+    }
+
+    @else {
+      $transformed-value: zeus-transform-value($type, $value, $key);
+      @include zeus-emit-variable($current-name, $transformed-value);
+    }
+  }
+}
+
+// Ascending-by-pixel-value ordering of a breakpoint map's keys. The custom-vars
+// loop below assumes this order for a correct mobile-first cascade — relying on
+// $zeus-breakpoints' own map-literal insertion order was fragile: an override
+// that appends a new key out of numeric order (e.g. a "tiny" breakpoint typed
+// after "xxl") would silently cascade last instead of where its pixel value
+// puts it. Small, fixed-size map (breakpoint counts are single digits), sorted
+// once per zeus-root-vars() call — negligible compile-time cost.
+@function _zeus-sorted-breakpoint-keys($breakpoints-map) {
+  $keys: map.keys($breakpoints-map);
+  $n: list.length($keys);
+  @if $n > 1 {
+    @for $i from 1 through $n - 1 {
+      @for $j from 1 through $n - $i {
+        $a: list.nth($keys, $j);
+        $b: list.nth($keys, $j + 1);
+        @if map.get($breakpoints-map, $a) > map.get($breakpoints-map, $b) {
+          $keys: list.set-nth($keys, $j, $b);
+          $keys: list.set-nth($keys, $j + 1, $a);
+        }
+      }
+    }
+  }
+  @return $keys;
+}
+
+// --- Public API ---
+@mixin zeus-root-vars() {
+
+  // Dynamic Responsive Custom Variables
+  @if meta.type-of(config.$zeus-custom-vars) == "map" {
+    @each $var-name, $breakpoints-map in config.$zeus-custom-vars {
+      $is-first: true;
+      // Loop in ascending pixel order (not map-literal order) to guarantee a
+      // correct mobile-first cascade regardless of how the breakpoint override
+      // map was authored.
+      @each $bp in _zeus-sorted-breakpoint-keys(config.$zeus-breakpoints) {
+        @if map.has-key($breakpoints-map, $bp) {
+          $val: map.get($breakpoints-map, $bp);
+
+          // The lowest defined breakpoint is treated as the base value (no media query)
+          @if $is-first {
+            --#{$var-name}: #{$val};
+            $is-first: false;
+          } @else {
+            @include screen-above($bp) {
+              --#{$var-name}: #{$val};
+            }
+          }
+        }
+      }
+    }
+  }
+
+  // Execute the automated token pipeline
+  @include zeus-pipeline-orchestrator($zeus-design-system);
+}

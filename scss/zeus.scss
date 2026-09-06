@@ -1,0 +1,17 @@
+// ╔══════════════════════════════════════════════════════════════╗
+// ║  ⚡ Zeus CSS — Zeus                                          ║
+// ║                                                              ║
+// ║  Core styles and definitions for zeus.                       ║
+// ╚══════════════════════════════════════════════════════════════╝
+// ╔══════════════════════════════════════════════════════════════╗
+// ║  Single entry point for component .module.scss files.        ║
+// ║  Exposes design tokens, engine (mixins), and API (functions) ║
+// ║  without emitting any CSS.                                   ║
+// ║                                                              ║
+// ║  Usage: @use "./zeus" as *;                                    ║
+// ╚══════════════════════════════════════════════════════════════╝
+
+@forward "./zeus.config";
+@forward "./foundation/core/design";
+@forward "./foundation/core/engine";
+@forward "./foundation/core/api";

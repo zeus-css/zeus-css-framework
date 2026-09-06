@@ -1,0 +1,138 @@
+// ╔══════════════════════════════════════════════════════════════╗
+// ║  ⚡ Zeus CSS — Modal                                           ║
+// ║                                                               ║
+// ║  Core structural and visual styles for the modal component.   ║
+// ╚══════════════════════════════════════════════════════════════╝
+
+@use "../../../zeus.config" as config;
+@use "../../core/engine" as *;
+
+// ╔══════════════════════════════════════════════════════════════╗
+// ║  🪟 Modal / Dialog Component                                 ║
+// ║                                                              ║
+// ║  Accessible overlay dialog with backdrop, header,            ║
+// ║  scrollable body and sticky footer.                          ║
+// ║                                                              ║
+// ║  Usage:                                                      ║
+// ║  <dialog class="z-modal" open>                               ║
+// ║    <header class="z-modal__header">                          ║
+// ║      <h2 class="z-modal__title">…</h2>                      ║
+// ║      <button class="z-modal__close">×</button>              ║
+// ║    </header>                                                 ║
+// ║    <div class="z-modal__body">…</div>                        ║
+// ║    <footer class="z-modal__footer">…</footer>                ║
+// ║  </dialog>                                                   ║
+// ╚══════════════════════════════════════════════════════════════╝
+
+@layer components {
+  // ── Backdrop ───────────────────────────────────────────────
+  // Two paths to the same look, for two ways of opening the modal:
+  // .z-modal-backdrop is a manual sibling element (any open/close approach).
+  // ::backdrop is painted automatically by the browser when a <dialog> is
+  // opened via .showModal() — style it too so that path needs no extra markup.
+  .z-modal-backdrop {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(4px);
+    z-index: var(--z-modal-backdrop);
+  }
+
+  .z-modal::backdrop {
+    background: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(4px);
+  }
+
+  // ── Modal container ────────────────────────────────────────
+  .z-modal {
+    position: fixed;
+    inset: 0;
+    margin: auto;
+    width: min(90dvw, 560px);
+    max-height: 85dvh;
+    flex-direction: column;
+    @include border-radius("lg");
+    background: var(--color-surface);
+    box-shadow: var(--shadow-xl);
+    border: var(--border-line-xs) solid var(--color-border);
+    z-index: var(--z-modal);
+
+    // Reset native dialog styling — display only when open, hidden otherwise
+    &[open] {
+      display: flex;
+    }
+
+    &:not([open]) {
+      display: none;
+    }
+
+    // ── Header ───────────────────────────────────────────────
+    &__header {
+      @include padding("lg", "x");
+      @include padding("md", "y");
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: var(--border-line-xs) solid var(--color-border);
+      flex-shrink: 0;
+    }
+
+    // ── Title ────────────────────────────────────────────────
+    &__title {
+      @include text("h4");
+      color: var(--color-text);
+      margin: 0;
+    }
+
+    // ── Close button ─────────────────────────────────────────
+    &__close {
+      appearance: none;
+      border: none;
+      background: transparent;
+      @include text("h4");
+      color: var(--color-text-muted);
+      cursor: pointer;
+      padding: 0;
+      line-height: 1;
+
+      &:hover {
+        color: var(--color-text);
+      }
+    }
+
+    // ── Body (scrollable) ───────────────────────────────────
+    &__body {
+      @include padding("lg");
+      overflow-y: auto;
+      flex: 1 1 auto;
+      @include text("body");
+      color: var(--color-text);
+    }
+
+    // ── Footer ───────────────────────────────────────────────
+    &__footer {
+      @include padding("lg", "x");
+      @include padding("md", "y");
+      border-top: var(--border-line-xs) solid var(--color-border);
+      display: flex;
+      justify-content: flex-end;
+      gap: var(--space-sm);
+      flex-shrink: 0;
+    }
+
+    // ── Size modifiers ───────────────────────────────────────
+    &--sm {
+      width: min(90dvw, 400px);
+    }
+
+    &--lg {
+      width: min(90dvw, 800px);
+    }
+
+    &--fullscreen {
+      width: 100dvw;
+      max-height: 100dvh;
+      border-radius: 0;
+    }
+  }
+}

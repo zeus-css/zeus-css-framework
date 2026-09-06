@@ -1,0 +1,114 @@
+// ╔══════════════════════════════════════════════════════════════╗
+// ║  ⚡ Zeus CSS — Validate                                        ║
+// ║                                                               ║
+// ║  Design tokens and configuration for validate.                ║
+// ╚══════════════════════════════════════════════════════════════╝
+
+@use "sass:map";
+@use "sass:meta";
+
+// -----------------------------------------------------------------
+// Validate a simple responsive token: (floor, ceil)
+// Used for: spaces, icon-sizes, border-radius, border-line
+// Clamp by default — no fluid flag needed
+// -----------------------------------------------------------------
+@mixin validate-responsive-token($category, $name, $token-map) {
+  @if not map.has-key($token-map, $name) {
+    @error "[ZEUS Validate] Token '#{$name}' not found in #{$category} map.";
+  }
+
+  $token: map.get($token-map, $name);
+
+  @if meta.type-of($token) != "map" {
+    @error "[ZEUS Validate] #{$category}.#{$name} must be a map, got #{meta.type-of($token)}.";
+  }
+
+  @each $required-key in ("floor", "ceil") {
+    @if not map.has-key($token, $required-key) {
+      @error "[ZEUS Validate] #{$category}.#{$name} is missing required key '#{$required-key}'. Expected format: (floor: N, ceil: N)";
+    }
+  }
+}
+
+// -----------------------------------------------------------------
+// Validate a typography token
+// Expected: (family, size: (floor, ceil), lh, ls, weight)
+// Clamp by default — no fluid flag needed
+// -----------------------------------------------------------------
+@mixin validate-typography-token($name, $token-map) {
+  @if not map.has-key($token-map, $name) {
+    @error "[ZEUS Validate] Typography token '#{$name}' not found.";
+  }
+
+  $token: map.get($token-map, $name);
+
+  @each $required-key in ("family", "size", "lh", "ls", "weight") {
+    @if not map.has-key($token, $required-key) {
+      @error "[ZEUS Validate] typography.#{$name} is missing key '#{$required-key}'. Expected keys: family, size, lh, ls, weight";
+    }
+  }
+
+  // Validate the nested size sub-map
+  $size-map: map.get($token, "size");
+  @if meta.type-of($size-map) != "map" {
+    @error "[ZEUS Validate] typography.#{$name}.size must be a map (floor, ceil), got #{meta.type-of($size-map)}.";
+  }
+
+  @each $size-key in ("floor", "ceil") {
+    @if not map.has-key($size-map, $size-key) {
+      @error "[ZEUS Validate] typography.#{$name}.size is missing '#{$size-key}'. Expected: (floor: N, ceil: N)";
+    }
+  }
+}
+
+// -----------------------------------------------------------------
+// Validate a button size token
+// Expected: (font: (floor, ceil), py: (floor, ceil), px: (floor, ceil))
+// Clamp by default — no fluid flag needed
+// -----------------------------------------------------------------
+@mixin validate-button-size-token($name, $token-map) {
+  @if not map.has-key($token-map, $name) {
+    @error "[ZEUS Validate] Button size '#{$name}' not found.";
+  }
+
+  $token: map.get($token-map, $name);
+
+  @each $prop in ("font", "py", "px") {
+    @if not map.has-key($token, $prop) {
+      @error "[ZEUS Validate] button-sizes.#{$name} is missing '#{$prop}'. Expected keys: font, py, px";
+    }
+
+    $sub: map.get($token, $prop);
+    @if meta.type-of($sub) != "map" {
+      @error "[ZEUS Validate] button-sizes.#{$name}.#{$prop} must be a map, got #{meta.type-of($sub)}.";
+    }
+
+    @each $sub-key in ("floor", "ceil") {
+      @if not map.has-key($sub, $sub-key) {
+        @error "[ZEUS Validate] button-sizes.#{$name}.#{$prop} is missing '#{$sub-key}'. Expected: (floor: N, ceil: N)";
+      }
+    }
+  }
+}
+
+// -----------------------------------------------------------------
+// Batch validate: run on entire maps at once
+// Call these in a debug/dev build to catch all errors early
+// -----------------------------------------------------------------
+@mixin validate-all-responsive($category, $token-map) {
+  @each $name, $_ in $token-map {
+    @include validate-responsive-token($category, $name, $token-map);
+  }
+}
+
+@mixin validate-all-typography($token-map) {
+  @each $name, $_ in $token-map {
+    @include validate-typography-token($name, $token-map);
+  }
+}
+
+@mixin validate-all-button-sizes($token-map) {
+  @each $name, $_ in $token-map {
+    @include validate-button-size-token($name, $token-map);
+  }
+}

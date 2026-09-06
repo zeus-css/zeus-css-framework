@@ -1,0 +1,116 @@
+// ╔══════════════════════════════════════════════════════════════╗
+// ║  ⚡ Zeus CSS — Classes                                         ║
+// ║                                                               ║
+// ║  Core styles and definitions for classes.                     ║
+// ╚══════════════════════════════════════════════════════════════╝
+
+@use "../../../zeus.config" as config;
+@use "../../core/engine/responsive" as *;
+
+@use "./classes/typography";
+@use "./classes/colors";
+@use "./classes/state-variants";
+@use "./classes/borders";
+@use "./classes/shadows";
+@use "./classes/z-index";
+@use "./classes/sizes";
+@use "./classes/sizing-utils";
+@use "./classes/position";
+@use "./classes/misc-utils";
+@use "./classes/spacing";
+@use "./classes/sections";
+@use "./classes/buttons";
+@use "./classes/utilities";
+@use "./classes/containers";
+@use "./classes/flexbox";
+@use "./classes/grid";
+@use "./classes/animations";
+@use "./classes/aspect-ratio";
+@use "./classes/compounds";
+
+// ============================================================================
+// MIXINS FOR DIFFERENT UTILITY GROUPS
+// ============================================================================
+
+// 1. Heavy components that do NOT need responsive breakpoints
+@mixin load-components($prefix: "") {
+@include buttons.load-buttons($prefix);
+  @include animations.load-animations($prefix);
+  @include compounds.load-compounds($prefix);
+  @include aspect-ratio.load-aspect-ratio($prefix);
+  @include sections.load-sections($prefix);
+  @include grid.load-grid-patterns($prefix);
+}
+
+// 2. Fluid & Static utilities (clamp() based or binary) that do NOT need breakpoints
+// .container and the .hidden-*/.article/.highlight utilities live here too:
+// they have no breakpoint-dependent variants of their own (hidden-* already encodes
+// its breakpoint in the class name via its own screen-*() call), so generating
+// "md:hidden-desktops" etc. inside the responsive loop below would nest an outer
+// breakpoint check around an already-fixed inner one — producing impossible/dead
+// media queries at higher breakpoints (e.g. min-width:2560px AND max-width:1279px).
+@mixin load-base-only-utilities($prefix: "") {
+@include typography.load-typography($prefix);
+  @include colors.load-colors($prefix);
+  @include state-variants.load-state-variants($prefix);
+  @include borders.load-borders($prefix);
+  @include shadows.load-shadows($prefix);
+  @include z-index.load-z-index($prefix);
+  @include spacing.load-spacing($prefix);
+  @include utilities.load-utilities($prefix);
+  @include containers.load-containers($prefix);
+}
+
+// 3. Structural & Layout utilities that MUST be responsive (breakpoints)
+@mixin load-responsive-utilities($prefix: "") {
+@include sizes.load-sizes($prefix);
+  @include sizing-utils.load-sizing-utils($prefix);
+  @include position.load-position($prefix);
+  @include misc-utils.load-misc-utils($prefix);
+  @include flexbox.load-flexbox($prefix);
+  @include grid.load-grid($prefix);
+}
+
+// Global mixin to load EVERYTHING for the base level
+@mixin load-all-classes($prefix: "") {
+@include load-components($prefix);
+  @include load-base-only-utilities($prefix);
+  @include load-responsive-utilities($prefix);
+}
+
+// ============================================================================
+// GENERATE CSS CLASSES
+// ============================================================================
+
+$_zp: "";
+@if config.$zeus-use-prefix {
+  $_zp: config.$zeus-class-prefix;
+}
+
+// STEP 1: Generate Components
+@layer components {
+  @include load-components($_zp);
+}
+
+// STEP 2: Generate Utilities (Base & Responsive)
+@layer utilities {
+  @include load-base-only-utilities($_zp);
+  @include load-responsive-utilities($_zp);
+
+  // STEP 3: Generate Breakpoint Responsive Classes
+  // By looping breakpoints at the top level, we guarantee that all `lg:` classes
+  // come after all `md:` classes, completely eliminating CSS specificity bugs.
+  //
+  // OPTIMIZATION: We ONLY load structural utilities (Grid, Flex, etc) inside 
+  // breakpoints to drastically reduce CSS bloat. Colors, Spacing, and Typography 
+  // are intentionally excluded because they are handled by the Fluid Engine.
+  @if config.$zeus-enable-responsive-classes {
+    @each $bp-name, $bp-value in config.$zeus-breakpoints {
+      @if $bp-value != 0 {
+        @include screen-above($bp-name) {
+          @include load-responsive-utilities("#{$bp-name}\\:#{$_zp}");
+        }
+      }
+    }
+  }
+}

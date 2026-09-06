@@ -1,0 +1,31 @@
+// ╔══════════════════════════════════════════════════════════════╗
+// ║  ⚡ Zeus CSS — Border Radius                                   ║
+// ║                                                               ║
+// ║  Design tokens and configuration for border radius.           ║
+// ╚══════════════════════════════════════════════════════════════╝
+
+@use "sass:map";
+@use "../../../../zeus.config" as config;
+@use "../_validate" as validate;
+
+// ╔══════════════════════════════════════════════════════════╗
+// ║  📐 BORDER RADIUS TOKENS                                
+// ║                                                         
+// ║  Format: "name": (floor: N, ceil: N)
+// ║  Output CSS variable: --border-radius-{name}             
+// ╚══════════════════════════════════════════════════════════╝
+
+// ── Defaults ─────────────────────────────────────────────────
+$_border-radius-defaults: (
+  "none":    (floor: 0,   ceil: 0),
+  "xs":      (floor: 2,   ceil: 4),
+  "sm":      (floor: 8,   ceil: 12),
+  "md":      (floor: 16,  ceil: 24),
+  "lg":      (floor: 20,  ceil: 32),
+  "xl":      (floor: 38,  ceil: 64),
+  "rounded": (floor: 360, ceil: 360),
+);
+
+// ── Developer can override specific keys ──
+$border-radius: map.deep-merge($_border-radius-defaults, config.$zeus-border-radius);
+@include validate.validate-all-responsive("border-radius", $border-radius);

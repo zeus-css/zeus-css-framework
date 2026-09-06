@@ -1,0 +1,69 @@
+// ╔══════════════════════════════════════════════════════════════╗
+// ║  ⚡ Zeus CSS — Skeleton                                        ║
+// ║                                                               ║
+// ║  Core structural and visual styles for the skeleton component.║
+// ╚══════════════════════════════════════════════════════════════╝
+
+@use "../../core/engine" as *;
+
+// ╔══════════════════════════════════════════════════════════════╗
+// ║  💀 Skeleton Component                                       ║
+// ║                                                              ║
+// ║  Pure CSS — no popover, no positioning, no JS. A loading      ║
+// ║  placeholder is static content in normal flow, so there's    ║
+// ║  nothing here that the Phase 2 popover decision applies to.  ║
+// ║                                                              ║
+// ║  Usage:                                                      ║
+// ║  <div class="z-skeleton z-skeleton--text"></div>             ║
+// ║  <div class="z-skeleton z-skeleton--title"></div>            ║
+// ║  <div class="z-skeleton z-skeleton--avatar"></div>           ║
+// ║  <div class="z-skeleton z-skeleton--block" style="height:120px"></div> ║
+// ╚══════════════════════════════════════════════════════════════╝
+
+@layer components {
+  .z-skeleton {
+    display: block;
+    @include border-radius("sm");
+    background: linear-gradient(
+      90deg,
+      var(--color-surface-subtle) 25%,
+      var(--color-border) 50%,
+      var(--color-surface-subtle) 75%
+    );
+    background-size: 200% 100%;
+    animation: zeus-skeleton-shimmer 1.6s ease-in-out infinite;
+    // Every placeholder shape hides its stand-in content from assistive
+    // tech the same way — the region announcing "loading" (aria-busy on a
+    // shared ancestor) is the consumer's job, not this component's.
+    color: transparent;
+    user-select: none;
+
+    &--text {
+      height: 0.9em;
+      width: 100%;
+      @include margin("3xs", "y");
+    }
+
+    &--title {
+      height: 1.4em;
+      width: 60%;
+      @include margin("2xs", "y");
+    }
+
+    &--avatar {
+      width: var(--size-icon-lg);
+      height: var(--size-icon-lg);
+      border-radius: 50%;
+    }
+
+    &--block {
+      width: 100%;
+      height: 100%;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      animation: none;
+      background: var(--color-surface-subtle);
+    }
+  }
+}

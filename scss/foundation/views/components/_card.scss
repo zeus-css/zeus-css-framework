@@ -1,0 +1,117 @@
+// ╔══════════════════════════════════════════════════════════════╗
+// ║  ⚡ Zeus CSS — Card                                            ║
+// ║                                                               ║
+// ║  Core structural and visual styles for the card component.    ║
+// ╚══════════════════════════════════════════════════════════════╝
+
+@use "../../../zeus.config" as config;
+@use "../../core/engine" as *;
+
+// ╔══════════════════════════════════════════════════════════════╗
+// ║  🃏 Card Component                                           ║
+// ║                                                              ║
+// ║  A self-contained content block with optional image,         ║
+// ║  header, body and footer sections.                           ║
+// ║                                                              ║
+// ║  Usage:                                                      ║
+// ║  <article class="z-card">                                    ║
+// ║    <img class="z-card__media" src="…" alt="…" />             ║
+// ║    <div class="z-card__body">                                ║
+// ║      <h3 class="z-card__title">…</h3>                       ║
+// ║      <p class="z-card__text">…</p>                           ║
+// ║    </div>                                                    ║
+// ║    <footer class="z-card__footer">…</footer>                 ║
+// ║  </article>                                                  ║
+// ╚══════════════════════════════════════════════════════════════╝
+// NOTE: .surface (views/render/classes/_compounds.scss, renamed from
+// .zeus-card) is a separate, intentional single-class utility card for
+// quick composition with other utility classes — not a duplicate of this
+// BEM component. See its own header.
+
+@layer components {
+  .z-card {
+    display: flex;
+    flex-direction: column;
+    @include border-radius("md");
+    @include card-shadow();
+    background: var(--color-surface);
+    border: var(--border-line-xs) solid var(--color-border);
+    overflow: hidden;
+    transition: box-shadow 0.25s ease, transform 0.25s ease;
+
+    &:hover {
+      box-shadow: var(--shadow-lg);
+      transform: translateY(-2px);
+    }
+
+    // ── Media (image/video at top) ───────────────────────────
+    &__media {
+      width: 100%;
+      aspect-ratio: 16 / 9;
+      object-fit: cover;
+      display: block;
+    }
+
+    // ── Inner Container & Structural Content ────────────────
+    &__body {
+      @include padding("lg");
+      flex: 1 1 auto;
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-sm);
+    }
+
+    // ── Title ────────────────────────────────────────────────
+    &__title {
+      @include text("h5");
+      color: var(--color-text);
+      margin: 0;
+    }
+
+    // ── Card Description Copy ──────────────────────────────
+    &__text {
+      @include text("body-sm");
+      color: var(--color-text-muted);
+      margin: 0;
+    }
+
+    // ── Footer ───────────────────────────────────────────────
+    &__footer {
+      @include padding("md", "x");
+      @include padding("sm", "y");
+      border-top: var(--border-line-xs) solid var(--color-border);
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: var(--space-sm);
+    }
+
+    // ── Modifiers ────────────────────────────────────────────
+    &--flat {
+      box-shadow: none;
+      &:hover {
+        box-shadow: none;
+        transform: none;
+      }
+    }
+
+    &--outlined {
+      box-shadow: none;
+      border: var(--border-line-md) solid var(--color-border-strong);
+      &:hover {
+        box-shadow: none;
+        transform: none;
+      }
+    }
+
+    &--horizontal {
+      flex-direction: row;
+
+      .z-card__media {
+        inline-size: 40%;
+        aspect-ratio: auto;
+        min-height: 100%;
+      }
+    }
+  }
+}

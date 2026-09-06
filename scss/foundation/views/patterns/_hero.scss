@@ -1,0 +1,121 @@
+// ╔══════════════════════════════════════════════════════════════╗
+// ║  ⚡ Zeus CSS — Hero                                            ║
+// ║                                                               ║
+// ║  Core styles and definitions for hero.                        ║
+// ╚══════════════════════════════════════════════════════════════╝
+
+@use "../../../zeus.config" as config;
+@use "../../core/engine" as *;
+
+// ╔══════════════════════════════════════════════════════════════╗
+// ║  🦸 Hero Pattern                                             ║
+// ║                                                              ║
+// ║  Full-width introductory section with title, subtitle,       ║
+// ║  optional CTA and background image support.                  ║
+// ║                                                              ║
+// ║  Usage:                                                      ║
+// ║  <section class="z-hero">                                    ║
+// ║    <div class="z-hero__content">                             ║
+// ║      <h1 class="z-hero__title">…</h1>                       ║
+// ║      <p class="z-hero__subtitle">…</p>                      ║
+// ║      <div class="z-hero__actions">                           ║
+// ║        <a class="z-hero__cta">Get Started</a>               ║
+// ║      </div>                                                  ║
+// ║    </div>                                                    ║
+// ║  </section>                                                  ║
+// ╚══════════════════════════════════════════════════════════════╝
+
+@layer components {
+  .z-hero {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 60svh;
+    @include padding("4xl", "y");
+    @include padding("xl", "x");
+    text-align: center;
+    overflow: hidden;
+
+    // ── Content wrapper ──────────────────────────────────────
+    &__content {
+      position: relative;
+      z-index: 1;
+      max-width: 800px;
+      margin-inline: auto;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: var(--space-lg);
+    }
+
+    // ── Title ────────────────────────────────────────────────
+    &__title {
+      @include text("display-lg");
+      color: var(--color-text);
+      margin: 0;
+    }
+
+    // ── Subtitle ─────────────────────────────────────────────
+    &__subtitle {
+      @include text("body-xl");
+      color: var(--color-text-muted);
+      margin: 0;
+      max-width: 640px;
+    }
+
+    // ── Actions row ──────────────────────────────────────────
+    &__actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--space-md);
+      justify-content: center;
+    }
+
+    // ── Background image overlay ─────────────────────────────
+    &--with-bg {
+      color: var(--color-text-inverse);
+      background-size: cover;
+      background-position: center;
+
+      &::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.55);
+        z-index: 0;
+      }
+
+      .z-hero__title,
+      .z-hero__subtitle {
+        color: var(--color-text-inverse);
+      }
+
+      .z-hero__subtitle {
+        opacity: 0.85;
+      }
+    }
+
+    // ── Alignment modifiers ──────────────────────────────────
+    &--start {
+      text-align: start;
+
+      .z-hero__content {
+        align-items: flex-start;
+      }
+
+      .z-hero__actions {
+        justify-content: flex-start;
+      }
+    }
+
+    // ── Height modifiers ─────────────────────────────────────
+    &--full {
+      min-height: 100svh;
+    }
+
+    &--compact {
+      min-height: 40svh;
+    }
+  }
+}

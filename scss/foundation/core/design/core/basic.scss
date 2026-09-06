@@ -1,0 +1,40 @@
+// ╔══════════════════════════════════════════════════════════════╗
+// ║  ⚡ Zeus CSS — Basic                                           ║
+// ║                                                               ║
+// ║  Design tokens and configuration for basic.                   ║
+// ╚══════════════════════════════════════════════════════════════╝
+
+@use "sass:map";
+@use "../../../../zeus.config" as config;
+
+// ╔══════════════════════════════════════════════════════════╗
+// ║  ⚙️  ZEUS CORE — Fluid Scaling & Base Tokens
+// ║
+// ║  Defines the viewport boundaries that drive all fluid
+// ║  calculations (clamp-based sizing, typography, spacing).
+// ║  Every token below can be overridden before @use.
+// ╚══════════════════════════════════════════════════════════╝
+
+// ─── Container bounds ───────────────────────────────
+// The container width range: fluid values scale linearly
+// Auto-derive container inner bounds inside the Engine (floor = 375 - 32 = 343, ceil = 1920 - 128 = 1792)
+$_c-floor-calc: map.get(config.$zeus-viewports, "mobile") - (map.get(config.$zeus-viewport-gutter, "mobile") * 2);
+$_c-ceil-calc:  map.get(config.$zeus-viewports, "desktop") - (map.get(config.$zeus-viewport-gutter, "desktop") * 2);
+
+$_container-bounds-base-defaults: (
+  floor: $_c-floor-calc,
+  ceil:  $_c-ceil-calc,
+);
+$_container-bounds-defaults: map.merge($_container-bounds-base-defaults, config.$zeus-container-bounds);
+
+// ── Developer can set $container-bounds BEFORE @use to override ──
+$container-bounds: () !default;
+$container-bounds: map.merge($_container-bounds-defaults, $container-bounds);
+
+// ─── Root typographic unit ───────────────────────────────────
+// Reference size for all rem-based calculations.
+$root-font-size: config.$zeus-root-font-size !default;
+
+// ─── Global focus ring ───────────────────────────────────────
+// Accessible focus indicator applied system-wide.
+$focus-ring: config.$zeus-focus-ring !default;

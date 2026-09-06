@@ -1,0 +1,41 @@
+// ╔══════════════════════════════════════════════════════════════╗
+// ║  ⚡ Zeus CSS — Design System                                   ║
+// ║                                                               ║
+// ║  Design tokens and configuration for design system.           ║
+// ╚══════════════════════════════════════════════════════════════╝
+
+@use "./core/basic" as *;
+@use "./colors/base-colors" as *;
+@use "./colors/semantic-colors" as *;
+@use "./typography/typography" as *;
+@use "./dimensions/spaces" as *;
+@use "./dimensions/sizes" as *;
+@use "./layout/grid" as *;
+@use "./borders/border-line" as *;
+@use "./borders/border-radius" as *;
+@use "./effects/shadows" as *;
+@use "./effects/z-index" as *;
+
+// ╔══════════════════════════════════════════════════════════════╗
+// ║  ⚡ Zeus Design System Master Dictionary                     ║
+// ║  This is the single source of truth for the recursive        ║
+// ║  compiler engine.                                            ║
+// ╚══════════════════════════════════════════════════════════════╝
+
+// NOTE: base $zeus-colors ("color" tokens) are NOT listed here — they are
+// emitted exclusively by semantic-colors.scss's generate-semantic-colors()
+// (called directly from render/root.scss), which also derives the -light/
+// -dark/-muted/-inverse/border/surface variants from them. Including them
+// here too would emit --color-primary (etc.) twice in the compiled output.
+$zeus-design-system: (
+  "base": $base-colors,
+  "size-icon": $icon-size,
+  "space": $space,
+  "border-radius": $border-radius,
+  "border-line": $border-line,
+  "col-gap": $column-gaps,
+  "padding-outer": $outer-padding,
+  "shadow": $shadows,
+  "text": $typography,
+  "z": $z-index,
+);

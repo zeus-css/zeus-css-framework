@@ -1,0 +1,226 @@
+// ╔══════════════════════════════════════════════════════════════╗
+// ║  ⚡ Zeus CSS — Buttons                                         ║
+// ║                                                               ║
+// ║  Framework internal engine and mixins for buttons.            ║
+// ╚══════════════════════════════════════════════════════════════╝
+
+@use "sass:map";
+@use "../buttons/variants" as *;
+@use "../design/buttons/sizes" as *;
+@use "./helpers" as *;
+@use "./sizing" as *;
+@use "./layout" as *;
+
+// ------------------------------------------------------------
+// Foundation: Base button reset & structure
+// ------------------------------------------------------------
+@mixin button-base-reset() {
+  // Layout & Display
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+
+  // Box model parameters
+  margin: 0;
+  padding: 0;
+  gap: var(--space-sm);
+
+  // Border & Outline
+  border: none;
+  border-radius: 0;
+  outline: none;
+
+  // Background & Color
+  background: none;
+  color: var(--color-text);
+
+  // Text styling attributes
+  font: var(--text-link);
+  line-height: 1;
+  text-align: center;
+  text-decoration: none;
+
+  // Interaction
+  cursor: pointer;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+
+  // Disabled state
+  &[disabled] {
+    opacity: 0.5;
+    pointer-events: none;
+    cursor: default;
+  }
+
+  // Remove browser defaults
+  &[type="button"],
+  &[type="reset"],
+  &[type="submit"] {
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+  }
+
+  // Accessible focus
+  &:focus {
+    outline: revert;
+  }
+}
+
+// ------------------------------------------------------------
+// Layout: Standard button padding & shape
+// ------------------------------------------------------------
+@mixin button-structure() {
+  // Padding presets
+  padding: var(--space-md) var(--space-lg);
+  // gap: var(--space-sm);
+
+  //default width
+  width: fit-content;
+
+  // Border
+  border-radius: var(--border-radius-sm);
+
+  // Layout adjustments
+  align-items: center;
+  justify-content: space-between;
+
+  // Inner text flow
+  text-align: center;
+  text-decoration: none;
+}
+
+// ╔══════════════════════════════════════════════════════════════╗
+// ║  🔘 Zeus Button Engine                                       ║
+// ║                                                              ║
+// ║  Pattern: State Map → Direct Render (no intermediate fn)     ║
+// ╚══════════════════════════════════════════════════════════════╝
+
+/// Render a map of CSS properties
+@mixin _render($props) {
+  @if $props and $props != null {
+    @each $prop, $val in $props {
+      #{$prop}: #{$val};
+    }
+  }
+}
+
+/// Apply all states for a button variant
+/// Uses direct map access instead of a getter function
+@mixin button-apply-variant($variant: "primary") {
+  @if not map.has-key($button-variants, $variant) {
+    @error "[Zeus Button] Unknown variant '#{$variant}'. Available: #{map.keys($button-variants)}";
+  }
+
+  $states: map.get($button-variants, $variant);
+
+  // Default state — always present
+  @include _render(map.get($states, "default"));
+
+  // Interactive states — guard with :not([disabled])
+  $hover: map.get($states, "hover");
+  $active: map.get($states, "active");
+
+  @if $hover {
+    &:not([disabled]):hover {
+      @include _render($hover);
+    }
+  }
+
+  @if $active {
+    &:not([disabled]):active {
+      @include _render($active);
+    }
+  }
+}
+
+// ╔══════════════════════════════════════════════════════════════╗
+// ║  Public API: Complete button mixins                          ║
+// ╚══════════════════════════════════════════════════════════════╝
+@mixin btn-primary() {
+  @include button-base-reset();
+  @include button-structure();
+  @include button-apply-variant("primary");
+}
+
+@mixin btn-secondary() {
+  @include button-base-reset();
+  @include button-structure();
+  @include button-apply-variant("secondary");
+}
+
+@mixin btn-tertiary() {
+  @include button-base-reset();
+  @include button-structure();
+  @include button-apply-variant("tertiary");
+}
+
+@mixin btn-icon-only() {
+  @include button-base-reset();
+  @include box-size(md);
+
+  // Icon-specific overrides
+  padding: 0;
+  justify-content: center;
+
+  @include button-apply-variant("icon-only");
+}
+
+// ------------------------------------------------------------
+// Dynamic Button Variant Generator
+// Creates a complete button with base, structure, and variant
+// ------------------------------------------------------------
+@mixin btn-variant($variant: "primary") {
+  @include button-base-reset();
+  @include button-structure();
+  @include button-apply-variant($variant);
+}
+
+// ------------------------------------------------------------
+// Size System: Apply button size from tokens
+// Clamp by default — always fluid, no flag check
+// ------------------------------------------------------------
+@mixin btn-size($size: "md") {
+  @if not map.has-key($button-sizes, $size) {
+    @error "Invalid button size '#{$size}'. Available: #{map.keys($button-sizes)}";
+  }
+
+  $size-config: map.get($button-sizes, $size);
+
+  // Font size
+  @if map.has-key($size-config, "font") {
+    $font-config: map.get($size-config, "font");
+    $min: map.get($font-config, "floor");
+    $max: map.get($font-config, "ceil");
+    font-size: useclamp-sizing($min, $max);
+  }
+
+  // Padding Y (block axis)
+  @if map.has-key($size-config, "py") {
+    $py: map.get($size-config, "py");
+    $min: map.get($py, "floor");
+    $max: map.get($py, "ceil");
+    padding-block: useclamp-sizing($min, $max);
+  }
+
+  // Padding X (inline axis) — logical property, not left/right, so RTL
+  // layouts get the correct side without a separate override.
+  @if map.has-key($size-config, "px") {
+    $px: map.get($size-config, "px");
+    $min: map.get($px, "floor");
+    $max: map.get($px, "ceil");
+    padding-inline: useclamp-sizing($min, $max);
+  }
+
+  // Line height
+  @if map.has-key($size-config, "line-height") {
+    line-height: map.get($size-config, "line-height");
+  }
+
+  // Border radius
+  @if map.has-key($size-config, "border-radius") {
+    $radius: map.get($size-config, "border-radius");
+    border-radius: var(--border-radius-#{$radius});
+  }
+}

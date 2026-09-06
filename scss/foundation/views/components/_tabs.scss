@@ -1,0 +1,96 @@
+// ╔══════════════════════════════════════════════════════════════╗
+// ║  ⚡ Zeus CSS — Tabs                                            ║
+// ║                                                               ║
+// ║  Core structural and visual styles for the tabs component.    ║
+// ╚══════════════════════════════════════════════════════════════╝
+
+@use "../../core/engine" as *;
+@use "../../core/design" as *;
+
+// ╔══════════════════════════════════════════════════════════════╗
+// ║  📑 Tabs Component                                           ║
+// ║                                                              ║
+// ║  No popover involved — tabs are inline content, not floating ║
+// ║  UI, so there's nothing to anchor-position. Styles read the  ║
+// ║  same two ARIA/HTML states the browser already gives you     ║
+// ║  (aria-selected, hidden) — same "native attribute drives the ║
+// ║  look" contract as .z-modal's [open]. Switching which tab is ║
+// ║  selected is the consumer's job (a few lines of vanilla JS   ║
+// ║  or your framework's state) — Zeus CSS ships zero JS.        ║
+// ║                                                              ║
+// ║  Usage:                                                      ║
+// ║  <div class="z-tabs">                                        ║
+// ║    <div class="z-tabs__list" role="tablist">                 ║
+// ║      <button class="z-tabs__tab" role="tab" id="t1"          ║
+// ║              aria-selected="true" aria-controls="p1">One</button> ║
+// ║      <button class="z-tabs__tab" role="tab" id="t2"          ║
+// ║              aria-selected="false" aria-controls="p2">Two</button> ║
+// ║    </div>                                                    ║
+// ║    <div class="z-tabs__panel" role="tabpanel" id="p1"        ║
+// ║         aria-labelledby="t1">…</div>                         ║
+// ║    <div class="z-tabs__panel" role="tabpanel" id="p2"        ║
+// ║         aria-labelledby="t2" hidden>…</div>                  ║
+// ║  </div>                                                      ║
+// ╚══════════════════════════════════════════════════════════════╝
+
+@layer components {
+  .z-tabs {
+    &__list {
+      display: flex;
+      gap: var(--space-xs);
+      border-bottom: var(--border-line-xs) solid var(--color-border);
+      overflow-x: auto;
+      // Hide the scrollbar on overflow without hiding the ability to
+      // scroll — a horizontally-scrolling tablist on narrow viewports
+      // should still feel like tabs, not a visible scroll pane.
+      scrollbar-width: none;
+      &::-webkit-scrollbar { display: none; }
+    }
+
+    &__tab {
+      appearance: none;
+      background: none;
+      border: none;
+      cursor: pointer;
+      @include padding("sm", "y");
+      @include padding("md", "x");
+      @include text("body-sm");
+      font-weight: 600;
+      color: var(--color-text-muted);
+      border-bottom: var(--border-line-sm) solid transparent;
+      // Pull the tab's own bottom border over the list's hairline so the
+      // active indicator reads as one continuous edge, not two stacked lines.
+      margin-bottom: calc(var(--border-line-xs) * -1);
+      white-space: nowrap;
+      transition: color 0.15s ease, border-color 0.15s ease;
+
+      &:hover {
+        color: var(--color-text);
+      }
+
+      &:focus-visible {
+        outline: $focus-ring;
+        outline-offset: -2px;
+        border-radius: 2px;
+      }
+
+      &[aria-selected="true"] {
+        color: var(--color-primary);
+        border-bottom-color: var(--color-primary);
+      }
+
+      &[disabled] {
+        opacity: 0.5;
+        cursor: not-allowed;
+      }
+    }
+
+    &__panel {
+      @include padding("lg", "y");
+
+      &[hidden] {
+        display: none;
+      }
+    }
+  }
+}

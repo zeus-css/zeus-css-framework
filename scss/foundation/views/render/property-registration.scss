@@ -1,0 +1,77 @@
+// ╔══════════════════════════════════════════════════════════════╗
+// ║  ⚡ Zeus CSS — Property Registration                           ║
+// ║                                                               ║
+// ║  Core styles and definitions for property registration.       ║
+// ╚══════════════════════════════════════════════════════════════╝
+
+@use "sass:map";
+@use "sass:meta";
+@use "../../../zeus.config" as config;
+@use "../../core/design/dimensions/spaces" as *;
+@use "../../core/design/dimensions/sizes" as *;
+@use "../../core/design/borders/border-radius" as *;
+@use "../../core/design/borders/border-line" as *;
+@use "../../core/design/typography/typography" as *;
+@use "../../core/design/colors/semantic-colors" as *;
+
+// ── Private generators ──────────────────────────────────────────
+//
+// These mixins are called at TOP LEVEL below (outside any selector),
+// which is the only valid location for @property rules per CSS spec.
+// SCSS mixins called at top level DO output top-level @property rules.
+
+// Registers all tokens from a (floor, ceil) map as <length> @property.
+// initial-value = min value (mobile baseline).
+// Adding a token to the source map auto-registers it here.
+@mixin _register-length-tokens($prefix, $token-map) {
+  @each $name, $config in $token-map {
+    $min: map.get($config, "floor");
+    @property --#{$prefix}-#{$name} {
+      syntax: "<length>";
+      inherits: true;
+      initial-value: #{$min}px;
+    }
+  }
+}
+
+// Registers all color tokens from the universal palette map as <color> @property.
+// Structure: flat $zeus-colors map
+// initial-value = the color value.
+// ╔══════════════════════════════════════════════════════════════╗
+// ║  WHAT IS @property                                           ║
+// ║                                                              ║
+// ║  Standard CSS custom property:                               ║
+// ║    :root { --space-sm: 8px; }                                ║
+// ║    → The browser DOES NOT know the type and accepts anything.║
+// ║                                                              ║
+// ║  With @property:                                             ║
+// ║    @property --space-sm { syntax: "<length>"; }              ║
+// ║    → The browser KNOWS the type. Invalid values are rejected ║
+// ║      and replaced by the initial-value fallback.             ║
+// ║                                                              ║
+// ║  WHAT IT PROVIDES:                                           ║
+// ║  1. TYPE SAFETY - Rejects invalid values                     ║
+// ║  2. FALLBACK - Initial value acts as a safe baseline         ║
+// ║  3. TRANSITIONS - Enables CSS transitions on custom properties║
+// ╚══════════════════════════════════════════════════════════════╝
+@mixin _register-color-tokens($colors-map) {
+  @each $name, $value in $colors-map {
+    @if meta.type-of($value) == "color" or meta.type-of($value) == "string" {
+      @property --color-#{$name} {
+        syntax: "<color>";
+        inherits: true;
+        initial-value: #{$value};
+      }
+    }
+  }
+}
+
+// ── Registration — runs only if flag is enabled ─────────────────
+
+@if config.$zeus-enable-property-registration {
+  @layer tokens {
+    // 🎨 Colors — all $zeus-colors universal tokens → --color-{name}
+    // Provides CSS type safety and enables smooth transitions for color variables.
+    @include _register-color-tokens(config.$zeus-colors);
+  }
+} // end @if zeus-enable-property-registration

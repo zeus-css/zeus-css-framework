@@ -1,0 +1,89 @@
+{
+  "name": "zeus-css",
+  "version": "1.0.0",
+  "description": "Zeus CSS — a fluid-first SCSS design system: cqi-based fluid scaling, OKLCH semantic color tokens, cascade layers, and an AI-readable token pipeline.",
+  "license": "MIT",
+  "author": "Stavros Kosmas Lazaris",
+  "keywords": [
+    "css",
+    "scss",
+    "sass",
+    "design-system",
+    "design-tokens",
+    "fluid-typography",
+    "css-framework",
+    "oklch",
+    "cascade-layers"
+  ],
+  "main": "foundation/foundation.scss",
+  "sass": "zeus.scss",
+  "style": "dist/zeus.css",
+  "homepage": "https://www.npmjs.com/package/zeus-css",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/zeus-css/zeus-css-framework.git"
+  },
+  "bugs": {
+    "url": "https://github.com/zeus-css/zeus-css-framework/issues"
+  },
+  "scripts": {
+    "build:css": "sass foundation/foundation.scss dist/zeus.css --style=expanded && sass foundation/foundation.scss dist/zeus.min.css --style=compressed",
+    "test:compile": "node scripts/test-compile.mjs",
+    "lint:scss": "stylelint \"**/*.scss\"",
+    "gen:tokens": "node scripts/gen-tokens.mjs",
+    "gen:cheatsheet": "node scripts/gen-cheatsheet.mjs",
+    "prepack": "npm run build:css && npm run gen:tokens && npm run gen:cheatsheet"
+  },
+  "exports": {
+    ".": {
+      "sass": "./foundation/foundation.scss",
+      "style": "./dist/zeus.css",
+      "default": "./dist/zeus.css"
+    },
+    "./css": "./dist/zeus.css",
+    "./min": "./dist/zeus.min.css",
+    "./zeus": {
+      "sass": "./zeus.scss",
+      "default": "./zeus.scss"
+    },
+    "./foundation": {
+      "sass": "./foundation/foundation.scss",
+      "default": "./foundation/foundation.scss"
+    },
+    "./config": {
+      "sass": "./zeus.config.scss",
+      "default": "./zeus.config.scss"
+    },
+    "./customize": {
+      "sass": "./zeus.customize.scss",
+      "default": "./zeus.customize.scss"
+    },
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "dist/",
+    "foundation/**/*.scss",
+    "zeus.scss",
+    "zeus.config.scss",
+    "zeus.customize.scss",
+    "zeus.token.sets.example.scss",
+    "zeus.tokens.json",
+    "llms.txt",
+    "cheatsheet.md",
+    "API.md",
+    "LICENSE",
+    "README.md",
+    "CHANGELOG.md"
+  ],
+  "engines": {
+    "node": ">=16"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "devDependencies": {
+    "sass": "^1.99.0",
+    "stylelint": "^16.0.0",
+    "stylelint-config-standard-scss": "^13.0.0"
+  }
+}

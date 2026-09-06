@@ -1,0 +1,29 @@
+// ╔══════════════════════════════════════════════════════════════╗
+// ║  ⚡ Zeus CSS — Border Line                                     ║
+// ║                                                               ║
+// ║  Design tokens and configuration for border line.             ║
+// ╚══════════════════════════════════════════════════════════════╝
+
+@use "sass:map";
+@use "../../../../zeus.config" as config;
+@use "../_validate" as validate;
+
+// ╔══════════════════════════════════════════════════════════╗
+// ║  📐 BORDER WIDTH TOKENS                                 
+// ║                                                         
+// ║  Format: "name": (floor: N, ceil: N)
+// ║  Output CSS variable: --border-line-{name}               
+// ╚══════════════════════════════════════════════════════════╝
+
+// ── Defaults ─────────────────────────────────────────────────
+$_border-line-defaults: (
+  "none": (floor: 0,   ceil: 0),
+  "xs": (floor: 1,   ceil: 2),
+  "sm": (floor: 1.5, ceil: 3),
+  "md": (floor: 2,   ceil: 4),
+  "lg": (floor: 4,   ceil: 8),
+);
+
+// ── Developer can override specific keys ──
+$border-line: map.deep-merge($_border-line-defaults, config.$zeus-border-line);
+@include validate.validate-all-responsive("border-line", $border-line);

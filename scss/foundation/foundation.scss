@@ -1,0 +1,36 @@
+// ╔══════════════════════════════════════════════════════════════╗
+// ║  ⚡ Zeus CSS — Foundation                                      ║
+// ║                                                               ║
+// ║  Core styles and definitions for foundation.                  ║
+// ╚══════════════════════════════════════════════════════════════╝
+
+// ╔══════════════════════════════════════════════════════════════╗
+// ║  ⚡ Zeus CSS — Main Stylesheet                                ║
+// ║                                                              ║
+// ║  Full compiled CSS for production.                           ║
+// ║  Import in root layout or link in HTML.                      ║
+// ║                                                              ║
+// ║  Unlike zeus.scss (which exports only utilities for          ║
+// ║  .module.scss), this file outputs real CSS classes.           ║
+// ╚══════════════════════════════════════════════════════════════╝
+
+// Forwarded (not just used) so that an external consumer can configure the
+// framework directly through this entry point:
+//   @use "zeus-css/foundation" with ($zeus-colors: (...), ...);
+// Without this forward, foundation.scss loads zeus.config with its defaults
+// immediately, before any external `with (...)` could ever apply — silently
+// locking every token to the shipped defaults regardless of local overrides.
+@forward "../zeus.config";
+@use "../zeus.config" as config;
+@use "./core/design";
+@use "./core/engine";
+@use "./core/api";
+@use "./views/render";
+@use "./views/components";
+@use "./views/patterns";
+
+// The cascade layer order (reset, tokens, base, layout, components,
+// utilities) is established in views/render/_layer-order.scss, forwarded
+// FIRST from views/_render.scss — see that file for why.
+
+/* Zeus CSS v#{config.$zeus-version} */

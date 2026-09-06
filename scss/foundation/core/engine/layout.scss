@@ -1,0 +1,156 @@
+// ╔══════════════════════════════════════════════════════════════╗
+// ║  ⚡ Zeus CSS — Layout                                          ║
+// ║                                                               ║
+// ║  Framework internal engine and mixins for layout.             ║
+// ╚══════════════════════════════════════════════════════════════╝
+
+@use "sass:map";
+@use "./responsive" as *;
+@use "../design/borders/border-radius" as *;
+@use "../design/borders/border-line" as *;
+@use "../design/dimensions/sizes" as *;
+@use "../design/dimensions/spaces" as *;
+@use "./helpers" as *;
+@use "./sizing" as *;
+
+// === adaptive private mixin ===
+// CSS-Var-First: references the :root token instead of recomputing clamp()
+// inline — the computation lives once in root-generator.scss. Smaller
+// compiled CSS, and the value stays overridable at runtime via the CSS var.
+@mixin _adaptive-size($property, $var-name, $type, $map, $important: false) {
+  @if not map.has-key($map, $type) {
+    @error "Type '#{$type}' not found!";
+  }
+
+  @if $important {
+    #{$property}: var(--#{$var-name}-#{$type}) !important;
+  } @else {
+    #{$property}: var(--#{$var-name}-#{$type});
+  }
+}
+
+// - - - - - - - - - - - - - -
+
+// Applies dynamically-scaled responsive rounded corners based on predefined maps
+@mixin border-radius($type) {
+  @include _adaptive-size("border-radius", "border-radius", $type, $border-radius, false);
+}
+
+// - - - - - - - - - - - - - -
+
+// Configures responsive border thickness and strokes across viewport ranges
+@mixin border-line($type) {
+  @include _adaptive-size("border-width", "border-line", $type, $border-line, false);
+}
+
+// - - - - - - - - - - - - - -
+
+// Mixin for icon sizes through devices — always clamp()
+@mixin box-size($type) {
+  @if not map.has-key($icon-size, $type) {
+    @error "Icon size '#{$type}' not found in $icon-size map!";
+  }
+
+  width: var(--size-icon-#{$type});
+  height: var(--size-icon-#{$type});
+}
+
+// - - - - - - - - - - - - - -
+
+// Mixin for padding with optional direction — references --space-* :root token
+@mixin padding($size, $direction: null) {
+  @if not map.has-key($space, $size) {
+    @error "space size '#{$size}' not found in $space map!";
+  }
+
+  $value: var(--space-#{$size});
+
+  @if $direction == "x" or $direction == "inline" {
+    padding-inline: $value;
+  } @else if $direction == "y" or $direction == "block" {
+    padding-block: $value;
+  } @else if $direction == null {
+    padding: $value;
+  } @else {
+    padding-#{$direction}: $value;
+  }
+}
+
+// Mixin for margin with optional direction — references --space-* :root token
+@mixin margin($size, $direction: null) {
+  @if not map.has-key($space, $size) {
+    @error "space size '#{$size}' not found in $space map!";
+  }
+
+  $value: var(--space-#{$size});
+
+  @if $direction == "x" or $direction == "inline" {
+    margin-inline: $value;
+  } @else if $direction == "y" or $direction == "block" {
+    margin-block: $value;
+  } @else if $direction == null {
+    margin: $value;
+  } @else {
+    margin-#{$direction}: $value;
+  }
+}
+
+// Mixin for gap with optional direction — references --space-* :root token
+@mixin gap($size, $direction: null) {
+  @if not map.has-key($space, $size) {
+    @error "space size '#{$size}' not found in $space map!";
+  }
+
+  $value: var(--space-#{$size});
+
+  @if $direction == "x" or $direction == "column" {
+    column-gap: $value;
+  } @else if $direction == "y" or $direction == "row" {
+    row-gap: $value;
+  } @else if $direction == null {
+    gap: $value;
+  } @else {
+    @error "gap() direction must be null, 'x', 'column', 'y', or 'row'. Got: '#{$direction}'";
+  }
+}
+
+// - - - - - - - - - - - - - -
+// DEMONSTRATION & API USAGE
+// @include padding("md"); // all sides
+// @include padding("md", "top"); // top only
+// @include padding("md", "x"); // left-right
+// @include padding("md", "y"); // top-bottom
+// @include margin("lg"); // all sides
+// @include margin("2xl", "bottom"); // bottom only
+// @include gap("md"); // gap (grid & flex)
+// @include gap("lg", "x"); // column-gap only
+// @include gap("sm", "y"); // row-gap only
+// - - - - - - - - - - - - - -
+
+@mixin not-first-child() {
+  &:where(:not(:first-child)) {
+    @content;
+  }
+}
+
+@mixin not-last-child() {
+  &:where(:not(:last-child)) {
+    @content;
+  }
+}
+
+@mixin horizontal-scroll() {
+  @media only screen {
+    overflow-x: auto;
+    white-space: nowrap;
+    width: 100%;
+    @content;
+  }
+}
+
+@mixin no-horizontal-scroll() {
+  overflow-x: visible;
+  white-space: normal;
+  width: auto;
+}
+

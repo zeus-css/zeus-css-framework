@@ -1,0 +1,67 @@
+// ╔══════════════════════════════════════════════════════════════╗
+// ║  ⚡ Zeus CSS — Responsive                                      ║
+// ║                                                               ║
+// ║  Framework internal engine and mixins for responsive.         ║
+// ╚══════════════════════════════════════════════════════════════╝
+
+@use "sass:map";
+@use "../design/layout/grid" as *;
+
+
+@function bp($key) {
+  @if not map.has-key($breakpoints, $key) {
+    @error "Breakpoint '#{$key}' not found in $breakpoints!";
+  }
+  @return map.get($breakpoints, $key);
+}
+
+@function _max($breakpoint) {
+  @return $breakpoint - 0.02px;   
+}
+
+// = = = = = = = = = = = = = = = =
+// Modern Parameter-Driven Responsive API
+// = = = = = = = = = = = = = = = =
+
+@mixin screen-above($breakpoint) {
+  @media screen and (min-width: #{bp($breakpoint)}) {
+    @content;
+  }
+}
+
+@mixin screen-below($breakpoint) {
+  @media screen and (max-width: #{_max(bp($breakpoint))}) {
+    @content;
+  }
+}
+
+@mixin screen-between($lower, $upper) {
+  @media screen and (min-width: #{bp($lower)}) and (max-width: #{_max(bp($upper))}) {
+    @content;
+  }
+}
+
+// ─── Exclusive Layout Exclusion (Hide) ─────────────────
+// Scopes: 'handheld', 'mobile', 'tablet', 'desktop' (all singular).
+@mixin suppress-on($scope) {
+  @if $scope == 'handheld' {
+    @media screen and (max-width: #{_max(bp(lg))}) {
+      display: none !important;
+    }
+  } @else if $scope == 'mobile' {
+    @media screen and (max-width: #{_max(bp(md))}) {
+      display: none !important;
+    }
+  } @else if $scope == 'tablet' {
+    @media screen and (min-width: #{bp(md)}) and (max-width: #{_max(bp(lg))}) {
+      display: none !important;
+    }
+  } @else if $scope == 'desktop' {
+    @media screen and (min-width: #{bp(lg)}) {
+      display: none !important;
+    }
+  } @else {
+    @error "[Zeus] suppress-on(): unknown scope '#{$scope}'. Expected 'handheld', 'mobile', 'tablet', or 'desktop'.";
+  }
+}
+

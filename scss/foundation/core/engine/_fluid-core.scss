@@ -1,0 +1,54 @@
+// ╔══════════════════════════════════════════════════════════════╗
+// ║  ⚡ Zeus CSS — Fluid Core                                      ║
+// ║                                                               ║
+// ║  Framework internal engine and mixins for fluid core.         ║
+// ╚══════════════════════════════════════════════════════════════╝
+
+@use "sass:math";
+
+// ╔══════════════════════════════════════════════════════════════╗
+// ║  ⚙️  Zeus Fluid Core — shared engine for clamp() generation  ║
+// ║                                                              ║
+// ║  Private file — NOT part of the public API.                  ║
+// ║  Consumed by:                                                ║
+// ║    sizing.scss         → useclamp-sizing()   (px output)     ║
+// ║    typography-calc.scss → useclamp-typography() (rem output) ║
+// ║                                                              ║
+// ║  Single source of truth for:                                 ║
+// ║    · precision rounding  (round-to)                          ║
+// ║    · linear fluid formula (zeus-cqi-fluid)                   ║
+// ║                                                              ║
+// ║  Output: native clamp(min, preferred, max)                   ║
+// ║    clamp() is faster to parse than max(min()) and produces   ║
+// ║    more compact, readable compiled CSS output.               ║
+// ╚══════════════════════════════════════════════════════════════╝
+
+// ── round-to($value, $digits) ───────────────────────────────────
+// Rounds $value to $digits decimal places.
+// Prevents floating-point noise in compiled CSS output.
+//   round-to(1.041666, 3) → 1.042
+//   round-to(0.427083, 3) → 0.427
+@function round-to($value, $digits: 1) {
+  $factor: math.pow(10, $digits);
+  @return math.div(math.round($value * $factor), $factor);
+}
+
+// ── zeus-cqi-fluid($low, $high, $c-floor, $c-ceil, $unit, $accuracy) ──
+//
+// Engine for dynamic value interpolation using Container Queries.
+// Uses native clamp() for faster browser parsing and cleaner CSS output.
+//
+// Output: clamp(${low}${unit}, calc(...cqi), ${high}${unit})
+//
+@function zeus-cqi-fluid($low, $high, $c-floor, $c-ceil, $unit, $accuracy: 1, $step: 0.1) {
+  $raw-slope: math.div($high - $low, $c-ceil - $c-floor);
+  $slope-cqi: round-to($raw-slope * 100, $accuracy);
+
+  // Derive intercept using rounded slope so endpoints match $low and $high with 100% precision
+  $intercept: $low - (math.div($slope-cqi, 100) * $c-floor);
+  $intercept-px: round-to($intercept, $accuracy);
+
+  $preferred-value: round(calc(#{$intercept-px}#{$unit} + #{$slope-cqi}cqi), #{$step}#{$unit});
+
+  @return clamp(#{$low}#{$unit}, #{$preferred-value}, #{$high}#{$unit});
+}

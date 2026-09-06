@@ -1,0 +1,139 @@
+// ╔══════════════════════════════════════════════════════════════╗
+// ║  ⚡ Zeus CSS — Toast                                           ║
+// ║                                                               ║
+// ║  Core structural and visual styles for the toast component.   ║
+// ╚══════════════════════════════════════════════════════════════╝
+
+@use "../../core/engine" as *;
+@use "../../core/design" as *;
+
+// ╔══════════════════════════════════════════════════════════════╗
+// ║  🔔 Toast Component — Native Popover API                     ║
+// ║                                                              ║
+// ║  The stack itself is popover="manual": it needs to render in ║
+// ║  the top layer (above modals, dropdowns, everything — no     ║
+// ║  z-index arithmetic required) but must NOT light-dismiss on  ║
+// ║  outside click/Escape the way "auto" would — a toast auto-   ║
+// ║  disappears on its own timer, not because the user clicked   ║
+// ║  elsewhere. Call region.showPopover() once; individual       ║
+// ║  toasts are plain children you append/remove — their auto-   ║
+// ║  dismiss timer is the one piece of JS this component still   ║
+// ║  needs (CSS alone can't schedule "remove me in 4s").         ║
+// ║                                                              ║
+// ║  Usage:                                                      ║
+// ║  <div class="z-toast-region" id="toasts" popover="manual">   ║
+// ║    <div class="z-toast z-toast--success" role="status">      ║
+// ║      <p class="z-toast__message">Saved.</p>                  ║
+// ║      <button class="z-toast__close" aria-label="Dismiss">×</button> ║
+// ║    </div>                                                    ║
+// ║  </div>                                                       ║
+// ║  <script>toasts.showPopover();</script>                      ║
+// ╚══════════════════════════════════════════════════════════════╝
+
+@layer components {
+  // Private: background/border/icon-color for one variant from a single
+  // base color token — same soft-tint approach as .z-badge, so every
+  // variant clears WCAG AA without hand-picking a passing shade per color.
+  @mixin _toast-variant($css-var) {
+    border-inline-start-color: var(#{$css-var});
+
+    .z-toast__icon {
+      color: var(#{$css-var});
+    }
+  }
+
+  .z-toast-region {
+    // Reset the UA [popover] box — this is a plain flow container for its
+    // toast children, not a bordered/inset panel like a menu or dialog.
+    position: fixed;
+    inset: auto var(--space-lg) var(--space-lg) auto;
+    margin: 0;
+    border: none;
+    padding: 0;
+    overflow: visible;
+    background: none;
+    color: inherit;
+    max-height: none;
+    max-width: min(90dvw, 380px);
+
+    // The layout only applies once actually shown — setting `display`
+    // unconditionally here would override the UA's own
+    // `[popover]:not(:popover-open) { display: none; }` rule and leave
+    // the region permanently visible regardless of showPopover() state.
+    &:popover-open {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-sm);
+    }
+  }
+
+  .z-toast {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--space-sm);
+    @include padding("md");
+    @include border-radius("md");
+    @include apply-shadow("dropdown");
+    background: var(--color-surface);
+    border: var(--border-line-xs) solid var(--color-border);
+    border-inline-start: 3px solid var(--color-border-strong);
+
+    @include slide-in(right, 0.25s);
+
+    &--success { @include _toast-variant(--base-system-success); }
+    &--warning { @include _toast-variant(--base-system-warning); }
+    &--danger  { @include _toast-variant(--base-system-error); }
+    &--info    { @include _toast-variant(--color-primary); }
+
+    &__icon {
+      flex-shrink: 0;
+      width: 1.25em;
+      height: 1.25em;
+      color: var(--color-text-muted);
+    }
+
+    &__body {
+      flex: 1 1 auto;
+      min-width: 0;
+    }
+
+    &__title {
+      @include text("body-sm-bold");
+      color: var(--color-text);
+      margin: 0 0 var(--space-4xs);
+    }
+
+    &__message {
+      @include text("body-sm");
+      color: var(--color-text-muted);
+      margin: 0;
+    }
+
+    &__close {
+      flex-shrink: 0;
+      appearance: none;
+      border: none;
+      background: transparent;
+      cursor: pointer;
+      padding: 0;
+      @include text("body");
+      color: var(--color-text-muted);
+      line-height: 1;
+
+      &:hover {
+        color: var(--color-text);
+      }
+
+      &:focus-visible {
+        outline: $focus-ring;
+        outline-offset: 2px;
+        border-radius: 2px;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      animation: none;
+      opacity: 1;
+    }
+  }
+}

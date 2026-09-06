@@ -1,0 +1,100 @@
+// ╔══════════════════════════════════════════════════════════════╗
+// ║  ⚡ Zeus CSS — Tooltip                                         ║
+// ║                                                               ║
+// ║  Core structural and visual styles for the tooltip component. ║
+// ╚══════════════════════════════════════════════════════════════╝
+
+@use "../../core/engine" as *;
+
+// ╔══════════════════════════════════════════════════════════════╗
+// ║  💬 Tooltip Component — Native Popover API                   ║
+// ║                                                              ║
+// ║  popover="hint" (not "auto"): showing a hint never closes an ║
+// ║  already-open menu/dialog popover the way "auto" would — the ║
+// ║  correct type for a description that can appear alongside    ║
+// ║  other floating UI. popovertarget alone gives you click-to-  ║
+// ║  toggle with zero JS — the browser owns dismiss/focus return ║
+// ║  once wired, same "native does the work" contract as         ║
+// ║  .z-modal's <dialog>/.showModal(). A hover/focus-triggered    ║
+// ║  tooltip (the usual expectation) needs a few lines of your    ║
+// ║  own JS calling .showPopover()/.hidePopover() on              ║
+// ║  mouseenter/mouseleave/focus/blur — that trigger logic isn't  ║
+// ║  something popovertarget provides on its own.                 ║
+// ║                                                              ║
+// ║  Positioning uses CSS anchor positioning (position-anchor +  ║
+// ║  position-area) — pair trigger and tooltip with a shared,    ║
+// ║  unique anchor-name per instance. Browsers without anchor    ║
+// ║  positioning support just fall back to the UA's default      ║
+// ║  top-layer placement — still a fully functional, just        ║
+// ║  unanchored, tooltip — same progressive-enhancement shape as ║
+// ║  the modal's ::backdrop + .z-modal-backdrop dual path.       ║
+// ║                                                              ║
+// ║  Usage:                                                      ║
+// ║  <button style="anchor-name:--tip1" popovertarget="tip1">    ║
+// ║    Info                                                      ║
+// ║  </button>                                                   ║
+// ║  <div class="z-tooltip" id="tip1" popover="hint" role="tooltip" ║
+// ║       style="position-anchor:--tip1">                        ║
+// ║    Helpful, short explanatory text.                          ║
+// ║  </div>                                                       ║
+// ╚══════════════════════════════════════════════════════════════╝
+
+@layer components {
+  .z-tooltip {
+    // Reset the UA [popover] box (border/inset/margin/padding/colors) —
+    // color/background are set for real a few lines down, not reset here.
+    margin: 0;
+    border: none;
+    padding: 0;
+    overflow: visible;
+
+    @include padding("2xs", "y");
+    @include padding("sm", "x");
+    @include border-radius("sm");
+    @include text("caption");
+    @include apply-shadow("sm");
+    background: var(--color-text);
+    color: var(--color-text-inverse);
+    max-width: 240px;
+    width: max-content;
+
+    // No anchor by default — the consumer pairs trigger and tooltip by
+    // setting `position-anchor: --your-name` inline on this element (see
+    // usage above); that inline declaration outranks this class rule.
+    // Anchored above the trigger, with breathing room and flip fallbacks
+    // for when there's no room above.
+    position-anchor: none;
+    position-area: top;
+    position-try-fallbacks: flip-block, flip-inline;
+    margin-block-end: var(--space-2xs);
+
+    // No @supports guard needed: browsers without anchor positioning simply
+    // ignore the unrecognized position-anchor/position-area/position-try-
+    // fallbacks values (standard CSS forward-compatible parsing) and fall
+    // through to the UA's default top-layer placement — still a fully
+    // functional popover, just centered instead of anchored to the trigger.
+    &:popover-open {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+    }
+
+    // Entrance/exit transition on the top layer — requires
+    // transition-behavior: allow-discrete to animate across the
+    // display: none <-> block flip that [popover] does internally.
+    opacity: 0;
+    transform: translateY(4px) scale(0.98);
+    transition: opacity 0.12s ease, transform 0.12s ease, overlay 0.12s allow-discrete, display 0.12s allow-discrete;
+
+    @starting-style {
+      &:popover-open {
+        opacity: 0;
+        transform: translateY(4px) scale(0.98);
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      transition: none;
+      transform: none;
+    }
+  }
+}

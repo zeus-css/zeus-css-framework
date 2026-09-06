@@ -1,0 +1,56 @@
+// ╔══════════════════════════════════════════════════════════════╗
+// ║  ⚡ Zeus CSS — Position                                        ║
+// ║                                                               ║
+// ║  Generates position/inset utility classes.                    ║
+// ╚══════════════════════════════════════════════════════════════╝
+
+@use "sass:map";
+@use "../../../core/design/dimensions/spaces" as spacing-tokens;
+
+// ╔══════════════════════════════════════════════════════════════╗
+// ║  📍 Position & Inset Utilities                               ║
+// ║                                                              ║
+// ║  Logical-first: inset-inline-*/inset-block-* rather than       ║
+// ║  left/right, so overlays and offsets flip correctly under RTL. ║
+// ╚══════════════════════════════════════════════════════════════╝
+
+@mixin load-position($prefix: "") {
+
+// ── Position ──────────────────────────────────────────────────
+.#{$prefix}static   { position: static; }
+.#{$prefix}relative { position: relative; }
+.#{$prefix}absolute  { position: absolute; }
+.#{$prefix}fixed    { position: fixed; }
+.#{$prefix}sticky   { position: sticky; }
+
+// ── Inset shorthand ───────────────────────────────────────────
+// .inset-0 is generated below from the space scale (it includes a "0" key)
+.#{$prefix}inset-auto { inset: auto; }
+
+// ── Logical inset offsets, from the fluid space scale ─────────
+$sizes: map.keys(spacing-tokens.$space);
+
+@each $size in $sizes {
+  .#{$prefix}inset-#{$size} {
+    inset: var(--space-#{$size});
+  }
+  .#{$prefix}top-#{$size} {
+    top: var(--space-#{$size});
+  }
+  .#{$prefix}bottom-#{$size} {
+    bottom: var(--space-#{$size});
+  }
+  .#{$prefix}inset-inline-start-#{$size} {
+    inset-inline-start: var(--space-#{$size});
+  }
+  .#{$prefix}inset-inline-end-#{$size} {
+    inset-inline-end: var(--space-#{$size});
+  }
+}
+
+.#{$prefix}top-auto    { top: auto; }
+.#{$prefix}bottom-auto { bottom: auto; }
+.#{$prefix}inset-inline-start-auto { inset-inline-start: auto; }
+.#{$prefix}inset-inline-end-auto   { inset-inline-end: auto; }
+
+}

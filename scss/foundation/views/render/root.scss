@@ -1,0 +1,19 @@
+// ╔══════════════════════════════════════════════════════════════╗
+// ║  ⚡ Zeus CSS — Root                                            ║
+// ║                                                               ║
+// ║  Core styles and definitions for root.                        ║
+// ╚══════════════════════════════════════════════════════════════╝
+
+@use "../../../zeus.config" as config;
+@use "./root-generator" as *;
+
+@use "../../core/design/colors/semantic-colors" as semantic;
+
+@layer tokens {
+  :root {
+    @include zeus-root-vars();
+  }
+
+  // Emits default semantic color tokens under :root
+  @include semantic.generate-semantic-colors();
+}

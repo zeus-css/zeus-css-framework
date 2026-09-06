@@ -1,0 +1,94 @@
+// ╔══════════════════════════════════════════════════════════════╗
+// ║  ⚡ Zeus CSS — Table                                           ║
+// ║                                                               ║
+// ║  Core structural and visual styles for the table component.   ║
+// ╚══════════════════════════════════════════════════════════════╝
+
+@use "../../core/engine" as *;
+
+// ╔══════════════════════════════════════════════════════════════╗
+// ║  📊 Table Component                                          ║
+// ║                                                              ║
+// ║  Pure CSS, zero JS dependency. .z-table-wrap provides the     ║
+// ║  horizontal-scroll container — always wrap wide tables in it  ║
+// ║  rather than letting them overflow the page.                 ║
+// ║                                                              ║
+// ║  Usage:                                                      ║
+// ║  <div class="z-table-wrap">                                  ║
+// ║    <table class="z-table z-table--striped">                  ║
+// ║      <thead><tr><th>Name</th><th>Status</th></tr></thead>    ║
+// ║      <tbody><tr><td>Zeus</td><td>Active</td></tr></tbody>    ║
+// ║    </table>                                                  ║
+// ║  </div>                                                      ║
+// ╚══════════════════════════════════════════════════════════════╝
+
+@layer components {
+  .z-table-wrap {
+    overflow-x: auto;
+    @include border-radius("sm");
+    border: var(--border-line-xs) solid var(--color-border);
+  }
+
+  .z-table {
+    width: 100%;
+    border-collapse: collapse;
+    @include text("body-sm");
+    color: var(--color-text);
+
+    caption {
+      @include padding("sm");
+      @include text("caption");
+      color: var(--color-text-muted);
+      text-align: start;
+      caption-side: bottom;
+    }
+
+    th,
+    td {
+      @include padding("sm", "y");
+      @include padding("md", "x");
+      text-align: start;
+      vertical-align: middle;
+      border-bottom: var(--border-line-xs) solid var(--color-border);
+    }
+
+    th {
+      @include text("caption-bold");
+      color: var(--color-text-muted);
+      background: var(--color-surface-subtle);
+      white-space: nowrap;
+    }
+
+    tbody tr:last-child td {
+      border-bottom: none;
+    }
+
+    tbody tr:hover td {
+      background: var(--color-surface-subtle);
+    }
+
+    // ── Modifiers ────────────────────────────────────────────
+    &--striped tbody tr:nth-child(even) td {
+      background: var(--color-surface-subtle);
+    }
+
+    &--bordered {
+      th,
+      td {
+        border-inline-end: var(--border-line-xs) solid var(--color-border);
+
+        &:last-child {
+          border-inline-end: none;
+        }
+      }
+    }
+
+    &--compact {
+      th,
+      td {
+        @include padding("2xs", "y");
+        @include padding("sm", "x");
+      }
+    }
+  }
+}

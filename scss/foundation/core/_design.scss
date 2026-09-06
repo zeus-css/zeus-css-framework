@@ -1,0 +1,33 @@
+// ╔══════════════════════════════════════════════════════════════╗
+// ║  ⚡ Zeus CSS — Design                                          ║
+// ║                                                               ║
+// ║  Core styles and definitions for design.                      ║
+// ╚══════════════════════════════════════════════════════════════╝
+
+@forward "./design/core/basic";
+
+// Palette & Semantic Themes
+@forward "./design/colors/base-colors";
+@forward "./design/colors/semantic-colors";
+
+// Text and Font Families
+@forward "./design/typography/typography";
+
+// Dimensions
+@forward "./design/dimensions/spaces";
+@forward "./design/dimensions/sizes";
+
+// Responsive Grid Architectures
+@forward "./design/layout/grid";
+
+// Borders
+@forward "./design/borders/border-line";
+@forward "./design/borders/border-radius";
+
+// Effects
+@forward "./design/effects/shadows";
+@forward "./design/effects/z-index";
+
+// Validation (opt-in — use to catch malformed tokens at compile time)
+@forward "./design/validate";
+@forward "./design/design-system";

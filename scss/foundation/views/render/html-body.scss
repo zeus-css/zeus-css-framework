@@ -1,0 +1,53 @@
+// ╔══════════════════════════════════════════════════════════════╗
+// ║  ⚡ Zeus CSS — Html Body                                       ║
+// ║                                                               ║
+// ║  Core styles and definitions for html body.                   ║
+// ╚══════════════════════════════════════════════════════════════╝
+
+@use "sass:map";
+@use "../../core/design" as *;
+@use "../../core/engine" as *;
+@use "../../../zeus.config" as config;
+
+$_zp: "";
+@if config.$zeus-use-prefix {
+  $_zp: config.$zeus-class-prefix;
+}
+
+@layer base {
+  html {
+    box-sizing: border-box;
+    // 100% respects the user's browser font-size preference.
+    // $root-font-size (basic.scss) is only the px→rem conversion base, not an override.
+    font-size: 100%;
+    -ms-overflow-style: scrollbar;
+    // scroll-behavior is handled by reset.scss under a prefers-reduced-motion guard
+    //
+    // No global overflow-x/max-width clipping here — that hides real horizontal
+    // overflow bugs instead of surfacing them, and can break position: sticky in
+    // some browsers. Use the opt-in .no-overflow-x utility (classes/_utilities.scss)
+    // if a specific project genuinely needs it.
+  }
+
+  // Container Context for CQI typography & sizing.
+  // .grid is deliberately NOT included: it's a structural/layout tool, not a
+  // "give me a reference frame" tool. Including it caused compounding shrink —
+  // every nested .grid reset the fluid reference frame, so a grid inside a
+  // grid inside a narrow column made every token (spacing/borders/icons/
+  // typography) smaller with each level. Use the opt-in .cq class below on
+  // any specific .grid that should size its own contents.
+  body, .#{$_zp}container {
+    container-type: inline-size;
+  }
+
+  // Opt-in Container Queries for Developers
+  .#{$_zp}cq { container-type: inline-size; }
+  .#{$_zp}cq-size { container-type: size; }
+
+  body {
+    color: var(--color-text);
+    background-color: var(--color-background);
+    word-break: break-word;
+    @include text(body);
+  }
+}

@@ -1,0 +1,86 @@
+// ╔══════════════════════════════════════════════════════════════╗
+// ║  ⚡ Zeus CSS — Grid                                            ║
+// ║                                                               ║
+// ║  Design tokens and configuration for grid.                    ║
+// ╚══════════════════════════════════════════════════════════════╝
+
+@use "sass:map";
+@use "../../../../zeus.config" as config;
+@use "../_validate" as validate;
+
+// ============================================================
+// ZEUS GRID — Layout Tokens
+// ============================================================
+
+$outer-max-width: config.$zeus-outer-max-width !default;
+
+// ─── Breakpoints ─────────────────────────────────────────────
+$_breakpoints-base-defaults: (
+  xs: 0,
+  sm: 576px,
+  md: 768px,
+  ml: 1024px,
+  lg: 1280px,
+  xl: 1920px,
+  xxl: $outer-max-width,
+);
+$_breakpoints-defaults: map.merge($_breakpoints-base-defaults, config.$zeus-breakpoints);
+$_breakpoints-defaults: map.merge(
+  $_breakpoints-defaults,
+  (
+    xxl: map.get(config.$zeus-breakpoints, xxl) or $outer-max-width,
+  )
+);
+$breakpoints: () !default;
+$breakpoints: map.merge($_breakpoints-defaults, $breakpoints);
+
+// ─── Column gap tokens (fluid: min → max) ────────────────────
+// Format: (floor: N, ceil: N) — unitless px numbers, resolved by useclamp-sizing() at :root
+// Output CSS vars: --col-gap-xs, --col-gap-sm, --col-gap-md, --col-gap-lg, --col-gap-xl, --col-gap-xxl
+$_column-gaps-base-defaults: (
+  xs: (
+    floor: 12,
+    ceil: 16,
+  ),
+  sm: (
+    floor: 16,
+    ceil: 20,
+  ),
+  md: (
+    floor: 20,
+    ceil: 28,
+  ),
+  lg: (
+    floor: 28,
+    ceil: 40,
+  ),
+  xl: (
+    floor: 36,
+    ceil: 48,
+  ),
+  xxl: (
+    floor: 40,
+    ceil: 64,
+  ),
+);
+$_column-gaps-defaults: map.deep-merge($_column-gaps-base-defaults, config.$zeus-column-gaps);
+$column-gaps: () !default;
+$column-gaps: map.deep-merge($_column-gaps-defaults, $column-gaps);
+@include validate.validate-all-responsive("column-gaps", $column-gaps);
+
+// ─── Container outer padding — fluid ─────────────────────────
+// Format: (floor: N, ceil: N) — unitless px numbers
+// Output CSS var: --padding-outer
+// floor = mobile minimum, ceil = wide desktop maximum
+
+// Based on useclamp-sizing() which defaults to the $container-bounds range
+// (343px–1792px unless overridden, see core/design/core/basic.scss).
+// floor: 16 -> 16px padding at the container floor (small mobile)
+// ceil: 128 -> 128px padding at the container ceiling (ultra-wide desktop)
+$_outer-padding-base-defaults: (
+  floor: 16,
+  ceil: 64,
+);
+$_outer-padding-defaults: map.merge($_outer-padding-base-defaults, config.$zeus-outer-padding);
+$outer-padding: () !default;
+$outer-padding: map.merge($_outer-padding-defaults, $outer-padding);

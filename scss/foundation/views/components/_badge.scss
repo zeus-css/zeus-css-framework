@@ -1,0 +1,100 @@
+// ╔══════════════════════════════════════════════════════════════╗
+// ║  ⚡ Zeus CSS — Badge                                           ║
+// ║                                                               ║
+// ║  Core structural and visual styles for the badge component.   ║
+// ╚══════════════════════════════════════════════════════════════╝
+
+@use "../../core/engine" as *;
+@use "../../core/design/colors/color-derivation" as derive;
+
+// ╔══════════════════════════════════════════════════════════════╗
+// ║  🏷️ Badge Component                                          ║
+// ║                                                              ║
+// ║  A small status/count pill. Soft-tint style by design: text  ║
+// ║  is always darkened via color-mix() toward black regardless  ║
+// ║  of how light the base hue is, so every variant clears WCAG  ║
+// ║  AA on its own tinted background without hand-picking a      ║
+// ║  passing shade per color (the trap that caught .btn-primary  ║
+// ║  originally).                                                ║
+// ║                                                              ║
+// ║  Usage:                                                      ║
+// ║  <span class="z-badge z-badge--success">Active</span>        ║
+// ╚══════════════════════════════════════════════════════════════╝
+
+@layer components {
+  // Private: background/text/border for one variant from a single CSS
+  // custom property. Mixed toward `transparent`, not `--color-surface`:
+  // surface has ~0 chroma but a *defined* (not "none") hue, and mixing a
+  // vivid color into a heavily-weighted near-zero-chroma-but-hued color
+  // does a real circular hue interpolation that can land far from the
+  // intended hue (verified live — every variant rendered as the same
+  // pinkish tint before this fix). Mixing toward transparent instead
+  // preserves the source hue exactly; the alpha shows the tint through
+  // whatever's actually behind the badge.
+  //
+  // Text is mixed 55% toward black so it stays dark (high contrast) even
+  // for light base hues like accent/secondary — verified via OKLab->sRGB:
+  // the lightest hue (accent, L 71.8%) still clears 7.3:1 against its own
+  // 12%-tint background at this ratio.
+  @mixin _badge-variant($css-var) {
+    background: color-mix(in oklch, var(#{$css-var}) 12%, transparent);
+    color: color-mix(in oklch, var(#{$css-var}) 55%, black);
+    border-color: color-mix(in oklch, var(#{$css-var}) 30%, transparent);
+  }
+
+  .z-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-3xs);
+    @include padding("3xs", "y");
+    @include padding("sm", "x");
+    @include border-radius("rounded");
+    @include text("caption-bold");
+    line-height: 1.4;
+    white-space: nowrap;
+    border: var(--border-line-xs) solid transparent;
+    background: var(--color-surface-subtle);
+    color: var(--color-text-muted);
+
+    &--primary   { @include _badge-variant(--color-primary); }
+    &--secondary { @include _badge-variant(--color-secondary); }
+    &--accent    { @include _badge-variant(--color-accent); }
+    &--success   { @include _badge-variant(--base-system-success); }
+    &--warning   { @include _badge-variant(--base-system-warning); }
+    &--error     { @include _badge-variant(--base-system-error); }
+
+    // Private: full-strength fill for the --solid modifier. The foreground is
+    // NOT a fixed --color-text-inverse: it's derived per color, because the
+    // palette legitimately contains both dark colors that need light text
+    // (primary, accent, error) and light ones that need dark text (secondary,
+    // warning, success). Hardcoding white here shipped 2.20:1 on the brand
+    // secondary; derive-on-color() picks the readable side automatically and
+    // keeps following runtime overrides of the base color.
+    @mixin _badge-solid($css-var) {
+      background: var(#{$css-var});
+      border-color: var(#{$css-var});
+      color: #{derive.derive-on-color("var(#{$css-var})")};
+    }
+
+    // ── Solid modifier — max emphasis. Every variant clears WCAG AA
+    // (4.55–7.40:1, asserted by scripts/test-compile.mjs check 8) because
+    // the text color is derived from each fill rather than assumed white.
+    &--solid {
+      &.z-badge--primary   { @include _badge-solid(--color-primary); }
+      &.z-badge--secondary { @include _badge-solid(--color-secondary); }
+      &.z-badge--accent    { @include _badge-solid(--color-accent); }
+      &.z-badge--success   { @include _badge-solid(--base-system-success); }
+      &.z-badge--warning   { @include _badge-solid(--base-system-warning); }
+      &.z-badge--error     { @include _badge-solid(--base-system-error); }
+    }
+
+    // ── Dot — leading status indicator, e.g. <span class="z-badge__dot"></span>
+    &__dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: currentColor;
+      flex-shrink: 0;
+    }
+  }
+}

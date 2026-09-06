@@ -1,0 +1,195 @@
+// ╔══════════════════════════════════════════════════════════════╗
+// ║  ⚡ Zeus CSS — Grid                                            ║
+// ║                                                               ║
+// ║  Generates utility classes for grid based on the framework's design tokens. ║
+// ╚══════════════════════════════════════════════════════════════╝
+// ========================================================================================
+// ZEUS GRID SYSTEM - Modern CSS Grid Based Layout
+// ========================================================================================
+// Zeus Grid System is based on classes that apply to parent divs, so they affect all children.
+// This is different from other classes that apply to individual elements (e.g. typography, borders, spacing, etc).
+// Applying classes to the parent instead of each child avoids repetitive per-element classes and
+// keeps layout changes centralized: change one class on the parent div to change the layout of every child.
+// In Zeus, we apply classes to parent divs, which allows us to change the layout of multiple elements by changing a single class on the parent div.
+// This also allows for easier responsive design, as we can change the layout of multiple elements by
+// changing a single class on the parent div for different screen sizes.
+//
+// Examples:
+// <div class="grid grid-cols-3 gap-4">...</div>
+// <div class="grid grid-auto-fit gap-3">...</div>
+// <div class="grid grid-cols-1 grid-cols-md-2 grid-cols-lg-3">...</div>
+// ========================================================================================
+
+@use "sass:map";
+@use "../../../../zeus.config" as config;
+@use "../../../core/design/layout/grid" as *;
+@use "../../../core/engine/responsive" as *;
+@use "../../../core/design/dimensions/spaces" as spacing-tokens;
+@use "../../../core/engine/layout" as layout-engine;
+
+@mixin load-grid($prefix: "") {
+@if config.$zeus-enable-grid-system {
+
+// ========================================================================================
+// BASE GRID DISPLAY UTILITIES
+// ========================================================================================
+.#{$prefix}d-grid {
+  display: grid;
+}
+
+.#{$prefix}d-inline-grid {
+  display: inline-grid;
+}
+
+// ========================================================================================
+// GRID COLUMNS - Fixed column layouts (1-12 columns)
+// ========================================================================================
+.#{$prefix}grid {
+  display: grid;
+  
+  // Fixed columns 1-12
+  // minmax(0, 1fr) — not bare 1fr. Bare 1fr means minmax(auto, 1fr): a child
+  // with wide min-content (pre/code blocks, long monospace strings, unbroken
+  // URLs) becomes a hard floor and the whole grid blows out past its container,
+  // forcing a page-level horizontal scrollbar. minmax(0, 1fr) keeps columns
+  // truly equal and lets the child's own overflow handling take over.
+  &-cols-1 {
+    grid-template-columns: repeat(1, minmax(0, 1fr));
+  }
+  &-cols-2 {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  &-cols-3 {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+  &-cols-4 {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+  &-cols-5 {
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+  }
+  &-cols-6 {
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+  }
+  &-cols-7 {
+    grid-template-columns: repeat(7, minmax(0, 1fr));
+  }
+  &-cols-8 {
+    grid-template-columns: repeat(8, minmax(0, 1fr));
+  }
+  &-cols-9 {
+    grid-template-columns: repeat(9, minmax(0, 1fr));
+  }
+  &-cols-10 {
+    grid-template-columns: repeat(10, minmax(0, 1fr));
+  }
+  &-cols-11 {
+    grid-template-columns: repeat(11, minmax(0, 1fr));
+  }
+  &-cols-12 {
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+  }
+
+  // ========================================================================================
+  // AUTO-FIT & AUTO-FILL - Smart responsive grids
+  // ========================================================================================
+  &-auto-fit {
+    grid-template-columns: repeat(auto-fit, minmax(var(--grid-auto-min, 250px), 1fr));
+  }
+  
+  &-auto-fill {
+    grid-template-columns: repeat(auto-fill, minmax(var(--grid-auto-min, 250px), 1fr));
+  }
+
+  // ========================================================================================
+  // ADVANCED GRID FEATURES
+  // ========================================================================================
+  &-dense {
+    grid-auto-flow: dense;
+  }
+}
+
+// ========================================================================================
+// GRID COLUMN SPANS
+// ========================================================================================
+@for $i from 1 through 12 {
+  .#{$prefix}col-span-#{$i} {
+    grid-column: span #{$i} / span #{$i};
+  }
+}
+.#{$prefix}col-span-full {
+  grid-column: 1 / -1;
+}
+
+@for $i from 2 through 12 {
+  .#{$prefix}col-start-#{$i} {
+    grid-column-start: #{$i};
+  }
+}
+
+@for $i from 1 through 13 {
+  .#{$prefix}col-end-#{$i} {
+    grid-column-end: #{$i};
+  }
+}
+
+} // end @if zeus-enable-grid-system
+
+}
+
+// ========================================================================================
+// COMMON GRID PATTERNS - Pre-built layouts
+// ========================================================================================
+// These are complete, self-contained components with their own internal breakpoint
+// behavior — NOT meant to have breakpoint-prefixed variants (e.g. "md:grid-sidebar"
+// is meaningless, since the responsive behavior is already baked in below).
+// Emitted ONCE at the base level only — never inside the responsive breakpoint loop
+// in classes.scss, otherwise the internal screen-below() gets nested inside an outer
+// screen-above() and can produce impossible/dead media queries at higher breakpoints.
+@mixin load-grid-patterns($prefix: "") {
+@if config.$zeus-enable-grid-system {
+
+// Cards layout with auto-fit
+.#{$prefix}grid-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: var(--col-gap-md);
+}
+
+// Sidebar layout (250px sidebar + fluid main)
+// minmax(0, 1fr) everywhere below (not bare 1fr) — see .grid-cols-* comment.
+.#{$prefix}grid-sidebar {
+  display: grid;
+  grid-template-columns: 250px minmax(0, 1fr);
+  gap: var(--col-gap-md);
+
+  @include screen-below(lg) {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+// Two column layout (equal width)
+.#{$prefix}grid-split {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--col-gap-md);
+
+  @include screen-below(lg) {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+// Three column layout
+.#{$prefix}grid-thirds {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--col-gap-md);
+
+  @include screen-below(lg) {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+} // end @if zeus-enable-grid-system
+
+}

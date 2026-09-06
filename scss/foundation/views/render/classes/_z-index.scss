@@ -1,0 +1,22 @@
+// ╔══════════════════════════════════════════════════════════════╗
+// ║  ⚡ Zeus CSS — Z-Index                                         ║
+// ║                                                               ║
+// ║  Generates utility classes for the stacking-order scale.      ║
+// ╚══════════════════════════════════════════════════════════════╝
+
+@use "sass:map";
+@use "../../../core/design/effects/z-index" as z-tokens;
+
+// Named ".layer-*" (not ".z-*") deliberately — the "z-" prefix is already
+// the framework's BEM component namespace (.z-card, .z-modal, .z-field, …);
+// reusing it here would collide with component class names.
+@mixin load-z-index($prefix: "") {
+$z-names: map.keys(z-tokens.$z-index);
+
+@each $name in $z-names {
+  .#{$prefix}layer-#{$name} {
+    z-index: var(--z-#{$name});
+  }
+}
+
+}

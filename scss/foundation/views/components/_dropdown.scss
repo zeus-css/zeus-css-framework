@@ -1,0 +1,123 @@
+// ╔══════════════════════════════════════════════════════════════╗
+// ║  ⚡ Zeus CSS — Dropdown                                        ║
+// ║                                                               ║
+// ║  Core structural and visual styles for the dropdown component.║
+// ╚══════════════════════════════════════════════════════════════╝
+
+@use "../../core/engine" as *;
+@use "../../core/design" as *;
+
+// ╔══════════════════════════════════════════════════════════════╗
+// ║  📋 Dropdown Component — Native Popover API                  ║
+// ║                                                              ║
+// ║  popover="auto" (the default): light-dismiss on outside      ║
+// ║  click/Escape, and opening this one closes any other "auto"  ║
+// ║  popover already open — exactly what a menu should do. Zero  ║
+// ║  JS for open/close/dismiss/focus-return.                     ║
+// ║                                                              ║
+// ║  Positioning: same anchor-positioning contract as .z-tooltip ║
+// ║  — pair trigger and menu with a shared, unique anchor-name.  ║
+// ║                                                              ║
+// ║  Usage:                                                      ║
+// ║  <button class="z-btn" style="anchor-name:--menu1"           ║
+// ║          popovertarget="menu1">Options</button>               ║
+// ║  <div class="z-dropdown" id="menu1" popover                  ║
+// ║       style="position-anchor:--menu1">                       ║
+// ║    <ul class="z-dropdown__list" role="menu">                 ║
+// ║      <li role="none"><a class="z-dropdown__item" role="menuitem" href="#">Edit</a></li> ║
+// ║      <li role="none"><a class="z-dropdown__item z-dropdown__item--danger" role="menuitem" href="#">Delete</a></li> ║
+// ║    </ul>                                                     ║
+// ║  </div>                                                       ║
+// ╚══════════════════════════════════════════════════════════════╝
+
+@layer components {
+  .z-dropdown {
+    // Reset the UA [popover] box.
+    margin: 0;
+    border: var(--border-line-xs) solid var(--color-border);
+    padding: 0;
+    overflow: hidden;
+    color: inherit;
+
+    @include border-radius("md");
+    @include apply-shadow("dropdown");
+    background: var(--color-surface);
+    min-width: 180px;
+    max-width: 320px;
+
+    // Anchored below and toward the inline-end (right in LTR, left in
+    // RTL) of the trigger, with a small gap — falls back to opening
+    // upward when there's no room below.
+    position-anchor: none;
+    position-area: block-end inline-end;
+    position-try-fallbacks: flip-block;
+    margin-block-start: var(--space-3xs);
+
+    &__list {
+      list-style: none;
+      margin: 0;
+      @include padding("2xs", "y");
+    }
+
+    &__item {
+      display: flex;
+      align-items: center;
+      gap: var(--space-xs);
+      width: 100%;
+      @include padding("xs", "y");
+      @include padding("md", "x");
+      @include text("body-sm");
+      color: var(--color-text);
+      text-decoration: none;
+      background: none;
+      border: none;
+      cursor: pointer;
+
+      &:hover,
+      &:focus-visible {
+        background: var(--color-surface-subtle);
+      }
+
+      &:focus-visible {
+        outline: $focus-ring;
+        outline-offset: -2px;
+      }
+
+      &--danger {
+        color: var(--base-system-error);
+      }
+
+      &[aria-disabled="true"] {
+        opacity: 0.5;
+        pointer-events: none;
+      }
+    }
+
+    &__divider {
+      border: none;
+      border-top: var(--border-line-xs) solid var(--color-border);
+      @include margin("2xs", "y");
+    }
+
+    opacity: 0;
+    transform: translateY(-4px) scale(0.98);
+    transition: opacity 0.15s ease, transform 0.15s ease, overlay 0.15s allow-discrete, display 0.15s allow-discrete;
+
+    &:popover-open {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+    }
+
+    @starting-style {
+      &:popover-open {
+        opacity: 0;
+        transform: translateY(-4px) scale(0.98);
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      transition: none;
+      transform: none;
+    }
+  }
+}

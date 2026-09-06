@@ -1,0 +1,103 @@
+// ╔══════════════════════════════════════════════════════════════╗
+// ║  ⚡ Zeus CSS — Compounds                                       ║
+// ║                                                               ║
+// ║  Generates utility classes for compounds based on the framework's design tokens. ║
+// ╚══════════════════════════════════════════════════════════════╝
+
+@use "../../../core/engine" as *;
+
+@mixin load-compounds($prefix: "") {
+// NOTE: .surface (below) and .z-card (views/components/_card.scss) are both
+// intentional, in active use, and NOT duplicates: .surface is a single-class
+// utility card meant to be combined/overridden with other utility classes
+// (padding-*, shadow-*, bg-*, …) on the same element; .z-card is a full BEM
+// component with dedicated __media/__body/__title/__footer sub-elements for
+// structured card layouts. Reach for .surface for a quick styled box, .z-card
+// when you need the structured markup. (Renamed from .zeus-card — see
+// naming-convention decision: .z-* is reserved for the framework's fixed
+// BEM components, everything else ships bare and is prefixable via
+// $zeus-use-prefix. Named .surface, not .box, because .box-{size} already
+// exists in _sizes.scss as the icon/box-dimension utility family — .box would
+// have looked like a member of that family instead of an unrelated card.)
+.#{$prefix}surface {
+  @include padding("lg");
+  @include border-radius("md");
+  @include card-shadow();
+  background: var(--color-surface);
+  border: var(--border-line-xs) solid var(--color-border);
+}
+
+.#{$prefix}surface-flat {
+  @include padding("lg");
+  @include border-radius("md");
+  background: var(--color-surface);
+  border: var(--border-line-xs) solid var(--color-border);
+}
+
+// ── Legacy Section Aliases ───────────────────────────────
+// These are maintained for backwards compatibility. They are equivalent to
+// the new `.section-*` sizes but they ALSO inject hardcoded inline padding.
+// Named .section-wrap(-narrow), not .section-<size>, so they can never be
+// mistaken for a member of the .section-sm/lg/none/full size scale.
+// 👉 Modern approach: Use `<section class="section-3xl"><div class="container">`
+.#{$prefix}section-wrap {
+  @include padding("3xl", "block");
+  @include padding("xl", "inline");
+}
+
+.#{$prefix}section-wrap-narrow {
+  @include padding("2xl", "block");
+  @include padding("lg", "inline");
+  max-width: 960px;
+  margin-inline: auto;
+}
+
+.#{$prefix}glass {
+  background: color-mix(in oklch, var(--color-surface) 10%, transparent);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: var(--border-line-xs) solid color-mix(in oklch, var(--color-surface) 15%, transparent);
+  @include border-radius("md");
+}
+
+.#{$prefix}divider {
+  border: none;
+  border-top: var(--border-line-xs) solid var(--color-border);
+  margin: var(--space-xl) 0;
+}
+
+.#{$prefix}sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}
+
+.#{$prefix}truncate {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.#{$prefix}line-clamp-2 {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.#{$prefix}line-clamp-3 {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+}

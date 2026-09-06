@@ -1,0 +1,83 @@
+// ╔══════════════════════════════════════════════════════════════╗
+// ║  ⚡ Zeus CSS — Theme Builder                                   ║
+// ║                                                               ║
+// ║  Framework internal engine and mixins for theme builder.      ║
+// ╚══════════════════════════════════════════════════════════════╝
+
+@use "sass:map";
+@use "../design/colors/color-derivation" as derive;
+
+// ╔══════════════════════════════════════════════════════════════╗
+// ║  🎨 Zeus Theme Builder                                       ║
+// ║                                                              ║
+// ║  Create a complete theme in one mixin call.                  ║
+// ║  Auto-derives the full default-palette token set (including   ║
+// ║  --color-surface-subtle / --color-warning-subtle, so `code`   ║
+// ║  and `mark` render correctly under the theme too) from just   ║
+// ║  4 required + 1 optional input color.                        ║
+// ║                                                              ║
+// ║  Usage:                                                      ║
+// ║  @include zeus-theme("ocean", (                              ║
+// ║    primary: #0077b6,                                         ║
+// ║    secondary: #00b4d8,                                       ║
+// ║    accent: #ff9f1c,   // optional                             ║
+// ║    body: #caf0f8,                                            ║
+// ║    text: #023e8a,                                            ║
+// ║  ));                                                         ║
+// ╚══════════════════════════════════════════════════════════════╝
+
+@mixin zeus-theme($name, $config) {
+  $primary: map.get($config, "primary");
+  $secondary: map.get($config, "secondary");
+  $accent: map.get($config, "accent");
+  $body: map.get($config, "body");
+  $text: map.get($config, "text");
+
+  [data-theme="#{$name}"] {
+    // Layer colors using the same derivation math as the default palette
+    // (core/design/colors/_color-derivation.scss) — so a named theme's
+    // light/dark/muted/border "weight" always matches the default's,
+    // instead of two independently hand-tuned percentages drifting apart.
+    @if $primary {
+      --color-primary: #{$primary};
+      --color-primary-light: #{derive.derive-light("var(--color-primary)")};
+      --color-primary-dark: #{derive.derive-dark("var(--color-primary)")};
+    }
+    @if $secondary {
+      --color-secondary: #{$secondary};
+      --color-secondary-light: #{derive.derive-light("var(--color-secondary)")};
+      --color-secondary-dark: #{derive.derive-dark("var(--color-secondary)")};
+    }
+    @if $accent {
+      --color-accent: #{$accent};
+      --color-accent-light: #{derive.derive-light("var(--color-accent)")};
+      --color-accent-dark: #{derive.derive-dark("var(--color-accent)")};
+    }
+    @if $body {
+      --color-background: #{$body};
+      --color-surface: #{derive.derive-surface("var(--color-background)")};
+    }
+
+    // Font colors — auto-derive from text + body
+    @if $text and $body {
+      --color-text: #{$text};
+      --color-text-muted: #{derive.derive-muted("var(--color-text)", "var(--color-background)")};
+      --color-text-inverse: #{$body};
+    }
+
+    // Border colors — auto-derive from text + body
+    @if $text and $body {
+      --color-border-strong: #{derive.derive-border-strong("var(--color-text)", "var(--color-background)")};
+      --color-border: #{derive.derive-border("var(--color-text)", "var(--color-background)")};
+    }
+
+    // Subtle surfaces — same tokens :where(code)/:where(mark) rely on in the
+    // default palette (render/typography.scss). --base-system-warning is a
+    // global token (core/design/colors/base-colors.scss), shared across all
+    // themes, not redefined per-theme.
+    @if $text and $body {
+      --color-surface-subtle: #{derive.derive-surface-subtle("var(--color-surface)", "var(--color-text)")};
+      --color-warning-subtle: #{derive.derive-warning-subtle("var(--base-system-warning)", "var(--color-background)")};
+    }
+  }
+}

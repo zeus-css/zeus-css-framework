@@ -1,0 +1,30 @@
+// ╔══════════════════════════════════════════════════════════════╗
+// ║  ⚡ Zeus CSS — Shortcuts                                       ║
+// ║                                                               ║
+// ║  Framework internal engine and mixins for shortcuts.          ║
+// ╚══════════════════════════════════════════════════════════════╝
+
+@use "./layout" as *;
+@use "./typographics" as *;
+
+// ╔══════════════════════════════════════════════════════════════╗
+// ║  ⚡ Zeus Shortcuts — Write less, do more                    ║
+// ║                                                              ║
+// ║  Full-name mixins remain available. These are opt-in aliases ║
+// ║  for rapid prototyping.                                      ║
+// ║                                                              ║
+// ║  p("lg")         → padding: var(--space-lg)                  ║
+// ║  p("lg", "x")    → padding-inline: var(--space-lg)           ║
+// ║  m("xl", "top")  → margin-top: var(--space-xl)               ║
+// ║  t("h3")         → font: 600 clamp(...) / 1.25 Inter         ║
+// ║  r("md")         → border-radius: var(--border-radius-md)    ║
+// ║  sz("lg")        → width/height: var(--size-icon-lg)         ║
+// ║  g("md")         → gap: var(--space-md)                      ║
+// ╚══════════════════════════════════════════════════════════════╝
+
+@mixin p($size, $dir: null) { @include padding($size, $dir); }
+@mixin m($size, $dir: null) { @include margin($size, $dir); }
+@mixin g($size, $dir: null) { @include gap($size, $dir); }
+@mixin r($type)             { @include border-radius($type); }
+@mixin t($type)             { @include text($type); }
+@mixin sz($type)            { @include box-size($type); }

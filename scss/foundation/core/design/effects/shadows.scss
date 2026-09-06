@@ -1,0 +1,65 @@
+// ╔══════════════════════════════════════════════════════════════╗
+// ║  ⚡ Zeus CSS — Shadows                                         ║
+// ║                                                               ║
+// ║  Design tokens and configuration for shadows.                 ║
+// ╚══════════════════════════════════════════════════════════════╝
+
+@use "sass:map";
+@use "../../../../zeus.config" as config;
+
+// ╔══════════════════════════════════════════════════════════╗
+// ║  ☁️ SHADOW TOKENS                                       
+// ║                                                         
+// ║  Format: "name": shadow-value                           
+// ║  Output CSS variable: --shadow-{name}                   
+// ╚══════════════════════════════════════════════════════════╝
+
+// ── Defaults ─────────────────────────────────────────────────
+$_shadows-defaults: (
+  "none": none,
+
+  // Elevation
+  "xs":  (0px 1px 2px 0px rgb(132 132 132 / 43%)),
+  "sm":  (0px 1px 3px 0px rgb(132 132 132 / 43%), 0px 1px 2px -1px rgb(132 132 132 / 43%)),
+  "md":  (0px 4px 6px -1px rgb(132 132 132 / 43%), 0px 2px 4px -2px rgb(132 132 132 / 43%)),
+  "lg":  (0px 10px 15px -3px rgb(132 132 132 / 43%), 0px 4px 6px -4px rgb(132 132 132 / 43%)),
+  "xl":  (0px 20px 25px -5px rgb(132 132 132 / 43%), 0px 8px 10px -6px rgb(132 132 132 / 43%)),
+  "2xl": (0px 25px 50px -12px rgba(0, 0, 0, 0.25)),
+
+  // Semantic (Glows for colored elements) — derived from the brand's own
+  // CSS custom properties at runtime, via OKLCH relative-color syntax, so
+  // changing $zeus-colors also re-colors these shadows automatically
+  // instead of leaving them locked to a hardcoded blue/purple.
+  "primary":   (0px 4px 12px 0px oklch(from var(--color-primary) l c h / 0.3)),
+  "secondary": (0px 4px 12px 0px oklch(from var(--color-secondary) l c h / 0.3)),
+  "success":   (0px 4px 12px 0px rgba(34, 197, 94, 0.3)),
+  "warning":   (0px 4px 12px 0px rgba(251, 146, 60, 0.3)),
+  "danger":    (0px 4px 12px 0px rgba(239, 68, 68, 0.3)),
+  "info":      (0px 4px 12px 0px rgba(14, 165, 233, 0.3)),
+
+  // Inner
+  "inner":    (inset 0px 2px 4px 0px rgba(0, 0, 0, 0.06)),
+  "inner-lg": (inset 0px 4px 8px 0px rgb(132 132 132 / 43%)),
+
+  // Special effects — same brand-derivation rationale as above
+  "glow":    (0px 0px 20px 0px oklch(from var(--color-primary) l c h / 0.5)),
+  "glow-lg": (0px 0px 40px 0px oklch(from var(--color-primary) l c h / 0.6)),
+  "outline": (0px 0px 0px 3px oklch(from var(--color-primary) l c h / 0.5)),
+
+  // Component specific recommendations
+  "card":       (0px 2px 8px 0px rgba(0,0,0,0.08), 0px 1px 2px 0px rgba(0,0,0,0.06)),
+  "card-hover": (0px 8px 24px 0px rgba(0,0,0,0.12), 0px 2px 6px 0px rgba(0,0,0,0.08)),
+  "dropdown":   (0px 10px 40px 0px rgba(0,0,0,0.15), 0px 2px 8px 0px rgb(132 132 132 / 43%)),
+  "modal":      (0px 20px 60px 0px rgba(0,0,0,0.3), 0px 4px 16px 0px rgba(0,0,0,0.2)),
+);
+
+// ── Developer Override ──
+$shadows: map.merge($_shadows-defaults, config.$zeus-shadows);
+
+// -----------------------------------------------------------------------------
+// HELPER FUNCTION
+// -----------------------------------------------------------------------------
+
+@function shadow($key) {
+  @return map.get($shadows, $key);
+}

@@ -1,0 +1,103 @@
+// ╔══════════════════════════════════════════════════════════════╗
+// ║  ⚡ Zeus CSS — Alert                                           ║
+// ║                                                               ║
+// ║  Core structural and visual styles for the alert component.   ║
+// ╚══════════════════════════════════════════════════════════════╝
+
+@use "../../core/engine" as *;
+@use "../../core/design" as *;
+
+// ╔══════════════════════════════════════════════════════════════╗
+// ║  🔔 Alert Component                                          ║
+// ║                                                              ║
+// ║  Inline status message with a left accent border and tinted  ║
+// ║  background. Same color-mix() contrast strategy as .z-badge  ║
+// ║  — text is always darkened toward black, independent of the  ║
+// ║  base hue's own lightness.                                   ║
+// ║                                                              ║
+// ║  Usage:                                                      ║
+// ║  <div class="z-alert z-alert--success" role="alert">          ║
+// ║    <p class="z-alert__title">Saved</p>                       ║
+// ║    <p class="z-alert__text">Your changes are live.</p>       ║
+// ║    <button class="z-alert__close" aria-label="Dismiss">×</button>║
+// ║  </div>                                                      ║
+// ╚══════════════════════════════════════════════════════════════╝
+
+@layer components {
+  // Mixed toward `transparent`, not `--color-surface` — see .z-badge's
+  // _badge-variant comment for why (surface's defined-but-zero hue
+  // corrupts the circular hue interpolation, verified live).
+  @mixin _alert-variant($css-var) {
+    background: color-mix(in oklch, var(#{$css-var}) 10%, transparent);
+    border-inline-start-color: var(#{$css-var});
+
+    // Same 55%-toward-black ratio as .z-badge — verified to clear 7.3:1
+    // even for the lightest brand hue (accent).
+    .z-alert__title {
+      color: color-mix(in oklch, var(#{$css-var}) 55%, black);
+    }
+  }
+
+  .z-alert {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--space-sm);
+    @include padding("md");
+    @include border-radius("sm");
+    border: var(--border-line-xs) solid var(--color-border);
+    border-inline-start: var(--border-line-md) solid var(--color-border-strong);
+    background: var(--color-surface-subtle);
+
+    &--info     { @include _alert-variant(--color-primary); }
+    &--success  { @include _alert-variant(--base-system-success); }
+    &--warning  { @include _alert-variant(--base-system-warning); }
+    &--error    { @include _alert-variant(--base-system-error); }
+
+    &__icon {
+      flex-shrink: 0;
+      @include box-size(md);
+    }
+
+    &__content {
+      flex: 1 1 auto;
+      min-width: 0;
+    }
+
+    &__title {
+      @include text("body-sm-bold");
+      color: var(--color-text);
+      margin: 0;
+    }
+
+    &__text {
+      @include text("body-sm");
+      color: var(--color-text-muted);
+      margin: 0;
+
+      .z-alert__title + & {
+        margin-top: var(--space-3xs);
+      }
+    }
+
+    &__close {
+      appearance: none;
+      border: none;
+      background: transparent;
+      flex-shrink: 0;
+      @include text("body");
+      color: var(--color-text-muted);
+      cursor: pointer;
+      padding: 0;
+      line-height: 1;
+
+      &:hover {
+        color: var(--color-text);
+      }
+
+      &:focus-visible {
+        outline: $focus-ring;
+        outline-offset: 2px;
+      }
+    }
+  }
+}

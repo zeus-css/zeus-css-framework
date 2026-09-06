@@ -1,0 +1,60 @@
+{
+  "name": "zeus-css",
+  "version": "1.0.14",
+  "description": "⚡ A Premium, Zero-Emission, Fluid-Scaling CSS Framework based on Sass SCSS Engine",
+  "author": "Stavros Lazaris",
+  "license": "MIT",
+  "homepage": "https://www.npmjs.com/package/zeus-css",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/zeus-css/zeus-css-framework.git"
+  },
+  "bugs": {
+    "url": "https://github.com/zeus-css/zeus-css-framework/issues"
+  },
+  "main": "./dist/zeus.css",
+  "style": "./dist/zeus.css",
+  "bin": {
+    "zeus-css": "bin/init.js"
+  },
+  "exports": {
+    ".": {
+      "sass": "./scss/foundation/foundation.scss",
+      "css": "./dist/zeus.css",
+      "default": "./dist/zeus.css"
+    },
+    "./foundation": "./scss/foundation/foundation.scss",
+    "./zeus": "./scss/zeus.scss",
+    "./config": "./scss/zeus.config.scss",
+    "./customize": "./scss/zeus.customize.scss",
+    "./css": "./dist/zeus.css",
+    "./min": "./dist/zeus.min.css",
+    "./dist/*": "./dist/*",
+    "./scss/*": "./scss/*",
+    "./bin/*": "./bin/*"
+  },
+  "files": [
+    "scss/foundation",
+    "scss/zeus.scss",
+    "scss/zeus.config.scss",
+    "scss/zeus.customize.scss",
+    "scss/zeus.token.sets.example.scss",
+    "scss/zeus.tokens.json",
+    "dist",
+    "bin",
+    "CHANGELOG.md"
+  ],
+  "peerDependencies": {
+    "sass": "^1.79.0"
+  },
+  "keywords": [
+    "zeus",
+    "css",
+    "scss",
+    "sass",
+    "framework",
+    "fluid-design",
+    "design-tokens",
+    "type-safe"
+  ]
+}

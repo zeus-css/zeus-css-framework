@@ -1,0 +1,20 @@
+// ╔══════════════════════════════════════════════════════════════╗
+// ║  ⚡ Zeus CSS — Containers                                      ║
+// ║                                                               ║
+// ║  Generates utility classes for containers based on the framework's design tokens. ║
+// ╚══════════════════════════════════════════════════════════════╝
+
+@use "../../../core/design/layout/grid" as *;
+
+@mixin load-containers($prefix: "") {
+.#{$prefix}container {
+  width: 100%;
+  max-width: $outer-max-width;
+  margin-inline: auto;
+
+  // Single fluid clamp for horizontal padding that scales with viewport width
+  // Uses the container bounds from config to calculate a linear clamp() function
+  padding-inline: var(--padding-outer);
+}
+
+}

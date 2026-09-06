@@ -1,0 +1,32 @@
+// ╔══════════════════════════════════════════════════════════════╗
+// ║  ⚡ Zeus CSS — Sizes                                           ║
+// ║                                                               ║
+// ║  Design tokens and configuration for sizes.                   ║
+// ╚══════════════════════════════════════════════════════════════╝
+
+@use "sass:map";
+@use "../../../../zeus.config" as config;
+@use "../_validate" as validate;
+
+// ╔══════════════════════════════════════════════════════════╗
+// ║  📐 BUTTON SIZES                                        
+// ║                                                         
+// ║  Each size defines fluid scaling for:                   
+// ║  - font (Font Size)                                     
+// ║  - py (Padding Y)                                       
+// ║  - px (Padding X)                                       
+// ╚══════════════════════════════════════════════════════════╝
+
+$_button-sizes-defaults: (
+  "2xs": ( font: (floor: 11, ceil: 12), py: (floor: 4, ceil: 6),   px: (floor: 8, ceil: 12) ),
+  "xs":  ( font: (floor: 12, ceil: 13), py: (floor: 6, ceil: 8),   px: (floor: 12, ceil: 16) ),
+  "sm":  ( font: (floor: 13, ceil: 14), py: (floor: 8, ceil: 10),  px: (floor: 16, ceil: 20) ),
+  "md":  ( font: (floor: 14, ceil: 16), py: (floor: 10, ceil: 12), px: (floor: 20, ceil: 24) ),
+  "lg":  ( font: (floor: 16, ceil: 20), py: (floor: 12, ceil: 16), px: (floor: 24, ceil: 32) ),
+  "xl":  ( font: (floor: 18, ceil: 22), py: (floor: 16, ceil: 20), px: (floor: 32, ceil: 40) ),
+  "2xl": ( font: (floor: 20, ceil: 26), py: (floor: 20, ceil: 24), px: (floor: 40, ceil: 48) ),
+);
+
+// ── Developer Override ──
+$button-sizes: map.deep-merge($_button-sizes-defaults, config.$zeus-button-sizes);
+@include validate.validate-all-button-sizes($button-sizes);

@@ -1,0 +1,42 @@
+// ╔══════════════════════════════════════════════════════════════╗
+// ║  ⚡ Zeus CSS — Spaces                                          ║
+// ║                                                               ║
+// ║  Design tokens and configuration for spaces.                  ║
+// ╚══════════════════════════════════════════════════════════════╝
+
+@use "sass:map";
+@use "../../../../zeus.config" as config;
+@use "../_validate" as validate;
+
+// ╔══════════════════════════════════════════════════════════╗
+// ║  📐 SPACING TOKENS — Edit values here                   
+// ║                                                         
+// ║  Format: "name": (floor: N, ceil: N)
+// ║  • min   = mobile size (px, unitless number)             
+// ║  • max   = desktop size (px, unitless number)            
+// ║  • Always fluid — clamp() by default                    
+// ║                                                          
+// ║  Output CSS variable: --space-{name}                     
+// ╚══════════════════════════════════════════════════════════╝
+
+// ── Defaults ─────────────────────────────────────────────────
+$_space-defaults: (
+  "0":    (floor:  0, ceil:   0),
+  "4xs":  (floor:  1, ceil:   2),
+  "3xs":  (floor:  2, ceil:   4),
+  "2xs":  (floor:  4, ceil:   6),
+  "xs":   (floor:  6, ceil:   8),
+  "sm":   (floor:  8, ceil:  12),
+  "md":   (floor: 12, ceil:  16),
+  "lg":   (floor: 16, ceil:  24),
+  "xl":   (floor: 24, ceil:  32),
+  "2xl":  (floor: 32, ceil:  48),
+  "3xl":  (floor: 48, ceil:  64),
+  "4xl":  (floor: 64, ceil:  96),
+);
+
+// ── Developer can set $space BEFORE @use to override specific keys ──
+$space: map.deep-merge($_space-defaults, config.$zeus-space);
+@include validate.validate-all-responsive("space", $space);
+
+// spaces can be used in padding, margin, gap, etc. throughout the design system. 

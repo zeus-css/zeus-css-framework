@@ -1,0 +1,209 @@
+// ╔══════════════════════════════════════════════════════════════╗
+// ║  ⚡ Zeus CSS — Form                                            ║
+// ║                                                               ║
+// ║  Core structural and visual styles for form controls.         ║
+// ╚══════════════════════════════════════════════════════════════╝
+
+@use "../../../zeus.config" as config;
+@use "../../core/engine" as *;
+@use "../../core/design" as *;
+
+// ╔══════════════════════════════════════════════════════════════╗
+// ║  📝 Form Components                                          ║
+// ║                                                              ║
+// ║  Accessible, token-driven form controls: text input,         ║
+// ║  textarea, select, checkbox, and radio — built on the same    ║
+// ║  semantic color/spacing/typography tokens as every other      ║
+// ║  component. States: default, hover, :focus-visible, disabled, ║
+// ║  and an explicit invalid/error modifier.                     ║
+// ║                                                              ║
+// ║  Usage:                                                      ║
+// ║  <div class="z-field">                                       ║
+// ║    <label class="z-label" for="email">Email</label>          ║
+// ║    <input class="z-input" id="email" type="email" />          ║
+// ║    <p class="z-field__helper">We'll never share it.</p>      ║
+// ║  </div>                                                      ║
+// ║                                                              ║
+// ║  <div class="z-field z-field--invalid">                       ║
+// ║    <label class="z-label" for="pw">Password</label>          ║
+// ║    <input class="z-input" id="pw" type="password" />          ║
+// ║    <p class="z-field__error">Must be at least 8 characters.</p>║
+// ║  </div>                                                      ║
+// ║                                                              ║
+// ║  <label class="z-checkbox">                                  ║
+// ║    <input type="checkbox" /> Remember me                     ║
+// ║  </label>                                                    ║
+// ╚══════════════════════════════════════════════════════════════╝
+
+@layer components {
+
+  // ── Shared control base — input / textarea / select ─────────
+  // Private: not emitted on its own, applied via @extend-free @include
+  // inside each concrete control below so every one stays a real,
+  // independent, overridable class (no forced specificity chains).
+  @mixin _z-control-base() {
+    display: block;
+    width: 100%;
+    @include padding("sm", "y");
+    @include padding("md", "x");
+    @include border-radius("sm");
+    @include text("body-sm");
+    background: var(--color-surface);
+    color: var(--color-text);
+    border: var(--border-line-sm) solid var(--color-border);
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    appearance: none;
+
+    &::placeholder {
+      color: var(--color-text-muted);
+    }
+
+    &:hover:not(:disabled, :focus-visible) {
+      border-color: var(--color-border-strong);
+    }
+
+    &:focus-visible {
+      // A fully transparent outline is invisible here (box-shadow is the
+      // real focus affordance) but browsers still paint outlines with a
+      // system color under forced-colors mode regardless of the author
+      // color — so keyboard focus stays visible even when box-shadow (which
+      // forced-colors strips entirely) disappears.
+      outline: 2px solid transparent;
+      outline-offset: 2px;
+      border-color: var(--color-primary);
+      box-shadow: 0 0 0 3px oklch(from var(--color-primary) l c h / 0.15);
+    }
+
+    &:disabled {
+      opacity: 0.55;
+      cursor: not-allowed;
+      background: var(--color-border);
+    }
+  }
+
+  // ── Field wrapper ─────────────────────────────────────────────
+  .z-field {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2xs);
+
+    &__helper {
+      @include text("caption");
+      color: var(--color-text-muted);
+      margin: 0;
+    }
+
+    &__error {
+      @include text("caption");
+      color: var(--base-system-error);
+      margin: 0;
+    }
+
+    // Invalid modifier — recolors whichever control lives inside.
+    &--invalid {
+      .z-input,
+      .z-textarea,
+      .z-select {
+        border-color: var(--base-system-error);
+
+        &:focus-visible {
+          border-color: var(--base-system-error);
+          box-shadow: 0 0 0 3px oklch(from var(--base-system-error) l c h / 0.15);
+        }
+      }
+    }
+  }
+
+  // ── Label ─────────────────────────────────────────────────────
+  .z-label {
+    @include text("label");
+    color: var(--color-text);
+
+    &--required::after {
+      content: " *";
+      color: var(--base-system-error);
+    }
+  }
+
+  // ── Text input ────────────────────────────────────────────────
+  .z-input {
+    @include _z-control-base();
+  }
+
+  // ── Textarea ──────────────────────────────────────────────────
+  .z-textarea {
+    @include _z-control-base();
+    min-height: 6em;
+    resize: vertical;
+  }
+
+  // ── Select ────────────────────────────────────────────────────
+  // appearance: none (from the shared base) removes the native arrow in
+  // every evergreen browser; a CSS-only chevron is drawn via background
+  // so no icon asset or JS is required.
+  .z-select {
+    @include _z-control-base();
+    padding-inline-end: var(--space-2xl);
+    background-image: linear-gradient(45deg, transparent 50%, var(--color-text-muted) 50%),
+      linear-gradient(135deg, var(--color-text-muted) 50%, transparent 50%);
+    // Chevron sits at the inline-end edge. background-position has no logical
+    // (inline-end-relative) form yet, so LTR draws from the right and :dir(rtl)
+    // flips it to draw from the left — same visual position in both directions.
+    background-position: right 20px center, right 15px center;
+    background-size: 5px 5px, 5px 5px;
+    background-repeat: no-repeat;
+    cursor: pointer;
+
+    &:dir(rtl) {
+      background-position: left 20px center, left 15px center;
+    }
+
+    &:disabled {
+      cursor: not-allowed;
+    }
+  }
+
+  // ── Checkbox & Radio ──────────────────────────────────────────
+  // Uses the native `accent-color` property to theme the control itself
+  // (fully accessible, no pseudo-element re-implementation needed) and
+  // only adds layout + label spacing around it.
+  .z-checkbox,
+  .z-radio {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-xs);
+    @include text("body-sm");
+    color: var(--color-text);
+    cursor: pointer;
+
+    input {
+      accent-color: var(--color-primary);
+      width: 1.15em;
+      height: 1.15em;
+      flex-shrink: 0;
+      cursor: inherit;
+
+      &:disabled {
+        cursor: not-allowed;
+        opacity: 0.55;
+      }
+
+      &:focus-visible {
+        outline: $focus-ring;
+        outline-offset: 2px;
+      }
+    }
+
+    &:has(input:disabled) {
+      color: var(--color-text-muted);
+      cursor: not-allowed;
+    }
+  }
+
+  // ── Grouped checkboxes / radios ───────────────────────────────
+  .z-field-group {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-sm);
+  }
+}

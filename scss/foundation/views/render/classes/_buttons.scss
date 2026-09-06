@@ -1,0 +1,40 @@
+// ╔══════════════════════════════════════════════════════════════╗
+// ║  ⚡ Zeus CSS — Buttons                                         ║
+// ║                                                               ║
+// ║  Generates utility classes for buttons based on the framework's design tokens. ║
+// ╚══════════════════════════════════════════════════════════════╝
+
+@use "../../../../zeus.config" as config;
+
+
+@use "../../../core/engine" as *;
+@use "../../../core/design/core/basic" as *;
+@use "../../../core/design/buttons/sizes" as *;
+@use "../../../core/buttons/variants" as *;
+@use "sass:map";
+
+@mixin load-buttons($prefix: "") {
+// :where() keeps this reset at zero specificity so it never fights with
+// third-party widget button styles or Zeus's own component-level overrides.
+:where(button) {
+  @include button-base-reset();
+  &:focus-visible {
+    outline: $focus-ring;
+  }
+}
+
+// Dynamic button variant classes generation
+@each $variant in map.keys($button-variants) {
+  .#{$prefix}btn-#{$variant} {
+    @include btn-variant($variant);
+  }
+}
+
+// Dynamic button size classes generation
+@each $size in map.keys($button-sizes) {
+  .#{$prefix}btn-#{$size} {
+    @include btn-size($size);
+  }
+}
+
+}

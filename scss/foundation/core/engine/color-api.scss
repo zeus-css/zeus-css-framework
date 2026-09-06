@@ -1,0 +1,37 @@
+// ╔══════════════════════════════════════════════════════════════╗
+// ║  ⚡ Zeus CSS — Color Api                                       ║
+// ║                                                               ║
+// ║  Framework internal engine and mixins for color api.          ║
+// ╚══════════════════════════════════════════════════════════════╝
+
+@use "sass:map";
+@use "sass:meta";
+@use "sass:color";
+@use "../../../zeus.config" as config;
+@use "./helpers" as *;
+
+// ╔══════════════════════════════════════════════════════════════╗
+// ║  🎨 Zeus Color API — Universal Palette Mode                  ║
+// ║                                                              ║
+// ║  Usage:                                                      ║
+// ║    color("primary")              → oklch(...)                ║
+// ║    color("primary", $alpha: 0.5) → oklch(... / 0.5)          ║
+// ╚══════════════════════════════════════════════════════════════╝
+
+// Internal: flat lookup map directly from config
+$_flat-palette: config.$zeus-colors !default;
+
+/// Retrieve any color from the design palette with optional alpha
+@function color($name, $alpha: 1) {
+  $resolved: map-get-safe($_flat-palette, $name);
+
+  @if $resolved == null {
+    @error "[Zeus Color] '#{$name}' not found in palette. Available: #{map.keys($_flat-palette)}";
+  }
+
+  @if $alpha < 1 {
+    @return color.change($resolved, $alpha: $alpha);
+  }
+
+  @return $resolved;
+}

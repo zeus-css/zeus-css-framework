@@ -1,0 +1,29 @@
+// ╔══════════════════════════════════════════════════════════════╗
+// ║  ⚡ Zeus CSS — Sizes                                           ║
+// ║                                                               ║
+// ║  Design tokens and configuration for sizes.                   ║
+// ╚══════════════════════════════════════════════════════════════╝
+
+@use "sass:map";
+@use "../../../../zeus.config" as config;
+@use "../_validate" as validate;
+
+// ╔══════════════════════════════════════════════════════════╗
+// ║  📐 ICON SIZES — Edit values here                       
+// ║                                                         
+// ║  Format: "name": (floor: N, ceil: N)                    
+// ║  Output CSS variable: --size-icon-{name}                
+// ╚══════════════════════════════════════════════════════════╝
+
+// ── Defaults ─────────────────────────────────────────────────
+$_icon-size-defaults: (
+  "xs":  (floor: 14, ceil: 18),
+  "sm":  (floor: 20, ceil: 24),
+  "md":  (floor: 22, ceil: 32),
+  "lg":  (floor: 38, ceil: 48),
+  "xl":  (floor: 48, ceil: 64),
+);
+
+// ── Developer can set $icon-size BEFORE @use to override specific keys ──
+$icon-size: map.deep-merge($_icon-size-defaults, config.$zeus-icon-size);
+@include validate.validate-all-responsive("icon-size", $icon-size);

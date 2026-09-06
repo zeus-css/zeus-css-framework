@@ -1,0 +1,186 @@
+// ╔══════════════════════════════════════════════════════════════╗
+// ║  ⚡ Zeus CSS — Shadows                                         ║
+// ║                                                               ║
+// ║  Framework internal engine and mixins for shadows.            ║
+// ╚══════════════════════════════════════════════════════════════╝
+
+// CSS-Var-First: references the already-emitted --shadow-{key} :root token
+// instead of inlining the raw shadow value at every call site — same
+// pattern as padding()/border-radius() (layout.scss) and text()
+// (typographics.scss). Keeps the value runtime-overridable (JS,
+// [data-theme]) and keeps the literal value in one place instead of
+// repeated in every component that references it.
+@function _shadow-var($key) {
+  @return var(--shadow-#{$key});
+}
+
+// -----------------------------------------------------------------------------
+// APPLY SHADOW MIXIN
+// -----------------------------------------------------------------------------
+// Usage: @include apply-shadow("md");
+@mixin apply-shadow($size: "md") {
+  box-shadow: _shadow-var($size);
+}
+
+// -----------------------------------------------------------------------------
+// ELEVATION MIXIN
+// -----------------------------------------------------------------------------
+// Usage: @include elevation(2); // Applies shadow-md
+@mixin elevation($level: 1) {
+  @if $level == 0 {
+    box-shadow: _shadow-var("none");
+  } @else if $level == 1 {
+    box-shadow: _shadow-var("sm");
+  } @else if $level == 2 {
+    box-shadow: _shadow-var("md");
+  } @else if $level == 3 {
+    box-shadow: _shadow-var("lg");
+  } @else if $level == 4 {
+    box-shadow: _shadow-var("xl");
+  } @else if $level == 5 {
+    box-shadow: _shadow-var("2xl");
+  } @else {
+    @warn "Elevation level #{$level} not found. Using default 'md'.";
+    box-shadow: _shadow-var("md");
+  }
+}
+
+// -----------------------------------------------------------------------------
+// HOVER SHADOW MIXIN
+// -----------------------------------------------------------------------------
+// Usage: @include hover-shadow("sm", "lg");
+@mixin hover-shadow($default: "md", $hover: "lg") {
+  box-shadow: _shadow-var($default);
+  transition: box-shadow 0.3s ease;
+
+  &:hover {
+    box-shadow: _shadow-var($hover);
+  }
+}
+
+// -----------------------------------------------------------------------------
+// FOCUS SHADOW MIXIN
+// -----------------------------------------------------------------------------
+// Usage: @include focus-shadow("outline");
+@mixin focus-shadow($shadow: "outline") {
+  // :focus-visible (not plain :focus) — outline is only removed when the
+  // shadow is actually shown, so keyboard users never lose focus indication.
+  // The outline itself is kept, just transparent: invisible in normal
+  // rendering (box-shadow is the real affordance), but forced-colors mode
+  // paints outlines with a system color regardless of author color, so
+  // focus stays visible even when box-shadow (stripped under forced-colors)
+  // disappears.
+  &:focus-visible {
+    box-shadow: _shadow-var($shadow);
+    outline: 2px solid transparent;
+    outline-offset: 2px;
+  }
+}
+
+// -----------------------------------------------------------------------------
+// INTERACTIVE SHADOW MIXIN
+// -----------------------------------------------------------------------------
+// Combines hover and focus states
+// Usage: @include interactive-shadow("md", "lg", "outline");
+@mixin interactive-shadow($default: "md", $hover: "lg", $focus: "outline") {
+  box-shadow: _shadow-var($default);
+  transition: box-shadow 0.3s ease;
+
+  &:hover {
+    box-shadow: _shadow-var($hover);
+  }
+
+  &:focus-visible {
+    box-shadow: _shadow-var($focus);
+    // See focus-shadow() above: transparent, not none — stays invisible
+    // normally but forced-colors mode paints it with a system color so
+    // focus survives box-shadow being stripped.
+    outline: 2px solid transparent;
+    outline-offset: 2px;
+  }
+
+  &:active {
+    box-shadow: _shadow-var($default);
+  }
+}
+
+// -----------------------------------------------------------------------------
+// CARD SHADOW MIXIN
+// -----------------------------------------------------------------------------
+// Pre-configured for cards with hover effect
+// Usage: @include card-shadow();
+@mixin card-shadow() {
+  box-shadow: _shadow-var("card");
+  transition: box-shadow 0.3s ease;
+
+  &:hover {
+    box-shadow: _shadow-var("card-hover");
+  }
+}
+
+// -----------------------------------------------------------------------------
+// SEMANTIC SHADOW MIXIN
+// -----------------------------------------------------------------------------
+// Usage: @include semantic-shadow("primary");
+@mixin semantic-shadow($type: "primary") {
+  box-shadow: _shadow-var($type);
+}
+
+// -----------------------------------------------------------------------------
+// GLOW EFFECT MIXIN
+// -----------------------------------------------------------------------------
+// Usage: @include glow-effect("primary", 0.5);
+@mixin glow-effect($color: rgba(59, 130, 246, 0.5), $blur: 20px) {
+  box-shadow: 0 0 $blur 0 $color;
+}
+
+// -----------------------------------------------------------------------------
+// INNER SHADOW MIXIN
+// -----------------------------------------------------------------------------
+// Usage: @include inner-shadow();
+@mixin inner-shadow($size: "inner") {
+  box-shadow: _shadow-var($size);
+}
+
+// -----------------------------------------------------------------------------
+// LAYERED SHADOW MIXIN
+// -----------------------------------------------------------------------------
+// Combines multiple shadows
+// Usage: @include layered-shadow("md", "primary");
+@mixin layered-shadow($shadow1, $shadow2) {
+  box-shadow: _shadow-var($shadow1), _shadow-var($shadow2);
+}
+
+// -----------------------------------------------------------------------------
+// CONDITIONAL SHADOW MIXIN
+// -----------------------------------------------------------------------------
+// Applies shadow only on certain states
+// Usage: @include conditional-shadow("hover", "lg");
+@mixin conditional-shadow($state: "hover", $shadow: "md") {
+  @if $state == "hover" {
+    &:hover {
+      box-shadow: _shadow-var($shadow);
+      transition: box-shadow 0.3s ease;
+    }
+  } @else if $state == "focus" {
+    &:focus-visible {
+      box-shadow: _shadow-var($shadow);
+      // See focus-shadow() above: transparent, not none — forced-colors
+      // mode paints it with a system color regardless of the author value.
+      outline: 2px solid transparent;
+      outline-offset: 2px;
+    }
+  } @else if $state == "active" {
+    &:active {
+      box-shadow: _shadow-var($shadow);
+    }
+  }
+}
+
+// -----------------------------------------------------------------------------
+// REMOVE SHADOW MIXIN
+// -----------------------------------------------------------------------------
+// Usage: @include no-shadow();
+@mixin no-shadow() {
+  box-shadow: none !important;
+}

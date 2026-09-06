@@ -1,0 +1,103 @@
+// ╔══════════════════════════════════════════════════════════════╗
+// ║  ⚡ Zeus CSS — Utilities                                       ║
+// ║                                                               ║
+// ║  Generates utility classes for utilities based on the framework's design tokens. ║
+// ╚══════════════════════════════════════════════════════════════╝
+
+@use "../../../../zeus.config" as config;
+@use "../../../core/engine/responsive" as *;
+
+@mixin load-utilities($prefix: "") {
+.#{$prefix}w-unset {
+  width: unset !important;
+}
+.#{$prefix}h-unset {
+  height: unset !important;
+}
+
+// Opt-in horizontal overflow clipping — apply to <html>/<body> or any
+// container that genuinely needs it. Not global by default: it masks real
+// layout overflow bugs and can interfere with position: sticky.
+.#{$prefix}no-overflow-x {
+  max-width: 100vw;
+  overflow-x: hidden;
+}
+
+:where(.#{$prefix}highlight) {
+  :is(strong, b, em, i) {
+    font-weight: inherit;
+    font-style: normal;
+    color: var(--color-primary);
+  }
+}
+
+// Was ":where(.zeus-article), :where(.article)" — a redundant synonym pair
+// for the same selector. .article is now the single name.
+:where(.#{$prefix}article) {
+  > p:last-child {
+    margin-bottom: 0;
+  }
+
+  a {
+    color: var(--color-primary);
+    text-decoration: underline;
+    text-underline-offset: 0.15em;
+
+    &:hover {
+      color: var(--color-primary-light);
+    }
+  }
+
+  > * + * {
+    margin-top: var(--space-md);
+  }
+}
+
+// Visibility classes
+@if config.$zeus-enable-responsive-classes {
+
+.#{$prefix}hidden-desktops {
+  @include screen-above(lg) {
+    display: none !important;
+  }
+}
+
+.#{$prefix}hidden-tablets {
+  @include screen-between(md, lg) {
+    display: none !important;
+  }
+}
+
+.#{$prefix}hidden-tablets-desktops {
+  @include screen-above(md) {
+    display: none !important;
+  }
+}
+
+.#{$prefix}hidden-mobiles {
+  @include screen-below(md) {
+    display: none !important;
+  }
+}
+
+.#{$prefix}hidden-devices {
+  @include screen-below(lg) {
+    display: none !important;
+  }
+}
+
+.#{$prefix}hidden-upto-ml {
+  @include screen-below(ml) {
+    display: none !important;
+  }
+}
+
+.#{$prefix}hidden-from-ml {
+  @include screen-above(ml) {
+    display: none !important;
+  }
+}
+
+}
+
+}

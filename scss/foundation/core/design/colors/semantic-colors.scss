@@ -1,0 +1,123 @@
+// ╔══════════════════════════════════════════════════════════════╗
+// ║  ⚡ Zeus CSS — Semantic Colors                                 ║
+// ║                                                               ║
+// ║  Design tokens and configuration for semantic colors.         ║
+// ╚══════════════════════════════════════════════════════════════╝
+
+@use "sass:map";
+@use "sass:list";
+@use "../../../../zeus.config" as config;
+@use "./color-derivation" as derive;
+
+// The full set of $zeus-colors keys this file actually reads (via _c()/_has()
+// below). Anything else is a typo or a key nothing consumes — e.g. "surface-
+// subtle"/"warning-subtle" are always derived and can't be overridden despite
+// looking like the rest of this list. _c()'s fallback-on-missing-key design is
+// intentional for the 5 core colors (a typo'd override is indistinguishable
+// from "not set" without this check), so this warns instead of erroring.
+$_known-color-keys: (
+  "primary", "primary-light", "primary-dark",
+  "secondary", "secondary-light", "secondary-dark",
+  "accent", "accent-light", "accent-dark",
+  "text", "text-inverse", "text-muted",
+  "background", "surface",
+  "border", "border-strong"
+);
+@each $_key in map.keys(config.$zeus-colors) {
+  @if not list.index($_known-color-keys, $_key) {
+    @warn "[Zeus Color] '#{$_key}' in $zeus-colors is not a recognized token name and will be ignored. Did you mean one of: #{$_known-color-keys}?";
+  }
+}
+
+// ╔══════════════════════════════════════════════════════════════╗
+// ║  Zeus Semantic Colors — Direct OKLCH Categories              ║
+// ╚══════════════════════════════════════════════════════════════╝
+
+@function _c($key, $fallback) {
+  $val: map.get(config.$zeus-colors, $key);
+  @if $val {
+    @return $val;
+  } @else {
+    @return $fallback;
+  }
+}
+
+// Whether $key is explicitly defined in the developer's $zeus-colors map.
+// Used so derived colors (below) never silently overwrite an explicit value —
+// the pipeline in root-generator.scss already emitted it from the map directly.
+@function _has($key) {
+  @return map.has-key(config.$zeus-colors, $key);
+}
+
+// ╔══════════════════════════════════════════════════════════════╗
+// ║  Private: emit static set of derived tokens                  ║
+// ║  from 5 resolved base colors.                               ║
+// ║  Single source of truth shared with engine/theme-builder.scss. ║
+// ╚══════════════════════════════════════════════════════════════╝
+// Emits $key either from the developer's explicit $zeus-colors override or
+// from $derived. root-generator.scss's generic token pipeline deliberately
+// excludes $zeus-colors (see _design-system.scss), so this is the only
+// place a variant key ever gets emitted — skipping it on _has($key) (as
+// this used to do, on the assumption something else emitted it) silently
+// dropped the variable from the compiled CSS entirely whenever a developer
+// set it explicitly.
+@function _resolved($key, $derived) {
+  @if _has($key) {
+    @return _c($key, $derived);
+  } @else {
+    @return $derived;
+  }
+}
+
+@mixin _emit-static-color-vars($primary, $secondary, $accent, $text, $bg) {
+  --color-primary: #{$primary};
+  --color-primary-light: #{_resolved("primary-light", derive.derive-light("var(--color-primary)"))};
+  --color-primary-dark: #{_resolved("primary-dark", derive.derive-dark("var(--color-primary)"))};
+
+  --color-secondary: #{$secondary};
+  --color-secondary-light: #{_resolved("secondary-light", derive.derive-light("var(--color-secondary)"))};
+  --color-secondary-dark: #{_resolved("secondary-dark", derive.derive-dark("var(--color-secondary)"))};
+
+  --color-accent: #{$accent};
+  --color-accent-light: #{_resolved("accent-light", derive.derive-light("var(--color-accent)"))};
+  --color-accent-dark: #{_resolved("accent-dark", derive.derive-dark("var(--color-accent)"))};
+
+  --color-background: #{$bg};
+  --color-surface: #{_resolved("surface", derive.derive-surface("var(--color-background)"))};
+
+  --color-text: #{$text};
+  --color-text-inverse: #{_resolved("text-inverse", $bg)};
+
+  --color-text-muted: #{_resolved("text-muted", derive.derive-muted("var(--color-text)", "var(--color-background)"))};
+  --color-border: #{_resolved("border", derive.derive-border("var(--color-text)", "var(--color-background)"))};
+  --color-border-strong: #{_resolved("border-strong", derive.derive-border-strong("var(--color-text)", "var(--color-background)"))};
+
+  --color-surface-subtle: #{derive.derive-surface-subtle("var(--color-surface)", "var(--color-text)")};
+  --color-warning-subtle: #{derive.derive-warning-subtle("var(--base-system-warning)", "var(--color-background)")};
+}
+
+// ── CSS Custom Properties ──────────────────────────────────────
+// ╔══════════════════════════════════════════════════════════════╗
+// ║  Semantic Colors Layer                                       ║
+// ║                                                              ║
+// ║  Maps the flat configuration directly to CSS custom variables.║
+// ║  There is no intermediate layer. Colors flow DIRECTLY from   ║
+// ║  zeus.config.scss to CSS variables, ensuring optimal perf.   ║
+// ╚══════════════════════════════════════════════════════════════╝
+@mixin generate-semantic-colors() {
+  // Capture base configurations
+  $primary: _c(primary, oklch(50.0% 0.232 259.6));
+  $secondary: _c(secondary, oklch(74.7% 0.174 60.6));
+  $accent: _c(accent, oklch(52.0% 0.153 164.1));
+  $text: _c(text, oklch(21.8% 0.000 0.0));
+  $bg: _c(background, oklch(97.6% 0.000 0.0));
+
+  :root {
+    color-scheme: light;
+    @include _emit-static-color-vars($primary, $secondary, $accent, $text, $bg);
+  }
+}
+
+// ── Sass variable (for use inside SCSS logic) ──────────────────
+// Exposes the resolved flat map so other SCSS files can loop over it
+$colors: config.$zeus-colors !default;

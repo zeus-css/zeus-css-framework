@@ -1,0 +1,76 @@
+// ╔══════════════════════════════════════════════════════════════╗
+// ║  ⚡ Zeus CSS — Typography Calc                                 ║
+// ║                                                               ║
+// ║  Framework internal engine and mixins for typography calc.    ║
+// ╚══════════════════════════════════════════════════════════════╝
+
+@use "sass:map";
+@use "sass:math";
+@use "../design/core/basic" as *;
+@use "../design/typography/typography" as *;
+@use "./fluid-core" as fc;
+
+// ╔══════════════════════════════════════════════════════════════╗
+// ║  🔤 Zeus Fluid Typography Engine                             ║
+// ║                                                              ║
+// ║  Generates CSS clamp() for fluid type scaling (CQI).         ║
+// ║  Container bounds sourced from $container-bounds             ║
+// ║  (design/core/basic.scss) — single source of truth.         ║
+// ║                                                              ║
+// ║  Output units: rem  (typography scales with user font prefs) ║
+// ║  Used by: root-generator.scss → --text-{type}           ║
+// ╚══════════════════════════════════════════════════════════════╝
+
+// ── Private: px → rem ────────────────────────────────────────────
+// Converts a unitless px value to rem using $root-font-size (basic.scss).
+// Robust if $root-font-size is ever changed from 16px.
+@function _px-to-rem($px, $precision: 2) {
+  $base: math.div($root-font-size, 1px);
+  @return fc.round-to(math.div($px, $base), $precision);
+}
+
+// ── Public API ───────────────────────────────────────────────────
+//
+// useclamp-typography($typeface, $precision?)
+//
+// Parameters
+//   $typeface   — key in the $typography token map (e.g. "h1", "body-sm")
+//   $precision  — decimal places in compiled CSS (default: 1)
+//
+// Returns: clamp() string in rem units (using cqi).
+//
+//
+@function useclamp-typography($typeface, $precision: 1) {
+  @if not map.has-key($typography, $typeface) {
+    @error "[Zeus] Typography variant '#{$typeface}' not found in $typography map.";
+  }
+
+  $token: map.get($typography, $typeface);
+
+  @if not map.has-key($token, "size") {
+    @error "[Zeus] Typography token '#{$typeface}' is missing a 'size' key.";
+  }
+
+  $size: map.get($token, "size");
+  $min-px: map.get($size, "floor");
+  $max-px: map.get($size, "ceil");
+
+  @if $min-px ==$max-px {
+    @return #{_px-to-rem($min-px, $precision)}rem;
+  }
+
+  // Convert px tokens to rem, then pass to the shared linear engine
+  $min-rem: _px-to-rem($min-px, 2);
+  $max-rem: _px-to-rem($max-px, 2);
+
+  // Convert container bounds to rem so they match the fluid unit scale
+  $c-floor: _px-to-rem(map.get($container-bounds, "floor"), 2);
+  $c-ceil:  _px-to-rem(map.get($container-bounds, "ceil"), 2);
+
+  // $step in rem defaults to 0.1 (fluid-core.scss), i.e. a 1.6px jump at the
+  // 16px root — visible banding in type that isn't visible in px-based
+  // spacing. A finer step (and matching $accuracy) keeps the rem rounding
+  // below the threshold where it reads as a step, and lets endpoints
+  // actually reach their declared min/max instead of stopping short.
+  @return fc.zeus-cqi-fluid($min-rem, $max-rem, $c-floor, $c-ceil, "rem", 3, 0.01);
+}

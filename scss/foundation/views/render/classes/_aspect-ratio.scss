@@ -1,0 +1,17 @@
+// ╔══════════════════════════════════════════════════════════════╗
+// ║  ⚡ Zeus CSS — Aspect Ratio                                    ║
+// ║                                                               ║
+// ║  Generates utility classes for aspect ratio based on the framework's design tokens. ║
+// ╚══════════════════════════════════════════════════════════════╝
+
+@mixin load-aspect-ratio($prefix: "") {
+.#{$prefix}aspect-auto    { aspect-ratio: auto; }
+.#{$prefix}aspect-1-1     { aspect-ratio: 1 / 1; }
+.#{$prefix}aspect-4-3     { aspect-ratio: 4 / 3; }
+.#{$prefix}aspect-3-2     { aspect-ratio: 3 / 2; }
+.#{$prefix}aspect-16-9    { aspect-ratio: 16 / 9; }
+.#{$prefix}aspect-21-9    { aspect-ratio: 21 / 9; }
+.#{$prefix}aspect-3-4     { aspect-ratio: 3 / 4; }
+.#{$prefix}aspect-9-16    { aspect-ratio: 9 / 16; }
+
+}

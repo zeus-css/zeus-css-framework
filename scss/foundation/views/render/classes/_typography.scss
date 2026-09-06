@@ -1,0 +1,32 @@
+// ╔══════════════════════════════════════════════════════════════╗
+// ║  ⚡ Zeus CSS — Typography                                      ║
+// ║                                                               ║
+// ║  Generates utility classes for typography based on the framework's design tokens. ║
+// ╚══════════════════════════════════════════════════════════════╝
+
+@use "sass:map";
+@use "../../../../zeus.config" as config;
+
+
+@use "../../../core/engine" as *;
+@use "../../../core/design/typography/typography" as typo-tokens;
+
+@mixin load-typography($prefix: "") {
+$typo-classes: map.keys(typo-tokens.$typography);
+
+// font sizes
+@each $type in $typo-classes {
+  .#{$prefix}text-#{$type} {
+    @include text($type);
+  }
+}
+
+// font weights
+@for $i from 1 through 9 {
+  $w: $i * 100;
+  .#{$prefix}text-#{$w} {
+    font-weight: #{$w} !important;
+  }
+}
+
+}

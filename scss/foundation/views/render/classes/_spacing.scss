@@ -1,0 +1,91 @@
+// ╔══════════════════════════════════════════════════════════════╗
+// ║  ⚡ Zeus CSS — Spacing                                         ║
+// ║                                                               ║
+// ║  Generates utility classes for spacing based on the framework's design tokens. ║
+// ╚══════════════════════════════════════════════════════════════╝
+
+@use "sass:map";
+@use "../../../../zeus.config" as config;
+
+@use "../../../core/engine" as *;
+@use "../../../core/design/dimensions/spaces" as spacing-tokens;
+
+// ╔══════════════════════════════════════════════════════════════╗
+// ║  📐 Spacing Utility Classes                                  ║
+// ║                                                              ║
+// ║  Auto-generated from $space token map.                       ║
+// ║  padding-{dir}-{size}, margin-{dir}-{size}, gap-{dir}-{size} ║
+// ╚══════════════════════════════════════════════════════════════╝
+
+@mixin load-spacing($prefix: "") {
+$spacing-sizes: map.keys(spacing-tokens.$space);
+
+// ── Padding & Margin ─────────────────────────────────────────
+// Directions: null (all sides), top, right, bottom, left, inline, block
+$spacing-properties: ("padding", "margin");
+$spacing-directions: (
+  null,
+  "top",
+  "right",
+  "bottom",
+  "left",
+  "inline",
+  "block"
+);
+
+@each $property in $spacing-properties {
+  @each $size in $spacing-sizes {
+    @each $direction in $spacing-directions {
+      @if $direction {
+        .#{$prefix}#{$property}-#{$direction}-#{$size} {
+          @if $property == "padding" {
+            @include padding($size, $direction);
+          } @else {
+            @include margin($size, $direction);
+          }
+        }
+      } @else {
+        .#{$prefix}#{$property}-#{$size} {
+          @if $property == "padding" {
+            @include padding($size);
+          } @else {
+            @include margin($size);
+          }
+        }
+      }
+    }
+  }
+}
+
+// ── Gap ──────────────────────────────────────────────────────
+// gap() mixin accepts: null (all), "x" / "column" (column-gap),
+//                      "y" / "row" (row-gap)
+// Does NOT support top/right/bottom/left — separate loop required.
+//
+// Generated classes:
+//   .gap-sm          → gap: clamp(...)
+//   .gap-x-lg        → column-gap: clamp(...)
+//   .gap-y-2xl       → row-gap: clamp(...)
+
+$gap-directions: (
+  null,   // .gap-{size}    → gap (all)
+  "x",    // .gap-x-{size}  → column-gap
+  "y",    // .gap-y-{size}  → row-gap
+);
+
+@each $size in $spacing-sizes {
+  @each $dir in $gap-directions {
+    @if $dir {
+      .#{$prefix}gap-#{$dir}-#{$size} {
+        @include gap($size, $dir);
+      }
+    } @else {
+      .#{$prefix}gap-#{$size} {
+        @include gap($size);
+      }
+    }
+  }
+}
+
+}
+

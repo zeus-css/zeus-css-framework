@@ -1,0 +1,39 @@
+// ╔══════════════════════════════════════════════════════════════╗
+// ║  ⚡ Zeus CSS — Sizes                                           ║
+// ║                                                               ║
+// ║  Generates utility classes for sizes based on the framework's design tokens. ║
+// ╚══════════════════════════════════════════════════════════════╝
+
+@use "sass:map";
+@use "../../../../zeus.config" as config;
+
+
+@use "../../../core/engine" as *;
+@use "../../../core/design/dimensions/sizes" as sizing-tokens;
+
+@mixin load-sizes($prefix: "") {
+$box-sizes: sizing-tokens.$icon-size;
+$box-classes: map.keys($box-sizes);
+
+@each $size in $box-classes {
+  .#{$prefix}box-#{$size} {
+    @include box-size($size);
+  }
+}
+
+@each $size in $box-classes {
+  .#{$prefix}icon-#{$size} {
+    @include box-size($size);
+  }
+}
+
+// @each $size in $element-classes {
+//   .element-#{$size} {
+//     &,
+//     img {
+//       @include elementSize($size);
+//     }
+//   }
+// }
+
+}

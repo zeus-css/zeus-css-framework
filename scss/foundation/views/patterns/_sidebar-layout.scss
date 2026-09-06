@@ -1,0 +1,83 @@
+// ╔══════════════════════════════════════════════════════════════╗
+// ║  ⚡ Zeus CSS — Sidebar Layout                                  ║
+// ║                                                               ║
+// ║  Core styles and definitions for sidebar layout.              ║
+// ╚══════════════════════════════════════════════════════════════╝
+
+@use "../../../zeus.config" as config;
+@use "../../core/engine" as *;
+
+// ╔══════════════════════════════════════════════════════════════╗
+// ║  📐 Sidebar Layout Pattern                                   ║
+// ║                                                              ║
+// ║  Classic content + sidebar layout with fluid breakpoint.     ║
+// ║  Uses CSS Grid — sidebar collapses below content on mobile.  ║
+// ║                                                              ║
+// ║  Usage:                                                      ║
+// ║  <div class="z-sidebar-layout">                              ║
+// ║    <main class="z-sidebar-layout__main">…</main>             ║
+// ║    <aside class="z-sidebar-layout__aside">…</aside>          ║
+// ║  </div>                                                      ║
+// ╚══════════════════════════════════════════════════════════════╝
+
+@layer components {
+  .z-sidebar-layout {
+    display: grid;
+    gap: var(--col-gap-md);
+    @include padding("lg");
+
+    // On small screens: single column, sidebar below content.
+    // minmax(0, 1fr) — not bare 1fr — so wide min-content children
+    // (code blocks, long monospace strings) can't blow the grid out
+    // past its container. The __main min-width: 0 below handles the
+    // grid ITEM; this handles the track itself.
+    grid-template-columns: minmax(0, 1fr);
+
+    // When there's enough space: content + sidebar side by side
+    @include screen-above(md) {
+      grid-template-columns: minmax(0, 1fr) 300px;
+    }
+
+    @include screen-above(lg) {
+      grid-template-columns: minmax(0, 1fr) 360px;
+    }
+
+    // ── Main content ─────────────────────────────────────────
+    &__main {
+      min-width: 0; // prevent grid blowout
+    }
+
+    // ── Sidebar ──────────────────────────────────────────────
+    &__aside {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-lg);
+    }
+
+    // ── Modifiers ────────────────────────────────────────────
+    &--sidebar-left {
+      @include screen-above(md) {
+        grid-template-columns: 300px minmax(0, 1fr);
+      }
+
+      @include screen-above(lg) {
+        grid-template-columns: 360px minmax(0, 1fr);
+      }
+
+      // Place sidebar first visually
+      .z-sidebar-layout__aside {
+        order: -1;
+      }
+    }
+
+    &--sticky-aside {
+      .z-sidebar-layout__aside {
+        @include screen-above(md) {
+          position: sticky;
+          top: var(--space-lg);
+          align-self: start;
+        }
+      }
+    }
+  }
+}

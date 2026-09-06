@@ -1,0 +1,49 @@
+// ╔══════════════════════════════════════════════════════════════╗
+// ║  ⚡ Zeus CSS — Sizing                                          ║
+// ║                                                               ║
+// ║  Framework internal engine and mixins for sizing.             ║
+// ╚══════════════════════════════════════════════════════════════╝
+
+@use "sass:math";
+@use "sass:map";
+@use "./fluid-core" as fc;
+@use "../design/core/basic" as *;
+
+// ╔══════════════════════════════════════════════════════════════╗
+// ║  📐 Zeus Sizing Engine — Clamp by Default                    ║
+// ║                                                              ║
+// ║  Generates CSS clamp() for any (min, max, container) pair.   ║
+// ║  Applies responsive fluid scaling to gaps, outer margins,     ║
+// ║                                                              ║
+// ║  Output units: px  (layout values, not typography)           ║
+// ║  Always fluid — no flag needed. If min == max → static.     ║
+// ╚══════════════════════════════════════════════════════════════╝
+
+// ── Public API ───────────────────────────────────────────────────
+//
+// useclamp-sizing($min, $max, $c-floor?, $c-ceil?, $precision?)
+//
+// Parameters
+//   $min        — smallest value in px (unitless number), at $c-floor
+//   $max        — largest value in px (unitless number), at $c-ceil
+//   $c-floor    — container width where scaling starts (default: derived from $container-bounds, 343 unless overridden)
+//   $c-ceil     — container width where scaling ends   (default: derived from $container-bounds, 1792 unless overridden)
+//   $precision  — decimal places in compiled CSS      (default: 1)
+//
+// Returns: clamp() string in px. Static #{$min}px only if min == max.
+//
+// Usage:
+//   padding: useclamp-sizing(12, 24);
+//   gap:     useclamp-sizing(8, 16, 320, 1440);
+//
+@function useclamp-sizing($min,
+  $max,
+  $c-floor: map.get($container-bounds, "floor"),
+  $c-ceil: map.get($container-bounds, "ceil"),
+  $precision: 1) {
+  @if $min ==$max {
+    @return #{$min}px;
+  }
+
+  @return fc.zeus-cqi-fluid($min, $max, $c-floor, $c-ceil, "px", $precision);
+}

@@ -1,0 +1,91 @@
+// ╔══════════════════════════════════════════════════════════════╗
+// ║  ⚡ Zeus CSS — Animations                                      ║
+// ║                                                               ║
+// ║  Framework internal engine and mixins for animations.         ║
+// ╚══════════════════════════════════════════════════════════════╝
+
+@use "sass:map";
+
+// ╔══════════════════════════════════════════════════════════════╗
+// ║  🎬 Zeus Animation Engine — mixins only, no top-level CSS    ║
+// ║                                                              ║
+// ║  This file is part of the zeus.scss module-only entry point  ║
+// ║  (@use "zeus" as * inside .module.scss files) and MUST NOT   ║
+// ║  emit any top-level CSS — every component consuming it would ║
+// ║  otherwise get a duplicate copy of that CSS in its own       ║
+// ║  compiled output.                                            ║
+// ║                                                              ║
+// ║  The @keyframes these mixins reference (zeus-fade-in, etc.)  ║
+// ║  are defined ONCE, globally, in:                              ║
+// ║    views/render/classes/_animations.scss                     ║
+// ║  which is only ever compiled as part of foundation.scss.      ║
+// ║  CSS @keyframes names are global page-wide identifiers, so    ║
+// ║  this works correctly even though the two files are separate.║
+// ╚══════════════════════════════════════════════════════════════╝
+
+
+// ─── MIXINS ────────────────────────────────────────────────────
+// Each mixin sets animation properties only — no @keyframes inside.
+
+// 1. Fade In
+// Usage: @include fade-in(0.5s, 0.2s);
+@mixin fade-in($duration: 0.3s, $delay: 0s, $timing: ease-in-out) {
+  opacity: 0;
+  animation: zeus-fade-in $duration $timing $delay forwards;
+}
+
+// 2. Slide In (from any direction)
+// Usage: @include slide-in(left, 0.4s);
+@mixin slide-in(
+  $direction: bottom,
+  $duration: 0.3s,
+  $delay: 0s,
+  $timing: ease-out
+) {
+  opacity: 0;
+
+  @if $direction == bottom {
+    animation: zeus-slide-in-bottom $duration $timing $delay forwards;
+  } @else if $direction == top {
+    animation: zeus-slide-in-top $duration $timing $delay forwards;
+  } @else if $direction == left {
+    animation: zeus-slide-in-left $duration $timing $delay forwards;
+  } @else if $direction == right {
+    animation: zeus-slide-in-right $duration $timing $delay forwards;
+  }
+}
+
+// 3. Scale (hover zoom)
+// Usage: @include scale(1.1, 0.3s);
+@mixin scale($scale: 1.05, $duration: 0.3s, $timing: ease-in-out) {
+  transition: transform $duration $timing;
+
+  &:hover,
+  &:focus {
+    transform: scale($scale);
+  }
+}
+
+// 4. Bounce
+// Usage: @include bounce(0.6s, infinite);
+@mixin bounce($duration: 0.8s, $iteration: 1, $delay: 0s) {
+  animation: zeus-bounce $duration ease-in-out $delay $iteration;
+}
+
+// 5. Pulse (heartbeat)
+// Usage: @include pulse(1.5s, infinite);
+@mixin pulse($duration: 1s, $iteration: infinite) {
+  animation: zeus-pulse $duration ease-in-out $iteration;
+}
+
+// 6. Rotate
+// Usage: @include rotate(360deg, 2s, linear, infinite);
+@mixin rotate($degrees: 360deg, $duration: 1s, $timing: linear, $iteration: 1) {
+  --_zeus-rotate-deg: #{$degrees};
+  animation: zeus-rotate $duration $timing $iteration;
+}
+
+// Note: the scroll-driven animation classes (.z-scroll-reveal/-tilt/-scale)
+// and ALL @keyframes (including the ones the mixins above reference) live in
+// views/render/classes/_animations.scss — see the header comment at the top
+// of this file for why.

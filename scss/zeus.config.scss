@@ -1,0 +1,102 @@
+// ╔══════════════════════════════════════════════════════════════╗
+// ║  ⚡ Zeus CSS — Zeus.config                                     ║
+// ║                                                               ║
+// ║  Core styles and definitions for zeus.config.                 ║
+// ╚══════════════════════════════════════════════════════════════╝
+
+// ╔══════════════════════════════════════════════════════════════╗
+// ║  ⚡ Zeus CSS — Framework Configuration                       ║
+// ║                                                              ║
+// ║  Controls framework features, naming strategies and the      ║
+// ║  fluid layout engine. For design tokens (colors, typography, ║
+// ║  spacing etc.) see zeus.customize.scss.                      ║
+// ╚══════════════════════════════════════════════════════════════╝
+
+@use "sass:map";
+
+// Design token customization values are forwarded from here so
+// that all internal engine files can @use this config module
+// and still access $zeus-colors etc. via config.$zeus-colors.
+@forward "./zeus.customize";
+
+// ────────────────────────────────────────────────────────────────
+// 1. FEATURE TOGGLES & UTILITIES
+// ────────────────────────────────────────────────────────────────
+// Enable/disable framework modules to control compiled CSS size.
+$zeus-enable-responsive-classes:    true  !default;
+$zeus-enable-animation-classes:     true  !default;
+$zeus-enable-grid-system:           true  !default;
+$zeus-enable-shadow-classes:        true  !default;
+$zeus-enable-color-utilities:       true  !default;
+$zeus-enable-property-registration: true  !default;
+
+// ────────────────────────────────────────────────────────────────
+// 2. NAMING & COMPILE STRATEGIES
+// ────────────────────────────────────────────────────────────────
+$zeus-use-prefix:          false          !default;
+$zeus-class-prefix:        "z-"          !default; // Used only if $zeus-use-prefix is true
+$zeus-version:             "1.0.12"       !default;
+
+// ────────────────────────────────────────────────────────────────
+// 3. FLUID ENGINE BOUNDS
+// ────────────────────────────────────────────────────────────────
+// Viewport limits & outer margins (Design Artboard references)
+// Internal-only: the gutter between the viewport edge and the container,
+// at each reference width — used solely to auto-derive $container-bounds
+// (see core/design/core/basic.scss). Not the same setting as the public
+// $zeus-outer-padding below — that one controls the compiled
+// --padding-outer CSS var. Kept as a separate variable so overriding one
+// never silently no-ops the other.
+$zeus-viewports: (
+  mobile:  375,   // Mobile Design width (px)
+  desktop: 1920,  // Desktop Design width (px)
+) !default;
+
+$zeus-viewport-gutter: (
+  mobile:  16,   // 16px left + 16px right
+  desktop: 64,   // 64px left + 64px right
+) !default;
+
+// Optional developer override for container bounds (defaults to empty so engine auto-calculates)
+$zeus-container-bounds: () !default;
+
+// Global typography root base size (1rem = 16px)
+$zeus-root-font-size: 16px !default;
+
+// Global accessible keyboard focus indicator
+$zeus-focus-ring: 2px solid var(--color-primary) !default;
+
+// ────────────────────────────────────────────────────────────────
+// 4. LAYOUT, BREAKPOINTS & GRID
+// ────────────────────────────────────────────────────────────────
+// Canonical wrapper limit
+$zeus-outer-max-width: 2560px !default;
+
+// Media query breakpoints.
+// Override a single key: ( lg: 1400px )
+$zeus-breakpoints: (
+  xs:  0,
+  sm:  576px,
+  md:  768px,
+  ml: 1024px,
+  lg:  1280px,
+  xl:  1920px,
+  xxl: 2560px,
+) !default;
+
+// Container outer padding — fluid margins (floor→ceil px, unit-less)
+// Public: drives the compiled --padding-outer CSS var (see
+// core/design/layout/grid.scss). Distinct from $zeus-viewport-gutter above.
+$zeus-outer-padding: (
+  floor: 16,
+  ceil: 128,
+) !default;
+
+// Column gaps — fluid spacing per breakpoint tier (floor→ceil px, unit-less)
+$zeus-column-gaps: (
+  xs:  (floor: 12, ceil: 16),
+  sm:  (floor: 16, ceil: 20),
+  md:  (floor: 20, ceil: 28),
+  lg:  (floor: 28, ceil: 40),
+  xxl: (floor: 40, ceil: 64),
+) !default;

@@ -1,0 +1,172 @@
+// ╔══════════════════════════════════════════════════════════════╗
+// ║  ⚡ Zeus CSS — Zeus.token.sets.example                         ║
+// ║                                                               ║
+// ║  Core styles and definitions for zeus.token.sets.example.     ║
+// ╚══════════════════════════════════════════════════════════════╝
+
+// ╔══════════════════════════════════════════════════════════════╗
+// ║  📖 Zeus CSS — Design Tokens Reference Guide                 ║
+// ║                                                              ║
+// ║  This file is strictly for REFERENCE. Do not import it.      ║
+// ║  It lists the exact default values for all Zeus tokens so    ║
+// ║  you can easily copy what you need into zeus.customize.scss. ║
+// ╚══════════════════════════════════════════════════════════════╝
+
+/*
+// ────────────────────────────────────────────────────────────────
+// 1. TYPOGRAPHY TOKENS
+// ────────────────────────────────────────────────────────────────
+$zeus-typography: (
+  // Display styles
+  "display-xl":       ( family: "primary", size: (floor: 56, ceil: 96), lh: 1.1,  ls: -0.02, weight: 800, role: "heading" ),
+  "display-lg":       ( family: "primary", size: (floor: 48, ceil: 80), lh: 1.1,  ls: -0.02, weight: 800, role: "heading" ),
+  "display-md":       ( family: "primary", size: (floor: 40, ceil: 64), lh: 1.15, ls: -0.01, weight: 700, role: "heading" ),
+  
+  // Headings
+  "h1":               ( family: "primary", size: (floor: 36, ceil: 58), lh: 1.2,  ls: -0.01, weight: 700, role: "heading" ),
+  "h1-light":         ( family: "primary", size: (floor: 36, ceil: 58), lh: 1.2,  ls: -0.01, weight: 300, role: "heading" ),
+  "h2":               ( family: "primary", size: (floor: 30, ceil: 52), lh: 1.2,  ls: -0.01, weight: 600, role: "heading" ),
+  "h2-light":         ( family: "primary", size: (floor: 30, ceil: 52), lh: 1.2,  ls: -0.01, weight: 300, role: "heading" ),
+  "h3":               ( family: "primary", size: (floor: 26, ceil: 44), lh: 1.25, ls: 0,     weight: 600, role: "heading" ),
+  "h3-light":         ( family: "primary", size: (floor: 26, ceil: 44), lh: 1.25, ls: 0,     weight: 300, role: "heading" ),
+  "h4":               ( family: "primary", size: (floor: 24, ceil: 32), lh: 1.3,  ls: 0,     weight: 600, role: "heading" ),
+  "h4-light":         ( family: "primary", size: (floor: 24, ceil: 32), lh: 1.3,  ls: 0,     weight: 300, role: "heading" ),
+  "h5":               ( family: "primary", size: (floor: 20, ceil: 24), lh: 1.4,  ls: 0,     weight: 500, role: "heading" ),
+  "h5-light":         ( family: "primary", size: (floor: 20, ceil: 24), lh: 1.4,  ls: 0,     weight: 300, role: "heading" ),
+  "h6":               ( family: "primary", size: (floor: 18, ceil: 20), lh: 1.4,  ls: 0,     weight: 500, role: "heading" ),
+  "h6-light":         ( family: "primary", size: (floor: 18, ceil: 20), lh: 1.4,  ls: 0,     weight: 300, role: "heading" ),
+
+  // Body
+  "body-xl":          ( family: "primary", size: (floor: 20, ceil: 24), lh: 1.6, ls: 0, weight: 400, role: "body" ),
+  "body-lg":          ( family: "primary", size: (floor: 18, ceil: 20), lh: 1.6, ls: 0, weight: 400, role: "body" ),
+  "body":             ( family: "primary", size: (floor: 16, ceil: 18), lh: 1.6, ls: 0, weight: 400, role: "body" ),
+  "body-bold":        ( family: "primary", size: (floor: 16, ceil: 18), lh: 1.6, ls: 0, weight: 700, role: "body" ),
+  "body-semibold":    ( family: "primary", size: (floor: 16, ceil: 18), lh: 1.6, ls: 0, weight: 600, role: "body" ),
+  "body-medium":      ( family: "primary", size: (floor: 16, ceil: 18), lh: 1.6, ls: 0, weight: 500, role: "body" ),
+  "body-sm":          ( family: "primary", size: (floor: 14, ceil: 16), lh: 1.5, ls: 0, weight: 400, role: "body" ),
+  "body-sm-bold":     ( family: "primary", size: (floor: 14, ceil: 16), lh: 1.5, ls: 0, weight: 700, role: "body" ),
+  "body-sm-semibold": ( family: "primary", size: (floor: 14, ceil: 16), lh: 1.5, ls: 0, weight: 600, role: "body" ),
+  "body-xs":          ( family: "primary", size: (floor: 12, ceil: 14), lh: 1.5, ls: 0, weight: 400, role: "body" ),
+
+  // UI
+  "label":            ( family: "secondary", size: (floor: 12, ceil: 14), lh: 1.4, ls: 0.01, weight: 500, role: "ui" ),
+  "label-bold":       ( family: "secondary", size: (floor: 12, ceil: 14), lh: 1.4, ls: 0.01, weight: 700, role: "ui" ),
+  "caption":          ( family: "secondary", size: (floor: 11, ceil: 12), lh: 1.4, ls: 0.01, weight: 400, role: "ui" ),
+  "caption-bold":     ( family: "secondary", size: (floor: 11, ceil: 12), lh: 1.4, ls: 0.01, weight: 600, role: "ui" ),
+  "overline":         ( family: "secondary", size: (floor: 14, ceil: 16), lh: 1.3, ls: 0.14, weight: 600, role: "ui" ),
+
+  // Interactive
+  "link":             ( family: "tertiary",  size: (floor: 15, ceil: 16), lh: 1.5, ls: 0,    weight: 500, role: "interactive" ),
+  "link-bold":        ( family: "tertiary",  size: (floor: 15, ceil: 16), lh: 1.5, ls: 0,    weight: 700, role: "interactive" ),
+  "button":           ( family: "secondary", size: (floor: 14, ceil: 16), lh: 1.2, ls: 0.02, weight: 600, role: "interactive" ),
+  "button-lg":        ( family: "secondary", size: (floor: 16, ceil: 18), lh: 1.2, ls: 0.02, weight: 600, role: "interactive" ),
+  "button-sm":        ( family: "secondary", size: (floor: 12, ceil: 14), lh: 1.2, ls: 0.02, weight: 600, role: "interactive" ),
+
+  // Code
+  "code":             ( family: "code", size: (floor: 14, ceil: 16), lh: 1.6, ls: 0, weight: 400, role: "code" ),
+  "code-sm":          ( family: "code", size: (floor: 12, ceil: 14), lh: 1.6, ls: 0, weight: 400, role: "code" )
+);
+
+
+// ────────────────────────────────────────────────────────────────
+// 2. SPACING SCALE
+// ────────────────────────────────────────────────────────────────
+$zeus-space: (
+  "0":    (floor:  0, ceil:   0),
+  "4xs":  (floor:  1, ceil:   2),
+  "3xs":  (floor:  2, ceil:   4),
+  "2xs":  (floor:  4, ceil:   6),
+  "xs":   (floor:  6, ceil:   8),
+  "sm":   (floor:  8, ceil:  12),
+  "md":   (floor: 12, ceil:  16),
+  "lg":   (floor: 16, ceil:  24),
+  "xl":   (floor: 24, ceil:  32),
+  "2xl":  (floor: 32, ceil:  48),
+  "3xl":  (floor: 48, ceil:  64),
+  "4xl":  (floor: 64, ceil:  96),
+);
+
+
+// ────────────────────────────────────────────────────────────────
+// 3. BORDER RADIUS & WIDTH
+// ────────────────────────────────────────────────────────────────
+$zeus-border-radius: (
+  "none":    (floor: 0,   ceil: 0),
+  "xs":      (floor: 2,   ceil: 4),
+  "sm":      (floor: 8,   ceil: 12),
+  "md":      (floor: 16,  ceil: 24),
+  "lg":      (floor: 20,  ceil: 32),
+  "xl":      (floor: 38,  ceil: 64),
+  "rounded": (floor: 360, ceil: 360),
+);
+
+$zeus-border-line: (
+  "xs": (floor: 1,   ceil: 2),
+  "sm": (floor: 1.5, ceil: 3),
+  "md": (floor: 2,   ceil: 4),
+  "lg": (floor: 4,   ceil: 8),
+);
+
+
+// ────────────────────────────────────────────────────────────────
+// 4. ICON SIZES
+// ────────────────────────────────────────────────────────────────
+$zeus-icon-size: (
+  "xs": (floor: 14, ceil: 18),
+  "sm": (floor: 20, ceil: 24),
+  "md": (floor: 22, ceil: 32),
+  "lg": (floor: 38, ceil: 48),
+  "xl": (floor: 48, ceil: 64),
+);
+
+
+// ────────────────────────────────────────────────────────────────
+// 5. SHADOWS
+// ────────────────────────────────────────────────────────────────
+$zeus-shadows: (
+  "none": none,
+  "xs":  (0px 1px 2px 0px rgb(132 132 132 / 43%)),
+  "sm":  (0px 1px 3px 0px rgb(132 132 132 / 43%), 0px 1px 2px -1px rgb(132 132 132 / 43%)),
+  "md":  (0px 4px 6px -1px rgb(132 132 132 / 43%), 0px 2px 4px -2px rgb(132 132 132 / 43%)),
+  "lg":  (0px 10px 15px -3px rgb(132 132 132 / 43%), 0px 4px 6px -4px rgb(132 132 132 / 43%)),
+  "xl":  (0px 20px 25px -5px rgb(132 132 132 / 43%), 0px 8px 10px -6px rgb(132 132 132 / 43%)),
+  "2xl": (0px 25px 50px -12px rgba(0, 0, 0, 0.25)),
+
+  // primary/secondary/glow/glow-lg/outline are brand-aware: derived at
+  // runtime from --color-primary/--color-secondary via relative color
+  // syntax, so they follow whatever you set in $zeus-colors automatically.
+  "primary":   (0px 4px 12px 0px oklch(from var(--color-primary) l c h / 0.3)),
+  "secondary": (0px 4px 12px 0px oklch(from var(--color-secondary) l c h / 0.3)),
+  "success":   (0px 4px 12px 0px rgba(34, 197, 94, 0.3)),
+  "warning":   (0px 4px 12px 0px rgba(251, 146, 60, 0.3)),
+  "danger":    (0px 4px 12px 0px rgba(239, 68, 68, 0.3)),
+  "info":      (0px 4px 12px 0px rgba(14, 165, 233, 0.3)),
+
+  "inner":    (inset 0px 2px 4px 0px rgba(0, 0, 0, 0.06)),
+  "inner-lg": (inset 0px 4px 8px 0px rgb(132 132 132 / 43%)),
+
+  "glow":    (0px 0px 20px 0px oklch(from var(--color-primary) l c h / 0.5)),
+  "glow-lg": (0px 0px 40px 0px oklch(from var(--color-primary) l c h / 0.6)),
+  "outline": (0px 0px 0px 3px oklch(from var(--color-primary) l c h / 0.5)),
+
+  "card":       (0px 2px 8px 0px rgba(0,0,0,0.08), 0px 1px 2px 0px rgba(0,0,0,0.06)),
+  "card-hover": (0px 8px 24px 0px rgba(0,0,0,0.12), 0px 2px 6px 0px rgba(0,0,0,0.08)),
+  "dropdown":   (0px 10px 40px 0px rgba(0,0,0,0.15), 0px 2px 8px 0px rgb(132 132 132 / 43%)),
+  "modal":      (0px 20px 60px 0px rgba(0,0,0,0.3), 0px 4px 16px 0px rgba(0,0,0,0.2)),
+);
+
+
+// ────────────────────────────────────────────────────────────────
+// 6. BUTTON SIZES
+// ────────────────────────────────────────────────────────────────
+$zeus-button-sizes: (
+  "2xs": ( font: (floor: 11, ceil: 12), py: (floor: 4, ceil: 6),   px: (floor: 8, ceil: 12) ),
+  "xs":  ( font: (floor: 12, ceil: 13), py: (floor: 6, ceil: 8),   px: (floor: 12, ceil: 16) ),
+  "sm":  ( font: (floor: 13, ceil: 14), py: (floor: 8, ceil: 10),  px: (floor: 16, ceil: 20) ),
+  "md":  ( font: (floor: 14, ceil: 16), py: (floor: 10, ceil: 12), px: (floor: 20, ceil: 24) ),
+  "lg":  ( font: (floor: 16, ceil: 20), py: (floor: 12, ceil: 16), px: (floor: 24, ceil: 32) ),
+  "xl":  ( font: (floor: 18, ceil: 22), py: (floor: 16, ceil: 20), px: (floor: 32, ceil: 40) ),
+  "2xl": ( font: (floor: 20, ceil: 26), py: (floor: 20, ceil: 24), px: (floor: 40, ceil: 48) ),
+);
+
+*/

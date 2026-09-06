@@ -1,0 +1,83 @@
+// ╔══════════════════════════════════════════════════════════════╗
+// ║  ⚡ Zeus CSS — Colors                                          ║
+// ║                                                               ║
+// ║  Generates utility classes for colors based on the framework's design tokens. ║
+// ╚══════════════════════════════════════════════════════════════╝
+
+@use "sass:map";
+@use "../../../../zeus.config" as config;
+
+@mixin load-colors($prefix: "") {
+@if config.$zeus-enable-color-utilities {
+
+// ========================================================================================
+// THEME TOKEN UTILITIES (AUTO-GENERATED)
+// ========================================================================================
+
+@each $name, $value in config.$zeus-colors {
+  // Backgrounds
+  .#{$prefix}bg-#{$name} {
+    background-color: var(--color-#{$name});
+  }
+  // Typography Color Rules
+  .#{$prefix}color-#{$name} {
+    color: var(--color-#{$name});
+  }
+  // Borders
+  .#{$prefix}border-color-#{$name} {
+    border-color: var(--color-#{$name});
+  }
+}
+
+// ========================================================================================
+// SPECIAL UTILITIES
+// ========================================================================================
+
+.#{$prefix}bg-transparent { background-color: transparent; }
+.#{$prefix}color-inherit { color: inherit; }
+.#{$prefix}color-current { color: currentColor; }
+.#{$prefix}border-color-transparent { border-color: transparent; }
+.#{$prefix}border-color-currentColor { border-color: currentColor; }
+
+// ========================================================================================
+// BACKGROUND OPACITY VARIANTS — using OKLCH relative color syntax
+// ========================================================================================
+// CORRECT approach: oklch(from var(--color-X) l c h / 0.10)
+//   → modifies ONLY the background-color alpha channel
+//   → element content, text, border and children remain 100% visible
+//
+// WRONG approach (removed): opacity: 0.1
+//   → makes the ENTIRE element (content, text, children) transparent
+//   → causes text inside to become invisible — critical UX bug
+//
+// Generated for ALL $zeus-colors tokens × 5 opacity steps.
+// ========================================================================================
+
+$_opacity-steps: (
+  5:  0.05,
+  10: 0.10,
+  20: 0.20,
+  25: 0.25,
+  30: 0.30,
+  40: 0.40,
+  50: 0.50,
+  60: 0.60,
+  70: 0.70,
+  75: 0.75,
+  80: 0.80,
+  90: 0.90,
+  95: 0.95
+);
+
+@each $name, $value in config.$zeus-colors {
+  @each $step, $alpha in $_opacity-steps {
+    .#{$prefix}bg-#{$name}-#{$step} {
+      background-color: oklch(from var(--color-#{$name}) l c h / #{$alpha});
+    }
+  }
+}
+
+} // end @if zeus-enable-color-utilities
+
+}
+

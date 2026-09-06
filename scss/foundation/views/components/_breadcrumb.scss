@@ -1,0 +1,70 @@
+// ╔══════════════════════════════════════════════════════════════╗
+// ║  ⚡ Zeus CSS — Breadcrumb                                      ║
+// ║                                                               ║
+// ║  Core structural and visual styles for the breadcrumb.        ║
+// ╚══════════════════════════════════════════════════════════════╝
+
+@use "../../core/engine" as *;
+@use "../../core/design" as *;
+
+// ╔══════════════════════════════════════════════════════════════╗
+// ║  🧭 Breadcrumb Component                                     ║
+// ║                                                              ║
+// ║  Usage:                                                      ║
+// ║  <nav class="z-breadcrumb" aria-label="Breadcrumb">           ║
+// ║    <ol>                                                      ║
+// ║      <li><a href="/">Home</a></li>                           ║
+// ║      <li><a href="/docs">Docs</a></li>                       ║
+// ║      <li aria-current="page">API</li>                        ║
+// ║    </ol>                                                     ║
+// ║  </nav>                                                      ║
+// ╚══════════════════════════════════════════════════════════════╝
+
+@layer components {
+  .z-breadcrumb {
+    ol {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      @include text("body-sm");
+    }
+
+    li {
+      display: flex;
+      align-items: center;
+      color: var(--color-text-muted);
+
+      // Separator before every item except the first.
+      &:not(:first-child)::before {
+        content: "/";
+        margin-inline: var(--space-2xs);
+        color: var(--color-border-strong);
+      }
+
+      // Current page — the only item without an <a> inside.
+      &[aria-current="page"] {
+        color: var(--color-text);
+        font-weight: 600;
+      }
+    }
+
+    a {
+      color: var(--color-text-muted);
+      text-decoration: none;
+
+      &:hover {
+        color: var(--color-primary);
+        text-decoration: underline;
+      }
+
+      &:focus-visible {
+        outline: $focus-ring;
+        outline-offset: 2px;
+        border-radius: 2px;
+      }
+    }
+  }
+}

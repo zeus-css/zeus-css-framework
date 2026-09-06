@@ -1,0 +1,233 @@
+// ╔══════════════════════════════════════════════════════════════╗
+// ║  ⚡ Zeus CSS — Animations                                      ║
+// ║                                                               ║
+// ║  Generates utility classes for animations based on the framework's design tokens. ║
+// ╚══════════════════════════════════════════════════════════════╝
+
+@use "../../../../zeus.config" as config;
+@use "../../../core/engine/animations" as *;
+@use "../../../core/engine/responsive" as *;
+
+// ╔══════════════════════════════════════════════════════════════╗
+// ║  🎬 Zeus Animation Keyframes & Scroll-Driven Classes          ║
+// ║                                                              ║
+// ║  Defined ONCE here, at top level, so this CSS is emitted     ║
+// ║  exactly once as part of foundation.scss. The mixins in       ║
+// ║  core/engine/animations.scss (used by zeus.scss's module-only ║
+// ║  entry point) reference these @keyframes names but do NOT     ║
+// ║  define them, to avoid leaking duplicate CSS into every       ║
+// ║  .module.scss component that does @use "zeus" as *.           ║
+// ╚══════════════════════════════════════════════════════════════╝
+
+@keyframes zeus-fade-in {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+@keyframes zeus-slide-in-bottom {
+  from { opacity: 0; transform: translateY(30px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes zeus-slide-in-top {
+  from { opacity: 0; transform: translateY(-30px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes zeus-slide-in-left {
+  from { opacity: 0; transform: translateX(-30px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes zeus-slide-in-right {
+  from { opacity: 0; transform: translateX(30px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes zeus-bounce {
+  0%,  20%, 50%, 80%, 100% { transform: translateY(0); }
+  40%  { transform: translateY(-20px); }
+  60%  { transform: translateY(-10px); }
+}
+
+@keyframes zeus-pulse {
+  0%, 100% { transform: scale(1);    opacity: 1; }
+  50%       { transform: scale(1.05); opacity: 0.8; }
+}
+
+// rotate uses a CSS custom property so the mixin can pass any angle
+// while the @keyframes itself stays a single top-level definition.
+@keyframes zeus-rotate {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(var(--_zeus-rotate-deg, 360deg)); }
+}
+
+// Used directly by .z-skeleton (views/components/_skeleton.scss) — not
+// exposed as an engine mixin since it's single-purpose, unlike the
+// reusable ones above.
+@keyframes zeus-skeleton-shimmer {
+  0%   { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+@if config.$zeus-enable-animation-classes {
+  @layer utilities {
+    // ─── SCROLL-DRIVEN ANIMATIONS (Native CSS) ─────────────────────
+    // animation-timeline: view() — zero JavaScript required.
+    // prefers-reduced-motion guards included — WCAG 2.3.3 compliant.
+
+    // 1. Scroll Fade In (Reveal)
+    .z-scroll-reveal {
+      animation: zeus-scroll-fade-in linear both;
+      animation-timeline: view();
+      animation-range: entry 0% cover 25vh;
+    }
+
+    // 2. Scroll Tilt
+    .z-scroll-tilt {
+      animation: zeus-scroll-tilt-up linear both;
+      animation-timeline: view();
+      animation-range: entry 0% cover 25vh;
+      transform-origin: bottom center;
+    }
+
+    // 3. Scroll Scale Up
+    .z-scroll-scale {
+      animation: zeus-scroll-scale-up linear both;
+      animation-timeline: view();
+      animation-range: entry 0% cover 25vh;
+    }
+
+    // ─── prefers-reduced-motion guard (WCAG 2.3.3) ───────────────────
+    @media (prefers-reduced-motion: reduce) {
+      .z-scroll-reveal,
+      .z-scroll-tilt,
+      .z-scroll-scale,
+      [class*="animate-"] {
+        animation: none !important;
+        opacity: 1 !important;
+        transform: none !important;
+        filter: none !important;
+      }
+    }
+
+    // ─── mobile viewport guard ─────────────────────────────────────
+    @include screen-below(md) {
+      .z-scroll-reveal,
+      .z-scroll-tilt,
+      .z-scroll-scale {
+        animation: none !important;
+        opacity: 1 !important;
+        transform: none !important;
+        filter: none !important;
+      }
+    }
+  }
+}
+
+@keyframes zeus-scroll-fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(60px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes zeus-scroll-tilt-up {
+  from {
+    opacity: 0;
+    transform: perspective(1000px) scale(0.98) rotateX(45deg) translateY(40px);
+  }
+  to {
+    opacity: 1;
+    transform: perspective(1000px) scale(1) rotateX(0deg) translateY(0);
+  }
+}
+
+@keyframes zeus-scroll-scale-up {
+  from {
+    opacity: 0;
+    transform: scale(0.85);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@mixin load-animations($prefix: "") {
+@if config.$zeus-enable-animation-classes {
+
+.#{$prefix}animate-fade-in {
+  @include fade-in();
+}
+
+.#{$prefix}animate-fade-in-slow {
+  @include fade-in(0.6s);
+}
+
+.#{$prefix}animate-fade-in-fast {
+  @include fade-in(0.15s);
+}
+
+.#{$prefix}animate-slide-up {
+  @include slide-in(bottom);
+}
+
+.#{$prefix}animate-slide-down {
+  @include slide-in(top);
+}
+
+.#{$prefix}animate-slide-left {
+  @include slide-in(right);
+}
+
+.#{$prefix}animate-slide-right {
+  @include slide-in(left);
+}
+
+.#{$prefix}animate-bounce {
+  @include bounce();
+}
+
+.#{$prefix}animate-pulse {
+  @include pulse();
+}
+
+.#{$prefix}animate-rotate {
+  @include rotate();
+}
+
+.hover\:#{$prefix}animate-scale {
+  @include scale(1.05);
+}
+
+.hover\:#{$prefix}animate-scale-sm {
+  @include scale(1.02);
+}
+
+.hover\:#{$prefix}animate-scale-lg {
+  @include scale(1.1);
+}
+
+// Delay utilities
+.#{$prefix}delay-100 { animation-delay: 100ms; }
+.#{$prefix}delay-200 { animation-delay: 200ms; }
+.#{$prefix}delay-300 { animation-delay: 300ms; }
+.#{$prefix}delay-500 { animation-delay: 500ms; }
+.#{$prefix}delay-700 { animation-delay: 700ms; }
+.#{$prefix}delay-1000 { animation-delay: 1000ms; }
+
+// Duration utilities
+.#{$prefix}duration-150 { animation-duration: 150ms; }
+.#{$prefix}duration-300 { animation-duration: 300ms; }
+.#{$prefix}duration-500 { animation-duration: 500ms; }
+.#{$prefix}duration-700 { animation-duration: 700ms; }
+.#{$prefix}duration-1000 { animation-duration: 1000ms; }
+
+} // end @if zeus-enable-animation-classes
+
+}

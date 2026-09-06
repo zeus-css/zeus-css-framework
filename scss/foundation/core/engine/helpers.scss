@@ -1,0 +1,39 @@
+// ╔══════════════════════════════════════════════════════════════╗
+// ║  ⚡ Zeus CSS — Helpers                                         ║
+// ║                                                               ║
+// ║  Framework internal engine and mixins for helpers.            ║
+// ╚══════════════════════════════════════════════════════════════╝
+
+@use "sass:map";
+@use "sass:meta";
+@use "sass:string";
+
+// ============================================================
+// Helper Functions
+// ============================================================
+
+//-----------------------------------------------------------------
+// Extracts values from the provided map structure with type validation and unquoted key normalization
+@function map-get-safe($map, $key) {
+  @if meta.type-of($map) != "map" {
+    @return null;
+  }
+  // Direct key match (fast path)
+  @if map.has-key($map, $key) {
+    @return map.get($map, $key);
+  }
+
+  // Normalize both candidate key and map keys to unquoted strings and compare.
+  $needle: string.unquote("#{$key}");
+
+  @each $k in map.keys($map) {
+    $candidate: string.unquote("#{$k}");
+    @if $candidate == $needle {
+      @return map.get($map, $k);
+    }
+  }
+
+  // Not found
+  @return null;
+}
+//-----------------------------------------------------------------
